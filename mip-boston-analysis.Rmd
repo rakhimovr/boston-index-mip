@@ -77,7 +77,7 @@ violin <- data %>%
          var108, #Solar
          var110) #Foodwaste 
 
-#dodge <- position_dodge(width = 1)
+dodge <- position_dodge(width = 1)
 
 violin_plot <- violin %>%
     select(var96:var110) %>%
@@ -85,7 +85,7 @@ violin_plot <- violin %>%
     mutate(behavior = recode(behavior, var96 = "Purchase an \nelectric car", var100 = "Purchase \ncarbon offsets", var106 = "Purchase green \nenergy", var108 = "Install solar \npanels", var98 = "Fly less", var104 = "Eat less meat", var110 = "Reduce food \nwaste")) %>%
   ggplot(aes(x = reorder(as_factor(behavior), -value), y = value, fill = value)) +
     geom_violin() +
-    #geom_boxplot(position = dodge, width = 0.1, color = "grey", alpha = 0.2, outlier.shape = NA) +
+  geom_boxplot(position = dodge, width = 0.1, color = "grey", alpha = 0.2, outlier.shape = NA) +
     stat_summary(fun.y = median, geom = "point", size = 2, color = "red") +
   theme(axis.line = element_line(color = "grey"),
         axis.ticks = element_line(color = "grey"),
@@ -109,6 +109,8 @@ violin_plot
 #violin <- mutate_all(violin, function(x) as.numeric(as.character(x)))
 
 #draw_quantiles = c(0.25, 0.5, 0.75)
+
+#summary(violin$var96)
 ```
 
 ```{r, echo = FALSE, results = 'asis', message = FALSE}
