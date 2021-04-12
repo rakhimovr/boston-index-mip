@@ -1,0 +1,377 @@
+---
+title: "Make It Personal: Boston Index Preliminary Results"
+output: html_document
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+author:
+- Erik Thulin, ethulin@rare.org
+- Rakhim Rakhimov, arakhimov@rare.org
+---
+
+```{r setup, include=FALSE, echo = FALSE, results = 'asis'}
+library(tidyverse)
+library(haven)
+library(labelled)
+library(data.table)
+#library(broom)
+library(knitr)
+#library(purrr)
+#library(kableExtra)
+#library(sjPlot)
+#library(sjmisc)
+#library(corrr)
+#library(reshape2)
+library("ggcorrplot")
+#library(formattable)
+#library(fastDummies)
+#require(lattice)
+#require(openintro)
+#library(magick)
+library(reactable)
+
+
+data <- read_sav("spss_4_12_2021.sav")
+
+#data$var15 <- as.numeric(data$var15)
+#mean(data$var15)
+#median(data$var15)
+#sd(data$var15)
+#table(data$var15)
+#819.7224*3
+
+#3*sd(data$var15)
+
+#data1 <- data %>% 
+#  filter(var15 < sd(data$var15)*3)
+
+#sd(data1$var15)
+#mean(data1$var15)
+#median(data1$var15)
+
+#data2 <- data1 %>% 
+#  filter(var15 < (mean(var15)+sd(data1$var15)*3))
+
+#boxplot.stats(data1$var15)$out
+
+#summary(data$var15)
+
+# LowerInner Fence
+#LowerInnerFence <- 419 - 1.5 * (419-733)
+# UpperInner Fence
+#UpperInnerFence <- 733.0 + 1.5 * (419-733)
+
+#data$var15[which(data$var15 < LowerInnerFence)]
+
+#(boxplot(data$var15))
+```
+
+### Interest in program participation
+
+```{r, fig.width = 9, fig.height = 5, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
+# Violin plot of interest in program
+violin <- data %>% 
+  select(var96, #EV 
+         var98, #Fly
+         var100, #Offsets 
+         var104, #PBD
+         var106, #RECs
+         var108, #Solar
+         var110) #Foodwaste 
+
+#dodge <- position_dodge(width = 1)
+
+violin_plot <- violin %>%
+    select(var96:var110) %>%
+    gather(behavior, value) %>%
+    mutate(behavior = recode(behavior, var96 = "Purchase an \nelectric car", var100 = "Purchase \ncarbon offsets", var106 = "Purchase green \nenergy", var108 = "Install solar \npanels", var98 = "Fly less", var104 = "Eat less meat", var110 = "Reduce food \nwaste")) %>%
+  ggplot(aes(x = reorder(as_factor(behavior), -value), y = value, fill = value)) +
+    geom_violin() +
+    #geom_boxplot(position = dodge, width = 0.1, color = "grey", alpha = 0.2, outlier.shape = NA) +
+    stat_summary(fun.y = median, geom = "point", size = 2, color = "red") +
+  theme(axis.line = element_line(color = "grey"),
+        axis.ticks = element_line(color = "grey"),
+        axis.title.y = element_text(color = "black", size = 11),
+        axis.title.x = element_text(color = "black", size = 11),
+        axis.text.x = element_text(colour="black", size = 11),
+        axis.text.y = element_text(colour="black", size = 11),
+        panel.grid.major = element_line(size = 0.5, linetype = 'solid',
+                                colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
+                                colour = "grey"),
+        panel.background = element_blank(),
+        panel.border = element_rect(colour = "grey", fill = NA, size = 0.5)) +
+  #scale_y_continuous(labels = function(x) paste0(x,"%")) +
+  labs(x ="",y = "Interest in a program which helps adopt behaviors")
+
+violin_plot
+
+#ggsave("violin_plot.png", units = "in", width = 8, height = 5, dpi = 300)
+
+#violin <- mutate_all(violin, function(x) as.numeric(as.character(x)))
+
+#draw_quantiles = c(0.25, 0.5, 0.75)
+```
+
+```{r, echo = FALSE, results = 'asis', message = FALSE}
+## Index table
+index <- data %>% 
+  select(
+  Vrid,
+  var13, #RID
+  var83O227:var83O804, #ranking
+  -var83O800, -var83O797, #remov foodwaste & composting
+  #EV
+  var26, #adoption
+  var87, #EE
+  var28, #PNB,
+  var88, #NE
+  var94, #intent
+  var96, #program interest
+  #Fly
+  var70, #trying to fly less
+  var69, #EE
+  var38, #PNB
+  var35, #NE
+  var97, #intent
+  var98, #program interest
+  #Offsets
+  var39, #adoption
+  var40, #EE
+  var41, #PNB
+  var42, #NE
+  var99, #intent
+  var100, #program interest
+  #PBD
+  var71, #tring to eat less meat
+  #var115, #adoption % of meals
+  var72, #EE
+  var66, #PNB
+  var48, #NE
+  var103, #intent
+  var104, #program interest
+  #RECs
+  var54, #adoption
+  var55, #EE
+  var56, #PNB
+  var57, #NE
+  var105, #intent
+  var106, #program interest
+  #Solar
+  var59, #adoption
+  var60, #EE
+  var61, #PNB
+  var62, #NE
+  var107, #intent
+  var108, #program interest
+  #Food waste
+  var73, #attempt
+  var74, #EE
+  var75, #PNB
+  var76, #NE
+  var109, #intent
+  var110 #program interest
+  ) %>% 
+  rename(
+  offset_hrank = var83O227,
+  ev_hrank = var83O794,
+  recs_hrank = var83O796,
+  solar_hrank = var83O793,
+  pbd_hrank = var83O795,
+  fly_hrank = var83O228,
+  local_lrank = var83O798,
+  bulbs_lrank = var83O799,
+  fridge_lrank = var83O801,
+  trees_lrank = var83O802,
+  recycling_lrank = var83O803,
+  pack_lrank = var83O804,
+  #EV
+  ev_adoption = var26,
+  ev_ee = var87,
+  ev_pnb = var28,
+  ev_ne = var88,
+  ev_intent = var94,
+  ev_program_interest = var96,
+  #Fly
+  fly_adoption = var70, #trying to fly less
+  fly_ee = var69, #EE
+  fly_pnb = var38, #PNB
+  fly_ne = var35, #NE
+  fly_intent = var97,
+  fly_program_interest = var98,
+  #Offset
+  offset_adoption = var39, #adoption
+  offset_ee = var40, #EE
+  offset_pnb = var41, #PNB
+  offset_ne = var42, #NE
+  offset_program_interest = var100, #program interest
+  offset_intent = var99,
+  #PBD
+  pbd_adoption = var71, #trying to
+  pbd_ee = var72, #EE
+  pbd_pnb = var66, #PNB
+  pbd_ne = var48, #NE
+  pbd_program_interest = var104, #program interest
+  pbd_intent = var103, 
+  #RECs
+  recs_adoption = var54, #adoption
+  recs_ee = var55, #EE
+  recs_pnb = var56, #PNB
+  recs_ne = var57, #NE
+  recs_program_interest = var106, #program interest
+  recs_intent = var105,
+  #Solar
+  solar_adoption = var59, #adoption
+  solar_ee = var60, #EE
+  solar_pnb = var61, #PNB
+  solar_ne = var62, #NE
+  solar_program_interest = var108, #program interest
+  solar_intent = var107,
+  #Food waste
+  foodwaste_adoption = var73, #attempt
+  foodwaste_ee = var74, #EE
+  foodwaste_pnb = var75, #PNB
+  foodwaste_ne = var76, #NE
+  foodwaste_program_interest = var110, #program interest
+  foodwaste_intent = var109)
+
+index <- index %>% 
+  mutate(
+  #Adoption
+  ev_adoption = case_when(ev_adoption == 0 ~ 0, TRUE ~ 1), 
+  fly_adoption = case_when(fly_adoption == 1 ~ 1, TRUE ~ 0),
+  recs_adoption = case_when(recs_adoption == 1 ~ 1, TRUE ~ 0),
+  pbd_adoption = case_when(pbd_adoption == 1 ~1, TRUE ~ 0),
+  #EE
+  ev_ee = ev_ee/10,
+  fly_ee = fly_ee/10,
+  #solar_ee = solar_ee/10,
+  recs_ee = recs_ee/10,
+  offset_ee = offset_ee/10,
+  foodwaste_ee = foodwaste_ee/10,
+  pbd_ee = pbd_ee/10,
+  #PNB
+  fly_pnb = case_when(fly_pnb == 10144 ~ 0, TRUE ~ 1),
+  #NE
+  ev_ne = ev_ne/10,
+  fly_ne = fly_ne/10,
+  solar_ne = solar_ne/10,
+  recs_ne = recs_ne/10,
+  offset_ne = offset_ne/10,
+  foodwaste_ne = foodwaste_ne/10,
+  pbd_ne = pbd_ne/10,
+  #Intent
+  fly_intent = case_when(fly_intent == 0 ~ 0, fly_intent == 10 ~ 1, fly_intent == 20 ~ 2, fly_intent == 30 ~ 3, fly_intent == 40 ~ 4, fly_intent == 50 ~ 5, fly_intent == 60 ~ 6, fly_intent == 70 ~ 7, fly_intent == 80 ~ 8, fly_intent == 10571 ~ 9, TRUE ~ 10),
+  #Program interest
+  ev_program_interest = ev_program_interest/10,
+  fly_program_interest = fly_program_interest/10,
+  solar_program_interest = solar_program_interest/10,
+  recs_program_interest = recs_program_interest/10,
+  offset_program_interest = offset_program_interest/10,
+  foodwaste_program_interest = foodwaste_program_interest/10,
+  pbd_program_interest = pbd_program_interest/10,
+  #Intent
+  ev_intent = ev_intent/100,
+  fly_intent = fly_intent/10,
+  solar_intent = solar_intent/100,
+  recs_intent = recs_intent/100,
+  offset_intent = offset_intent/100,
+  foodwaste_intent = foodwaste_intent/100,
+  pbd_intent = pbd_intent/100)
+
+# ranking
+
+df1 <- index %>% 
+  select(Vrid:pack_lrank)
+
+df1 = index %>% 
+     transmute(Vrid, across(ends_with('hrank'), 
+        ~  rowSums(. <  select(df1, ends_with('lrank'))), .names = '{.col}_rank'))
+
+df1 <- mutate_all(df1, function(x) as.numeric(as.character(x)))
+
+#
+
+index_long <- index %>% 
+  select(Vrid, ev_adoption:foodwaste_program_interest)
+
+index_long <- mutate_all(index_long, function(x) as.numeric(as.character(x)))
+
+index_long <- left_join(index_long, df1, by = "Vrid")
+
+index_long <- index_long %>%
+ pivot_longer(
+   cols = ends_with(c("intent", "program_interest", "ee", "pnb", "ne", "adoption", "rank")),
+   names_to = "indicator",
+   values_to = "value",
+   values_drop_na = TRUE
+ )
+
+index_long <- index_long %>%
+  mutate(behavior = indicator)
+
+fin_table <- index_long %>% 
+  mutate(behavior = sapply(strsplit(index_long$indicator, split='_', fixed=TRUE),function(x) (x[1])))
+
+fin_table <- fin_table %>% 
+  mutate(ind = sapply(strsplit(fin_table$indicator, split='_', fixed=TRUE),function(x) (x[2])))
+
+t <- group_by(fin_table, behavior, ind)
+
+t <- summarise(t, value.mean = mean(value, na.rm = TRUE))
+
+t <- t %>% 
+  group_by(behavior) %>% 
+  pivot_wider(names_from = ind, values_from = value.mean)
+
+t <- t %>% 
+  mutate(hrank = hrank/6)
+
+```
+
+```{r, include = FALSE}
+hist(index$solar_ee)
+```
+
+### Boston Index
+
+```{r, echo = FALSE, results = 'asis', message = FALSE}
+# Rename columns
+t <- t %>% 
+  rename('Behavior' = behavior,
+         'Adoption' = adoption,
+         'Intention' = intent,
+         'Belief that others are engaging in the behavior' = ee,
+         'Belief that others should engage in the behavior' = pnb,
+         'Belief that others think people engage in the behavior' = ne,
+         'Program interest' = program,
+         'Carbon impact ranking' = hrank)
+
+# Rename rows
+t$Behavior[t$Behavior == "ev"] <- "Purchase an EV"
+t$Behavior[t$Behavior == "fly"] <- "Fly less*"
+t$Behavior[t$Behavior == "offset"] <- "Purchase carbon offsets"
+t$Behavior[t$Behavior == "recs"] <- "Purchase green energy"
+t$Behavior[t$Behavior == "solar"] <- "Install solar panels"
+t$Behavior[t$Behavior == "pbd"] <- "Eat less meat*"
+t$Behavior[t$Behavior == "foodwaste"] <- "Waste less food*"
+
+t <- t %>% 
+  select(Behavior, Adoption, Intention, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people engage in the behavior`, `Program interest`, `Carbon impact ranking`)
+
+reactable(t,
+  columns = list(Adoption = colDef(format = colFormat(digits = 2)),
+                 Intention = colDef(format = colFormat(digits = 2)),
+                 `Belief that others are engaging in the behavior` = colDef(format = colFormat(digits = 2)),
+                 `Belief that others should engage in the behavior` = colDef(format = colFormat(digits = 2)),
+                 `Belief that others think people engage in the behavior` = colDef(format = colFormat(digits = 2)),
+                 `Program interest` = colDef(format = colFormat(digits = 2)),
+                 `Carbon impact ranking` = colDef(format = colFormat(digits = 2))),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    borderColor = "#dfe2e5",
+    stripedColor = "#f6f8fa",
+    highlightColor = "#f0f5f9",
+    cellPadding = "8px 12px",
+    style = list(fontFamily = "-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif")))
+```
