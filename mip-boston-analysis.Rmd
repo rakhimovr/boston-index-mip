@@ -110,7 +110,7 @@ violin_plot
 
 #draw_quantiles = c(0.25, 0.5, 0.75)
 
-#summary(violin$var96)
+#summary(violin$var108)
 ```
 
 ```{r, echo = FALSE, results = 'asis', message = FALSE}
@@ -343,7 +343,7 @@ t <- t %>%
          'Intention' = intent,
          'Belief that others are engaging in the behavior' = ee,
          'Belief that others should engage in the behavior' = pnb,
-         'Belief that others think people engage in the behavior' = ne,
+         'Belief that others think people should engage in the behavior' = ne,
          'Program interest' = program,
          'Carbon impact ranking' = hrank)
 
@@ -357,14 +357,14 @@ t$Behavior[t$Behavior == "pbd"] <- "Eat less meat*"
 t$Behavior[t$Behavior == "foodwaste"] <- "Waste less food*"
 
 t <- t %>% 
-  select(Behavior, Adoption, Intention, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people engage in the behavior`, `Program interest`, `Carbon impact ranking`)
+  select(Behavior, Adoption, Intention, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`, `Program interest`, `Carbon impact ranking`)
 
 reactable(t,
   columns = list(Adoption = colDef(format = colFormat(digits = 2)),
                  Intention = colDef(format = colFormat(digits = 2)),
                  `Belief that others are engaging in the behavior` = colDef(format = colFormat(digits = 2)),
                  `Belief that others should engage in the behavior` = colDef(format = colFormat(digits = 2)),
-                 `Belief that others think people engage in the behavior` = colDef(format = colFormat(digits = 2)),
+                 `Belief that others think people should engage in the behavior` = colDef(format = colFormat(digits = 2)),
                  `Program interest` = colDef(format = colFormat(digits = 2)),
                  `Carbon impact ranking` = colDef(format = colFormat(digits = 2))),
   striped = TRUE,
