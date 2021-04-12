@@ -360,11 +360,11 @@ t <- t %>%
   select(Behavior, Adoption, Intention, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`, `Program interest`, `Carbon impact ranking`)
 
 reactable(t,
-  columns = list(Adoption = colDef(format = colFormat(digits = 2)),
-                 Intention = colDef(format = colFormat(digits = 2)),
-                 `Belief that others are engaging in the behavior` = colDef(format = colFormat(digits = 2)),
-                 `Belief that others should engage in the behavior` = colDef(format = colFormat(digits = 2)),
-                 `Belief that others think people should engage in the behavior` = colDef(format = colFormat(digits = 2)),
+  columns = list(Adoption = colDef(format = colFormat(digits = 2), minWidth = 90),
+                 Intention = colDef(format = colFormat(digits = 2), minWidth = 90),
+                 `Belief that others are engaging in the behavior` = colDef(format = colFormat(digits = 2), minWidth = 140),
+                 `Belief that others should engage in the behavior` = colDef(format = colFormat(digits = 2), minWidth = 140),
+                 `Belief that others think people should engage in the behavior` = colDef(format = colFormat(digits = 2), minWidth = 140),
                  `Program interest` = colDef(format = colFormat(digits = 2)),
                  `Carbon impact ranking` = colDef(format = colFormat(digits = 2))),
   striped = TRUE,
