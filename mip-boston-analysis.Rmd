@@ -346,7 +346,8 @@ p + geom_boxplot(width = 0.1, color = "grey") + stat_summary(fun.y=median, geom=
         panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
                                 colour = "grey"),
         panel.background = element_blank(),
-        panel.border = element_rect(colour = "grey", fill = NA, size = 0.5))
+        panel.border = element_rect(colour = "grey", fill = NA, size = 0.5)) +
+  labs(x ="",y = "Interest in a program which helps adopt behaviors")
 ```
 
 ```{r, fig.width = 9, fig.height = 5, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, eval = FALSE}
