@@ -7,66 +7,345 @@ author:
 - Rakhim Rakhimov, arakhimov@rare.org
 ---
 
-```{r setup, include=FALSE, echo = FALSE, results = 'asis'}
+```{r setup, include = FALSE, echo = FALSE, results = 'asis'}
 library(tidyverse)
 library(haven)
 library(labelled)
 library(data.table)
-#library(broom)
 library(knitr)
-#library(purrr)
-#library(kableExtra)
-#library(sjPlot)
-#library(sjmisc)
-#library(corrr)
-#library(reshape2)
-library("ggcorrplot")
-#library(formattable)
-#library(fastDummies)
-#require(lattice)
-#require(openintro)
-#library(magick)
 library(reactable)
+library(htmltools)
+library(lubridate)
+library(hrbrthemes)
+library(survey)
+options(scipen = 999)
 
-
-data <- read_sav("spss_4_12_2021.sav")
-
-#data$var15 <- as.numeric(data$var15)
-#mean(data$var15)
-#median(data$var15)
-#sd(data$var15)
-#table(data$var15)
-#819.7224*3
-
-#3*sd(data$var15)
-
-#data1 <- data %>% 
-#  filter(var15 < sd(data$var15)*3)
-
-#sd(data1$var15)
-#mean(data1$var15)
-#median(data1$var15)
-
-#data2 <- data1 %>% 
-#  filter(var15 < (mean(var15)+sd(data1$var15)*3))
-
-#boxplot.stats(data1$var15)$out
-
-#summary(data$var15)
-
-# LowerInner Fence
-#LowerInnerFence <- 419 - 1.5 * (419-733)
-# UpperInner Fence
-#UpperInnerFence <- 733.0 + 1.5 * (419-733)
-
-#data$var15[which(data$var15 < LowerInnerFence)]
-
-#(boxplot(data$var15))
+data <- read_sav("spss_4_17_2021.sav")
+lucid_data <-read.csv("lucid_response.csv")
 ```
 
-### Interest in program participation
+```{r, include = FALSE, echo = FALSE, results = 'asis'}
+lucid <- read.csv("lucid_data_analysis_4_17_2021.csv")
+test <- lucid %>% 
+  filter(FulcrumStatus == 3 & ClientStatus == 10 & SupplierName != "Z - Test Supplier") %>% 
+  mutate(
+    var13 = as.character(Response.ID),
+    var13 = tolower(var13))
+
+test_merge <- merge(x = data, y = test, by = "var13", all.x = TRUE)
+
+test_merge <- test_merge %>% 
+  select(var13, Response.ID)
+
+test_merge$Response.ID <- as.character(test_merge$Response.ID)
+```
+
+```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE}
+lucid_data <- lucid_data %>% 
+  filter(SupplierName != "Z - Test Supplier") %>% # remove test responses
+  select(-HISPANIC.3., -REGION.6., -Ethnicity...Detailed.7.) %>% 
+  mutate(
+    ID = as.character(Response.ID),
+    ID = tolower(ID))
+
+data$ID <- data$var13
+
+data <- merge(x = lucid_data, y = data, by = "ID", all.y = TRUE)
+```
+
+```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE}
+data <- data %>% 
+rename(sex = var3,
+       age = var2,
+       White = var8O33,
+       Black = var8O34,
+       Native_American = var8O35,
+       Asian = var8O36,
+       Native_Hawaiian = var8O37,
+       Other = var8O38,
+       ethnicity = ETHNICITY.8.) %>% 
+mutate(sex = case_when(sex == 10003 ~ "Male", TRUE ~ "Female"),
+       ethnicity = case_when(ethnicity == 1 ~ "White", 
+                             ethnicity == 2 ~ "Black", 
+                             ethnicity == 3 ~ "Alaska_Native", 
+                             ethnicity == 4 ~ "Asian", 
+                             ethnicity == 5 ~ "Asian", 
+                             ethnicity == 6 ~ "Asian", 
+                             ethnicity == 7 ~ "Asian", 
+                             ethnicity == 8 ~ "Asian", 
+                             ethnicity == 9 ~ "Asian", 
+                             ethnicity == 10 ~ "Asian", 
+                             ethnicity == 15 ~ "Other", 
+                             TRUE ~ "NG"),
+       ethnicity = case_when(Vrid == 394 ~ "White", Vrid == 1008 ~ "Asian", Vrid == 184 ~ "White", Vrid == 1505 ~ "Black", Vrid == 193 ~ "Black", TRUE ~ ethnicity)) %>% 
+  filter(age >= 18 & age <= 150)
+```
+
+```{r, include=FALSE, echo = FALSE, warning = FALSE}
+#Demo prop
+demo <- read.csv("demo_w.csv")
+
+demo <- demo %>% 
+  select(-`ï..demo_combined`) %>% 
+  filter(prop > 0) %>% 
+  rename(sex = gender,
+         pop.demo.prop = prop,
+         ethnicity = race)
+
+# Create age brackets
+agebreaks <- c(18, 25, 35, 45, 55, 65, 100)
+agelabels <- c("18-24", "25-34", "35-44", "45-54", "55-64", "65+")
+# Add age brackets to df
+setDT(data)[ , age_group := cut(age, 
+                                breaks = agebreaks, 
+                                right = FALSE, 
+                                labels = agelabels)]
+
+data$ethnicity <- as.factor(data$ethnicity)
+
+##
+
+d <- data %>% 
+  select(Vrid, sex, age_group, ethnicity)
+
+d <- d %>% 
+  group_by(sex, ethnicity, age_group) %>%
+  summarise(count=n()) 
+
+d <- d %>% 
+  mutate(sample.demo.prop = count/sum(d$count))
+
+d <- merge(d, demo, by = c("ethnicity", "age_group", "sex"))
+
+d <- d %>% 
+  mutate(demo_weight = pop.demo.prop/sample.demo.prop) 
+
+d <- d %>% select(ethnicity, age_group, sex, demo_weight)
+```
+
+```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE}
+# ZIP weight population
+pop_zip <- read.csv("geocorr_cbsa_zip.csv")
+
+pop_zip <- pop_zip %>% 
+  filter(cbsa == "14460") %>% 
+  select(-cbsa, -cbsaname15, -zipname)
+
+pop_zip$zip <- as.numeric(as.character(pop_zip$zcta))
+pop_zip$zip.pop <- as.numeric(as.character(pop_zip$pop10))
+pop_zip$pop.zip.prop <- as.numeric(as.character(pop_zip$afact))
+
+pop_zip <- pop_zip %>% 
+  filter(zip < 99999) %>% 
+  select(zip, zip.pop, pop.zip.prop)
+```
+
+```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE}
+#ZIP weight sample
+df <- data %>% 
+  select(Vrid, var21)
+  
+df$zip <- as.numeric(as.character(df$var21))
+df$ID <- as.numeric(as.character(df$Vrid))
+
+df <- df %>% 
+  select(ID, zip)%>% 
+  gather(ID, zip) %>% 
+  group_by(zip) %>%
+  summarise(count=n()) 
+
+df <- df %>% 
+  mutate(sample.zip.prop = count/sum(count))
+
+df <- merge(df, pop_zip, by = "zip")
+
+df <- df %>% 
+  mutate(zip.weight = pop.zip.prop/sample.zip.prop)
+
+df <- df %>% 
+  select(zip, zip.weight)
+```
+
+### weighting by puma
+
+```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE, eval = FALSE}
+#population
+puma <- read.csv("geocorr_puma_export.csv")
+
+puma <- puma %>% 
+  filter(cbsa == "14460") %>% 
+  select(PUMAname, pop10) %>% 
+  rename(puma = PUMAname,
+         puma.pop = pop10)
+
+puma$puma.pop <- as.numeric(as.character(puma$puma.pop))
+
+puma$puma <- as.character(puma$puma)
+puma$puma <- as.factor(puma$puma)
+
+puma <- puma %>% 
+  mutate(pop.puma.prop = puma.pop/sum(puma.pop))
+```
+
+```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE, eval = FALSE}
+#DF matching ZIPs to PUMAs
+zip_puma <- read.csv("geocorr_puma_zip.csv")
+
+zip_puma <- zip_puma %>% 
+  filter(state == "25") %>% 
+  select(zcta5, PUMAname, pop10) %>% 
+  rename(zip = zcta5,
+         puma = PUMAname,
+         zip.pop = pop10)
+
+zip_puma$zip <- as.numeric(as.character(zip_puma$zip))
+zip_puma$zip.pop <- as.numeric(as.character(zip_puma$zip.pop))
+zip_puma$puma <- as.character(zip_puma$puma)
+zip_puma$puma <- as.factor(zip_puma$puma)
+
+zip_puma <- zip_puma %>% 
+  filter(zip < 99999)
+
+puma_zip <- merge(x = puma, y = zip_puma, by = c("puma"), all.x = TRUE)
+```
+
+```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE, eval = FALSE}
+#sample
+df <- data %>% 
+  select(Vrid, var21) %>% 
+  rename(zip = var21,
+         ID = Vrid)
+  
+df$zip <- as.numeric(as.character(df$zip))
+df$ID <- as.numeric(as.character(df$ID))
+
+df <- merge(x = df, y = puma_zip, by = c("zip"), all.x = TRUE)
+
+#df <- df %>% 
+#  select(ID, zip, puma, zip_pop)
+
+df <- df %>% 
+  group_by(ID) %>% 
+  mutate(total.puma = sum(puma.pop),
+         puma.weight = puma.pop/total.puma)
+
+df <- df %>% 
+  select(ID, zip, puma, puma.weight)
+
+puma_zip <- puma_zip %>% 
+  select(puma, zip)
+```
+
+```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE}
+data$zip <- as.numeric(as.character(data$var21))
+df$Vrid <- df$ID
+
+#merge demos
+data <- merge(x = d, y = data, by = c("ethnicity", "age_group", "sex"), all.y = TRUE)
+data <- data %>% 
+  unite(demo, ethnicity, sex, age_group, remove = FALSE)
+
+data <- merge(x = df, y = data, by = "zip", all.y = TRUE)
+```
+
+```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE}
+demo <- demo %>%
+  unite(demo, ethnicity, sex, age_group, remove = FALSE)
+
+d <- d %>%
+  unite(demo, ethnicity, sex, age_group, remove = FALSE)
+
+demo <- merge(x = d, y = demo, by = c("demo"), all.x = TRUE)
+
+demo.dist <- data.frame(demo = demo$demo,
+                       Freq = nrow(data) * demo$pop.demo.prop)
+
+demo.dist$demo <- as.character(demo.dist$demo)
+
+#puma.dist <- data.frame(puma = puma$puma,
+#                        Freq = nrow(data) * puma$puma_prop)
+
+zip1 <- merge(x = df, y = pop_zip, by = "zip", all.x = TRUE)
+
+zip.dist <- data.frame(zip = zip1$zip,
+                             Freq = nrow(data) * zip1$pop.zip.prop)
+
+# Create the unweighted survey object
+svy.unweighted <- svydesign(ids = ~ 1, data = data)
+
+#data <- data %>% rename(zip = zip.x)
+
+# Create survey design object with weights
+svy.rake <- rake(design = svy.unweighted,
+                   sample.margins = list(~zip, ~demo),
+                   population.margins = list(zip.dist, demo.dist))
+
+#summary(weights(svy.rake))
+
+#svy.rake.trim <- trimWeights(svy.rake, lower = 0.3, upper = 3, strict = TRUE)
+
+# Extract weight values
+wt <- data.frame(wt = weights(svy.rake))
+
+# Bind weights with the df, re-order variable
+data <- cbind(data, wt)
+
+data <- data %>% 
+  select(wt, demo:var15)
+```
+
+### Interest in program participation (weighted by ZIP and age-sex-ethnicity)
 
 ```{r, fig.width = 9, fig.height = 5, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
+# Violin plot of interest in program
+violin <- data %>% 
+  select(wt,
+         var96, #EV 
+         var98, #Fly
+         var100, #Offsets 
+         var104, #PBD
+         var106, #RECs
+         var108, #Solar
+         var110) #Foodwaste 
+
+violin <- mutate_all(violin, function(x) as.numeric(as.character(x)))
+
+dodge <- position_dodge(width = 0.5)
+
+violin_plot0 <- violin %>%
+   pivot_longer(
+   cols = starts_with(c("var")),
+   names_to = "behavior",
+   values_to = "value",
+   values_drop_na = TRUE) %>% 
+    mutate(behavior = recode(behavior, var96 = "Purchase an \nelectric car", var100 = "Purchase \ncarbon offsets", var106 = "Purchase green \nenergy", var108 = "Install solar \npanels", var98 = "Fly less", var104 = "Eat less meat", var110 = "Reduce food \nwaste")) %>%
+  ggplot(aes(x = reorder(as_factor(behavior), -value), y = value, fill = value, weight = wt)) +
+    geom_violin(position = dodge) +
+  geom_boxplot(position = dodge, width = 0.1, color = "grey", alpha = 0.2, outlier.shape = NA) +
+    stat_summary(fun.y = median, geom = "point", size = 2, color = "red") +
+  theme(axis.line = element_line(color = "grey"),
+        axis.ticks = element_line(color = "grey"),
+        axis.title.y = element_text(color = "black", size = 11),
+        axis.title.x = element_text(color = "black", size = 11),
+        axis.text.x = element_text(colour="black", size = 11),
+        axis.text.y = element_text(colour="black", size = 11),
+        panel.grid.major = element_line(size = 0.5, linetype = 'solid',
+                                colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
+                                colour = "grey"),
+        panel.background = element_blank(),
+        panel.border = element_rect(colour = "grey", fill = NA, size = 0.5)) +
+  #scale_y_continuous(labels = function(x) paste0(x,"%")) +
+  labs(x ="",y = "Interest in a program which helps adopt behaviors")
+
+violin_plot0
+
+#ggsave("violin_plot.png", units = "in", width = 8, height = 5, dpi = 300)
+```
+
+```{r, fig.width = 9, fig.height = 5, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, eval = FALSE}
+### Interest in program participation Unweighted
+
 # Violin plot of interest in program
 violin <- data %>% 
   select(var96, #EV 
@@ -103,20 +382,111 @@ violin_plot <- violin %>%
   labs(x ="",y = "Interest in a program which helps adopt behaviors")
 
 violin_plot
+#ggsave("violin_plot.png", units = "in", width = 8, height = 5, dpi = 300)
+```
+
+```{r, fig.width = 9, fig.height = 5, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, eval = FALSE}
+### Interest in program participation Demo Weighted
+
+# Violin plot of interest in program
+violin <- data %>% 
+  select(demo_weight,
+         var96, #EV 
+         var98, #Fly
+         var100, #Offsets 
+         var104, #PBD
+         var106, #RECs
+         var108, #Solar
+         var110) #Foodwaste 
+
+violin <- mutate_all(violin, function(x) as.numeric(as.character(x)))
+
+dodge <- position_dodge(width = 1)
+
+violin_plot1 <- violin %>%
+   pivot_longer(
+   cols = starts_with(c("var")),
+   names_to = "behavior",
+   values_to = "value",
+   values_drop_na = TRUE) %>% 
+    mutate(behavior = recode(behavior, var96 = "Purchase an \nelectric car", var100 = "Purchase \ncarbon offsets", var106 = "Purchase green \nenergy", var108 = "Install solar \npanels", var98 = "Fly less", var104 = "Eat less meat", var110 = "Reduce food \nwaste")) %>%
+  ggplot(aes(x = reorder(as_factor(behavior), -value), y = value, fill = value, weight = demo_weight)) +
+    geom_violin() +
+  geom_boxplot(position = dodge, width = 0.1, color = "grey", alpha = 0.2, outlier.shape = NA) +
+    stat_summary(fun.y = median, geom = "point", size = 2, color = "red") +
+  theme(axis.line = element_line(color = "grey"),
+        axis.ticks = element_line(color = "grey"),
+        axis.title.y = element_text(color = "black", size = 11),
+        axis.title.x = element_text(color = "black", size = 11),
+        axis.text.x = element_text(colour="black", size = 11),
+        axis.text.y = element_text(colour="black", size = 11),
+        panel.grid.major = element_line(size = 0.5, linetype = 'solid',
+                                colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
+                                colour = "grey"),
+        panel.background = element_blank(),
+        panel.border = element_rect(colour = "grey", fill = NA, size = 0.5)) +
+  #scale_y_continuous(labels = function(x) paste0(x,"%")) +
+  labs(x ="",y = "Interest in a program which helps adopt behaviors")
+
+violin_plot1
 
 #ggsave("violin_plot.png", units = "in", width = 8, height = 5, dpi = 300)
+```
 
-#violin <- mutate_all(violin, function(x) as.numeric(as.character(x)))
+```{r, fig.width = 9, fig.height = 5, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, eval = FALSE}
+### Interest in program participation ZIP Weighted
+# Violin plot of interest in program
+violin <- data %>% 
+  select(zip.weight,
+         var96, #EV 
+         var98, #Fly
+         var100, #Offsets 
+         var104, #PBD
+         var106, #RECs
+         var108, #Solar
+         var110) #Foodwaste 
 
-#draw_quantiles = c(0.25, 0.5, 0.75)
+violin <- mutate_all(violin, function(x) as.numeric(as.character(x)))
 
-#summary(violin$var108)
+dodge <- position_dodge(width = 1)
+
+violin_plot2 <- violin %>%
+   pivot_longer(
+   cols = starts_with(c("var")),
+   names_to = "behavior",
+   values_to = "value",
+   values_drop_na = TRUE) %>% 
+    mutate(behavior = recode(behavior, var96 = "Purchase an \nelectric car", var100 = "Purchase \ncarbon offsets", var106 = "Purchase green \nenergy", var108 = "Install solar \npanels", var98 = "Fly less", var104 = "Eat less meat", var110 = "Reduce food \nwaste")) %>%
+  ggplot(aes(x = reorder(as_factor(behavior), -value), y = value, fill = value, weight = zip.weight)) +
+    geom_violin() +
+  geom_boxplot(position = dodge, width = 0.1, color = "grey", alpha = 0.2, outlier.shape = NA) +
+    stat_summary(fun.y = median, geom = "point", size = 2, color = "red") +
+  theme(axis.line = element_line(color = "grey"),
+        axis.ticks = element_line(color = "grey"),
+        axis.title.y = element_text(color = "black", size = 11),
+        axis.title.x = element_text(color = "black", size = 11),
+        axis.text.x = element_text(colour="black", size = 11),
+        axis.text.y = element_text(colour="black", size = 11),
+        panel.grid.major = element_line(size = 0.5, linetype = 'solid',
+                                colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
+                                colour = "grey"),
+        panel.background = element_blank(),
+        panel.border = element_rect(colour = "grey", fill = NA, size = 0.5)) +
+  #scale_y_continuous(labels = function(x) paste0(x,"%")) +
+  labs(x ="",y = "Interest in a program which helps adopt behaviors")
+
+violin_plot2
+
+#ggsave("violin_plot.png", units = "in", width = 8, height = 5, dpi = 300)
 ```
 
 ```{r, echo = FALSE, results = 'asis', message = FALSE}
 ## Index table
 index <- data %>% 
   select(
+  wt,
   Vrid,
   var13, #RID
   var83O227:var83O804, #ranking
@@ -245,7 +615,7 @@ index <- index %>%
   #EE
   ev_ee = ev_ee/10,
   fly_ee = fly_ee/10,
-  #solar_ee = solar_ee/10,
+  solar_ee = solar_ee/10,
   recs_ee = recs_ee/10,
   offset_ee = offset_ee/10,
   foodwaste_ee = foodwaste_ee/10,
@@ -293,7 +663,7 @@ df1 <- mutate_all(df1, function(x) as.numeric(as.character(x)))
 #
 
 index_long <- index %>% 
-  select(Vrid, ev_adoption:foodwaste_program_interest)
+  select(Vrid, wt, ev_adoption:foodwaste_program_interest)
 
 index_long <- mutate_all(index_long, function(x) as.numeric(as.character(x)))
 
@@ -326,16 +696,10 @@ t <- t %>%
 
 t <- t %>% 
   mutate(hrank = hrank/6)
-
 ```
 
-```{r, include = FALSE}
-hist(index$solar_ee)
-```
-
-### Boston Index
-
-```{r, echo = FALSE, results = 'asis', message = FALSE}
+```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE}
+### Boston Index Unweighted
 # Rename columns
 t <- t %>% 
   rename('Behavior' = behavior,
@@ -377,3 +741,216 @@ reactable(t,
     cellPadding = "8px 12px",
     style = list(fontFamily = "-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif")))
 ```
+
+### Boston Index (weighted by ZIP and age-sex-ethnicity)
+
+```{r, echo = FALSE, results = 'asis', message = FALSE}
+t11 <- group_by(fin_table, behavior, ind)
+
+t11 <- summarise(t11, w.mean = weighted.mean(value, wt, na.rm = TRUE))
+
+t11 <- t11 %>% 
+  group_by(behavior) %>% 
+  pivot_wider(names_from = ind, values_from = w.mean)
+
+t11 <- t11 %>% 
+  mutate(hrank = hrank/6)
+
+# Rename columns
+t11 <- t11 %>% 
+  rename('Behavior' = behavior,
+         'Adoption' = adoption,
+         'Intention' = intent,
+         'Belief that others are engaging in the behavior' = ee,
+         'Belief that others should engage in the behavior' = pnb,
+         'Belief that others think people should engage in the behavior' = ne,
+         'Program interest' = program,
+         'Carbon impact ranking' = hrank)
+
+# Rename rows
+t11$Behavior[t11$Behavior == "ev"] <- "Purchase an EV"
+t11$Behavior[t11$Behavior == "fly"] <- "Fly less*"
+t11$Behavior[t11$Behavior == "offset"] <- "Purchase carbon offsets"
+t11$Behavior[t11$Behavior == "recs"] <- "Purchase green energy"
+t11$Behavior[t11$Behavior == "solar"] <- "Install solar panels"
+t11$Behavior[t11$Behavior == "pbd"] <- "Eat less meat*"
+t11$Behavior[t11$Behavior == "foodwaste"] <- "Waste less food*"
+
+t11 <- t11 %>% 
+  select(Behavior, Adoption, Intention, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`, `Program interest`, `Carbon impact ranking`)
+
+tt = reactable(t11,
+  defaultSortOrder = 'asc',
+  defaultSorted = 'Behavior',
+  showSortIcon = FALSE,
+  # ALL one page option (no scrolling or page swapping)
+    pagination = TRUE,
+    # compact for an overall smaller table width wise
+    compact = TRUE,
+    # borderless - TRUE or FALSE
+    borderless = FALSE,
+    # Stripes - TRUE or FALSE
+    striped = FALSE,
+    # fullWidth - either fit to width or not
+    fullWidth = FALSE,
+    # apply defaults
+    # 100 px and align to center of column
+    defaultColDef = colDef(
+      align = "center",
+      minWidth = 100),
+  # Add theme for the top border
+    theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )
+    ),
+  columns = list(
+    Behavior = colDef(
+      minWidth = 160,
+        align = "left"),
+    Adoption = colDef(
+      format = colFormat(digits = 2)),
+    Intention = colDef(
+      format = colFormat(digits = 2)),
+    `Belief that others are engaging in the behavior` = colDef(
+      name = "Others are adopting",
+      format = colFormat(digits = 2)),
+    `Belief that others should engage in the behavior` = colDef(
+      name = "Others should adopt",
+      format = colFormat(digits = 2)),
+    `Belief that others think people should engage in the behavior` = colDef(
+      name = "Others think people should adopt",
+      format = colFormat(digits = 2)),
+    `Program interest` = colDef(
+      format = colFormat(digits = 2)),
+    `Carbon impact ranking` = colDef(
+      format = colFormat(digits = 2))))
+
+div(
+  class = "Behavior",
+  div(
+    # this can be called with CSS now via .title
+    class = "title",
+    h2("MIP Index: Boston"),
+    #This is kind of like a sub-title, but really it's just raw text
+    "This is kind of like a sub-title, but really it's just raw text"
+  ),
+  # The actual table
+  tt,
+  # I use a span here so I can assigna  color to this text
+  #tags$span(style = "color:#C8C8C8", "
+  #          Location: Boston CBSA | Period: Data collected between March 31, 2021 and April 21, 2021")
+)
+```
+
+```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE, eval = FALSE}
+### Boston Index Demo Weighted
+t1 <- group_by(fin_table, behavior, ind)
+
+t1 <- summarise(t1, w.mean = weighted.mean(value, demo_weight, na.rm = TRUE))
+
+t1 <- t1 %>% 
+  group_by(behavior) %>% 
+  pivot_wider(names_from = ind, values_from = w.mean)
+
+t1 <- t1 %>% 
+  mutate(hrank = hrank/6)
+# Rename columns
+t1 <- t1 %>% 
+  rename('Behavior' = behavior,
+         'Adoption' = adoption,
+         'Intention' = intent,
+         'Belief that others are engaging in the behavior' = ee,
+         'Belief that others should engage in the behavior' = pnb,
+         'Belief that others think people should engage in the behavior' = ne,
+         'Program interest' = program,
+         'Carbon impact ranking' = hrank)
+
+# Rename rows
+t1$Behavior[t1$Behavior == "ev"] <- "Purchase an EV"
+t1$Behavior[t1$Behavior == "fly"] <- "Fly less*"
+t1$Behavior[t1$Behavior == "offset"] <- "Purchase carbon offsets"
+t1$Behavior[t1$Behavior == "recs"] <- "Purchase green energy"
+t1$Behavior[t1$Behavior == "solar"] <- "Install solar panels"
+t1$Behavior[t1$Behavior == "pbd"] <- "Eat less meat*"
+t1$Behavior[t1$Behavior == "foodwaste"] <- "Waste less food*"
+
+t1 <- t1 %>% 
+  select(Behavior, Adoption, Intention, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`, `Program interest`, `Carbon impact ranking`)
+
+reactable(t1,
+  columns = list(Adoption = colDef(format = colFormat(digits = 2), minWidth = 90),
+                 Intention = colDef(format = colFormat(digits = 2), minWidth = 90),
+                 `Belief that others are engaging in the behavior` = colDef(format = colFormat(digits = 2), minWidth = 140),
+                 `Belief that others should engage in the behavior` = colDef(format = colFormat(digits = 2), minWidth = 140),
+                 `Belief that others think people should engage in the behavior` = colDef(format = colFormat(digits = 2), minWidth = 140),
+                 `Program interest` = colDef(format = colFormat(digits = 2)),
+                 `Carbon impact ranking` = colDef(format = colFormat(digits = 2))),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    borderColor = "#dfe2e5",
+    stripedColor = "#f6f8fa",
+    highlightColor = "#f0f5f9",
+    cellPadding = "8px 12px",
+    style = list(fontFamily = "-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif")))
+```
+
+```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE, eval = FALSE}
+### Boston Index ZIP weighted
+t2 <- group_by(fin_table, behavior, ind)
+
+t2 <- summarise(t2, w.mean = weighted.mean(value, zip.weight, na.rm = TRUE))
+
+t2 <- t2 %>% 
+  group_by(behavior) %>% 
+  pivot_wider(names_from = ind, values_from = w.mean)
+
+t2 <- t2 %>% 
+  mutate(hrank = hrank/6)
+
+# Rename columns
+t2 <- t2 %>% 
+  rename('Behavior' = behavior,
+         'Adoption' = adoption,
+         'Intention' = intent,
+         'Belief that others are engaging in the behavior' = ee,
+         'Belief that others should engage in the behavior' = pnb,
+         'Belief that others think people should engage in the behavior' = ne,
+         'Program interest' = program,
+         'Carbon impact ranking' = hrank)
+
+# Rename rows
+t2$Behavior[t2$Behavior == "ev"] <- "Purchase an EV"
+t2$Behavior[t2$Behavior == "fly"] <- "Fly less*"
+t2$Behavior[t2$Behavior == "offset"] <- "Purchase carbon offsets"
+t2$Behavior[t2$Behavior == "recs"] <- "Purchase green energy"
+t2$Behavior[t2$Behavior == "solar"] <- "Install solar panels"
+t2$Behavior[t2$Behavior == "pbd"] <- "Eat less meat*"
+t2$Behavior[t2$Behavior == "foodwaste"] <- "Waste less food*"
+
+t2 <- t2 %>% 
+  select(Behavior, Adoption, Intention, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`, `Program interest`, `Carbon impact ranking`)
+
+reactable(t2,
+  columns = list(Adoption = colDef(format = colFormat(digits = 2), minWidth = 90),
+                 Intention = colDef(format = colFormat(digits = 2), minWidth = 90),
+                 `Belief that others are engaging in the behavior` = colDef(format = colFormat(digits = 2), minWidth = 140),
+                 `Belief that others should engage in the behavior` = colDef(format = colFormat(digits = 2), minWidth = 140),
+                 `Belief that others think people should engage in the behavior` = colDef(format = colFormat(digits = 2), minWidth = 140),
+                 `Program interest` = colDef(format = colFormat(digits = 2)),
+                 `Carbon impact ranking` = colDef(format = colFormat(digits = 2))),
+  striped = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  theme = reactableTheme(
+    borderColor = "#dfe2e5",
+    stripedColor = "#f6f8fa",
+    highlightColor = "#f0f5f9",
+    cellPadding = "8px 12px",
+    style = list(fontFamily = "-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif")))
+```
+

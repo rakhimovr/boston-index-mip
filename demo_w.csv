@@ -1,0 +1,85 @@
+﻿demo_combined,race,gender,age_group,prop
+White alone female 18-24,White,Female,18-24,0.0480
+White alone female 25-34,White,Female,25-34,0.0644
+White alone female 35-44,White,Female,35-44,0.0555
+White alone female 45-54,White,Female,45-54,0.0708
+White alone female 55-64,White,Female,55-64,0.0782
+White alone female 65+,White,Female,65+,0.1135
+White alone male 18-24,White,Male,18-24,0.0476
+White alone male 25-34,White,Male,25-34,0.0631
+White alone male 35-44,White,Male,35-44,0.0536
+White alone male 45-54,White,Male,45-54,0.0673
+White alone male 55-64,White,Male,55-64,0.0723
+White alone male 65+,White,Male,65+,0.0868
+Black or African American alone female 18-24,Black,Female,18-24,0.0058
+Black or African American alone female 25-34,Black,Female,25-34,0.0063
+Black or African American alone female 35-44,Black,Female,35-44,0.0056
+Black or African American alone female 45-54,Black,Female,45-54,0.0059
+Black or African American alone female 55-64,Black,Female,55-64,0.0052
+Black or African American alone female 65+,Black,Female,65+,0.0065
+Black or African American alone male 18-24,Black,Male,18-24,0.0058
+Black or African American alone male 25-34,Black,Male,25-34,0.0063
+Black or African American alone male 35-44,Black,Male,35-44,0.0054
+Black or African American alone male 45-54,Black,Male,45-54,0.0048
+Black or African American alone male 55-64,Black,Male,55-64,0.0048
+Black or African American alone male 65+,Black,Male,65+,0.0044
+Asian alone female 18-24,Asian,Female,18-24,0.0080
+Asian alone female 25-34,Asian,Female,25-34,0.0100
+Asian alone female 35-44,Asian,Female,35-44,0.0087
+Asian alone female 45-54,Asian,Female,45-54,0.0069
+Asian alone female 55-64,Asian,Female,55-64,0.0053
+Asian alone female 65+,Asian,Female,65+,0.0050
+Asian alone male 18-24,Asian,Male,18-24,0.0068
+Asian alone male 25-34,Asian,Male,25-34,0.0090
+Asian alone male 35-44,Asian,Male,35-44,0.0073
+Asian alone male 45-54,Asian,Male,45-54,0.0061
+Asian alone male 55-64,Asian,Male,55-64,0.0044
+Asian alone male 65+,Asian,Male,65+,0.0044
+Native American or Alaska Native female 18-24,Native_American,Female,18-24,0.0000
+Native American or Alaska Native female 25-34,Native_American,Female,25-34,0.0000
+Native American or Alaska Native female 35-44,Native_American,Female,35-44,0.0000
+Native American or Alaska Native female 45-54,Native_American,Female,45-54,0.0000
+Native American or Alaska Native female 55-64,Native_American,Female,55-64,0.0000
+Native American or Alaska Native female 65+,Native_American,Female,65+,0.0000
+Native American or Alaska Native male 18-24,Native_American,Male,18-24,0.0000
+Native American or Alaska Native male 25-34,Native_American,Male,25-34,0.0000
+Native American or Alaska Native male 35-44,Native_American,Male,35-44,0.0000
+Native American or Alaska Native male 45-54,Native_American,Male,45-54,0.0000
+Native American or Alaska Native male 55-64y,Native_American,Male,55-64,0.0000
+Native American or Alaska Native male 65+,Native_American,Male,65+,0.0000
+Native Hawaiian and Other Pacific Islander alone female 18-24,Native_Hawaiian,Female,18-24,0.0000
+Native Hawaiian and Other Pacific Islander alone female 25-34,Native_Hawaiian,Female,25-34,0.0000
+Native Hawaiian and Other Pacific Islander alone female 35-44,Native_Hawaiian,Female,35-44,0.0000
+Native Hawaiian and Other Pacific Islander alone female 45-54,Native_Hawaiian,Female,45-54,0.0000
+Native Hawaiian and Other Pacific Islander alone female 55-64,Native_Hawaiian,Female,55-64,0.0000
+Native Hawaiian and Other Pacific Islander alone female 65+,Native_Hawaiian,Female,65+,0.0000
+Native Hawaiian and Other Pacific Islander alone male 18-24,Native_Hawaiian,Male,18-24,0.0000
+Native Hawaiian and Other Pacific Islander alone male 25-34,Native_Hawaiian,Male,25-34,0.0000
+Native Hawaiian and Other Pacific Islander alone male 35-44,Native_Hawaiian,Male,35-44,0.0000
+Native Hawaiian and Other Pacific Islander alone male 45-54,Native_Hawaiian,Male,45-54,0.0000
+Native Hawaiian and Other Pacific Islander alone male 55-64,Native_Hawaiian,Male,55-64,0.0000
+Native Hawaiian and Other Pacific Islander alone male 65+,Native_Hawaiian,Male,65+,0.0000
+Two or more races female 18-24,Two_races,Female,18-24,0.0000
+Two or more races female 25-34,Two_races,Female,25-34,0.0000
+Two or more races female 35-44,Two_races,Female,35-44,0.0000
+Two or more races female 45-54,Two_races,Female,45-54,0.0000
+Two or more races female 55-64,Two_races,Female,55-64,0.0000
+Two or more races female 65+,Two_races,Female,65+,0.0000
+Two or more races male 18-24,Two_races,Male,18-24,0.0000
+Two or more races male 25-34,Two_races,Male,25-34,0.0000
+Two or more races male 35-44,Two_races,Male,35-44,0.0000
+Two or more races male 45-54,Two_races,Male,45-54,0.0000
+Two or more races male 55-64,Two_races,Male,55-64,0.0000
+Two or more races male 65+,Two_races,Male,65+,0.0000
+Some Other Race alone female 18-24,Other,Female,18-24,0.0025
+Some Other Race alone female 25-34,Other,Female,25-34,0.0033
+Some Other Race alone female 35-44,Other,Female,35-44,0.0030
+Some Other Race alone female 45-54,Other,Female,45-54,0.0027
+Some Other Race alone female 55-64,Other,Female,55-64,0.0019
+Some Other Race alone female 65+,Other,Female,65+,0.0016
+Some Other Race alone male 18-24,Other,Male,18-24,0.0031
+Some Other Race alone male 25-34,Other,Male,25-34,0.0039
+Some Other Race alone male 35-44,Other,Male,35-44,0.0029
+Some Other Race alone male 45-54,Other,Male,45-54,0.0025
+Some Other Race alone male 55-64,Other,Male,55-64,0.0016
+Some Other Race alone male 65+,Other,Male,65+,0.0011

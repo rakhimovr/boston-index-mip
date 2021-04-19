@@ -1,0 +1,610 @@
+state,puma12,zcta5,stab,zipname,PUMAname,pop10,afact
+State code,PUMA (2012),ZIP census tabulation area,State abbreviation,ZCTA name,PUMA12 name,Population (2010),puma12 to zcta5 allocation factor
+25,100,01029,MA,"East Otis, MA (PO Boxes)",Berkshire County--Pittsfield City,789,0.006
+25,100,01201,MA,"Pittsfield, MA",Berkshire County--Pittsfield City,46504,0.3544
+25,100,01220,MA,"Adams, MA",Berkshire County--Pittsfield City,8603,0.0656
+25,100,01222,MA,"Ashley Falls, MA",Berkshire County--Pittsfield City,829,0.0063
+25,100,01223,MA,"Becket, MA",Berkshire County--Pittsfield City,2314,0.0176
+25,100,01224,MA,"Berkshire, MA",Berkshire County--Pittsfield City,182,0.0014
+25,100,01225,MA,"Cheshire, MA",Berkshire County--Pittsfield City,3117,0.0238
+25,100,01226,MA,"Dalton, MA",Berkshire County--Pittsfield City,6945,0.0529
+25,100,01229,MA,"Glendale, MA (PO Boxes)",Berkshire County--Pittsfield City,95,0.0007
+25,100,01230,MA,"Great Barrington, MA",Berkshire County--Pittsfield City,8430,0.0642
+25,100,01235,MA,"Hinsdale, MA",Berkshire County--Pittsfield City,2766,0.0211
+25,100,01236,MA,"Housatonic, MA",Berkshire County--Pittsfield City,1509,0.0115
+25,100,01237,MA,"Lanesboro, MA",Berkshire County--Pittsfield City,2496,0.019
+25,100,01238,MA,"Lee, MA",Berkshire County--Pittsfield City,6047,0.0461
+25,100,01240,MA,"Lenox, MA",Berkshire County--Pittsfield City,4534,0.0346
+25,100,01242,MA,"Lenox Dale, MA (PO Boxes)",Berkshire County--Pittsfield City,476,0.0036
+25,100,01244,MA,"Mill River, MA (PO Boxes)",Berkshire County--Pittsfield City,151,0.0012
+25,100,01245,MA,"Monterey, MA",Berkshire County--Pittsfield City,985,0.0075
+25,100,01247,MA,"North Adams, MA",Berkshire County--Pittsfield City,16087,0.1226
+25,100,01253,MA,"Otis, MA",Berkshire County--Pittsfield City,731,0.0056
+25,100,01254,MA,"Richmond, MA",Berkshire County--Pittsfield City,972,0.0074
+25,100,01255,MA,"Sandisfield, MA",Berkshire County--Pittsfield City,915,0.007
+25,100,01256,MA,"Savoy, MA",Berkshire County--Pittsfield City,692,0.0053
+25,100,01257,MA,"Sheffield, MA",Berkshire County--Pittsfield City,2121,0.0162
+25,100,01258,MA,"South Egremont, MA",Berkshire County--Pittsfield City,374,0.0029
+25,100,01259,MA,"Southfield, MA",Berkshire County--Pittsfield City,635,0.0048
+25,100,01260,MA,"South Lee, MA (PO Boxes)",Berkshire County--Pittsfield City,240,0.0018
+25,100,01262,MA,"Stockbridge, MA (PO Boxes)",Berkshire County--Pittsfield City,1238,0.0094
+25,100,01264,MA,"Tyringham, MA",Berkshire County--Pittsfield City,137,0.001
+25,100,01266,MA,"West Stockbridge, MA",Berkshire County--Pittsfield City,1463,0.0111
+25,100,01267,MA,"Williamstown, MA",Berkshire County--Pittsfield City,7989,0.0609
+25,100,01270,MA,"Windsor, MA",Berkshire County--Pittsfield City,778,0.0059
+25,100,01343,MA,"Drury, MA",Berkshire County--Pittsfield City,75,0.0006
+25,200,01002,MA,"Amherst Center, MA",Franklin & Hampshire (North) Counties,29049,0.2386
+25,200,01003,MA,"Amherst Center, MA",Franklin & Hampshire (North) Counties,10372,0.0852
+25,200,01011,MA,"Chester, MA",Franklin & Hampshire (North) Counties,187,0.0015
+25,200,01012,MA,"Chesterfield, MA",Franklin & Hampshire (North) Counties,661,0.0054
+25,200,01026,MA,"Cummington, MA",Franklin & Hampshire (North) Counties,946,0.0078
+25,200,01032,MA,"Goshen, MA",Franklin & Hampshire (North) Counties,570,0.0047
+25,200,01038,MA,"Hatfield, MA",Franklin & Hampshire (North) Counties,2545,0.0209
+25,200,01039,MA,"Haydenville, MA",Franklin & Hampshire (North) Counties,1336,0.011
+25,200,01054,MA,"Leverett, MA",Franklin & Hampshire (North) Counties,1851,0.0152
+25,200,01066,MA,"North Hatfield, MA (PO Boxes)",Franklin & Hampshire (North) Counties,64,0.0005
+25,200,01070,MA,"Plainfield, MA",Franklin & Hampshire (North) Counties,629,0.0052
+25,200,01072,MA,"Shutesbury, MA",Franklin & Hampshire (North) Counties,1478,0.0121
+25,200,01084,MA,"West Chesterfield, MA (PO Boxes)",Franklin & Hampshire (North) Counties,176,0.0014
+25,200,01088,MA,"West Hatfield, MA",Franklin & Hampshire (North) Counties,670,0.0055
+25,200,01093,MA,"Whately, MA (PO Boxes)",Franklin & Hampshire (North) Counties,325,0.0027
+25,200,01096,MA,"Williamsburg, MA",Franklin & Hampshire (North) Counties,2217,0.0182
+25,200,01098,MA,"Worthington, MA",Franklin & Hampshire (North) Counties,1101,0.009
+25,200,01243,MA,"Middlefield, MA (PO Boxes)",Franklin & Hampshire (North) Counties,334,0.0027
+25,200,01301,MA,"Greenfield Town, MA",Franklin & Hampshire (North) Counties,17700,0.1454
+25,200,01330,MA,"Ashfield, MA",Franklin & Hampshire (North) Counties,1506,0.0124
+25,200,01337,MA,"Bernardston, MA",Franklin & Hampshire (North) Counties,2596,0.0213
+25,200,01338,MA,"Buckland, MA",Franklin & Hampshire (North) Counties,187,0.0015
+25,200,01339,MA,"Charlemont, MA",Franklin & Hampshire (North) Counties,1438,0.0118
+25,200,01340,MA,"Colrain, MA",Franklin & Hampshire (North) Counties,1701,0.014
+25,200,01341,MA,"Conway, MA",Franklin & Hampshire (North) Counties,1833,0.0151
+25,200,01342,MA,"Deerfield, MA",Franklin & Hampshire (North) Counties,1492,0.0123
+25,200,01344,MA,"Erving, MA",Franklin & Hampshire (North) Counties,1498,0.0123
+25,200,01346,MA,"Heath, MA",Franklin & Hampshire (North) Counties,533,0.0044
+25,200,01347,MA,"Lake Pleasant, MA (PO Boxes)",Franklin & Hampshire (North) Counties,166,0.0014
+25,200,01349,MA,"Millers Falls, MA",Franklin & Hampshire (North) Counties,1091,0.009
+25,200,01350,MA,"Monroe Bridge, MA (PO Boxes)",Franklin & Hampshire (North) Counties,121,0.001
+25,200,01351,MA,"Montague, MA",Franklin & Hampshire (North) Counties,2270,0.0186
+25,200,01354,MA,"Gill, MA",Franklin & Hampshire (North) Counties,1500,0.0123
+25,200,01355,MA,"New Salem, MA",Franklin & Hampshire (North) Counties,878,0.0072
+25,200,01360,MA,"Northfield, MA",Franklin & Hampshire (North) Counties,3032,0.0249
+25,200,01364,MA,"Orange, MA",Franklin & Hampshire (North) Counties,7969,0.0655
+25,200,01367,MA,"Rowe, MA",Franklin & Hampshire (North) Counties,522,0.0043
+25,200,01370,MA,"Shelburne Falls, MA",Franklin & Hampshire (North) Counties,4084,0.0335
+25,200,01373,MA,"South Deerfield, MA",Franklin & Hampshire (North) Counties,4600,0.0378
+25,200,01375,MA,"Sunderland, MA",Franklin & Hampshire (North) Counties,3684,0.0303
+25,200,01376,MA,"Turners Falls, MA",Franklin & Hampshire (North) Counties,5247,0.0431
+25,200,01378,MA,"Warwick, MA",Franklin & Hampshire (North) Counties,774,0.0064
+25,200,01379,MA,"Wendell, MA",Franklin & Hampshire (North) Counties,813,0.0067
+25,300,01583,MA,"West Boylston, MA",Worcester County (Central)--Worcester City,50,0.0003
+25,300,01602,MA,"Worcester, MA",Worcester County (Central)--Worcester City,22819,0.126
+25,300,01603,MA,"Worcester, MA",Worcester County (Central)--Worcester City,19916,0.11
+25,300,01604,MA,"Worcester, MA",Worcester County (Central)--Worcester City,34586,0.191
+25,300,01605,MA,"Worcester, MA",Worcester County (Central)--Worcester City,26221,0.1448
+25,300,01606,MA,"Worcester, MA",Worcester County (Central)--Worcester City,18949,0.1047
+25,300,01607,MA,"Worcester, MA",Worcester County (Central)--Worcester City,8250,0.0456
+25,300,01608,MA,"Worcester, MA",Worcester County (Central)--Worcester City,3888,0.0215
+25,300,01609,MA,"Worcester, MA",Worcester County (Central)--Worcester City,22421,0.1238
+25,300,01610,MA,"Worcester, MA",Worcester County (Central)--Worcester City,23945,0.1323
+25,301,01420,MA,"Fitchburg, MA","Worcester County (Northeast)--Leominster, Fitchburg & Gardner Cities",40337,0.3399
+25,301,01440,MA,"Gardner, MA","Worcester County (Northeast)--Leominster, Fitchburg & Gardner Cities",20228,0.1705
+25,301,01453,MA,"Leominster, MA","Worcester County (Northeast)--Leominster, Fitchburg & Gardner Cities",40740,0.3433
+25,301,01462,MA,"Lunenburg, MA","Worcester County (Northeast)--Leominster, Fitchburg & Gardner Cities",10086,0.085
+25,301,01473,MA,"Westminster, MA","Worcester County (Northeast)--Leominster, Fitchburg & Gardner Cities",7277,0.0613
+25,302,01005,MA,"Barre, MA",Worcester County (West Central),5079,0.0422
+25,302,01031,MA,"Gilbertville, MA",Worcester County (West Central),1308,0.0109
+25,302,01037,MA,"Hardwick, MA (PO Boxes)",Worcester County (West Central),838,0.007
+25,302,01068,MA,"Oakham, MA",Worcester County (West Central),1902,0.0158
+25,302,01074,MA,"South Barre, MA (PO Boxes)",Worcester County (West Central),319,0.0027
+25,302,01082,MA,"Ware, MA",Worcester County (West Central),450,0.0037
+25,302,01083,MA,"Warren, MA (PO Boxes)",Worcester County (West Central),2888,0.024
+25,302,01092,MA,"West Warren, MA (PO Boxes)",Worcester County (West Central),1394,0.0116
+25,302,01094,MA,"Wheelwright, MA (PO Boxes)",Worcester County (West Central),351,0.0029
+25,302,01366,MA,"Petersham, MA",Worcester County (West Central),43,0.0004
+25,302,01501,MA,"Auburn, MA",Worcester County (West Central),16075,0.1336
+25,302,01506,MA,"Brookfield, MA",Worcester County (West Central),3390,0.0282
+25,302,01515,MA,"East Brookfield, MA",Worcester County (West Central),2183,0.0181
+25,302,01520,MA,"Holden, MA",Worcester County (West Central),13997,0.1164
+25,302,01522,MA,"Jefferson, MA",Worcester County (West Central),3310,0.0275
+25,302,01524,MA,"Leicester, MA",Worcester County (West Central),6696,0.0557
+25,302,01527,MA,"Millbury, MA",Worcester County (West Central),13246,0.1101
+25,302,01531,MA,"New Braintree, MA",Worcester County (West Central),999,0.0083
+25,302,01535,MA,"North Brookfield, MA",Worcester County (West Central),4680,0.0389
+25,302,01542,MA,"Rochdale, MA",Worcester County (West Central),2032,0.0169
+25,302,01543,MA,"Rutland, MA",Worcester County (West Central),7973,0.0663
+25,302,01562,MA,"Spencer, MA",Worcester County (West Central),11688,0.0972
+25,302,01583,MA,"West Boylston, MA",Worcester County (West Central),7541,0.0627
+25,302,01585,MA,"West Brookfield, MA",Worcester County (West Central),4554,0.0379
+25,302,01604,MA,"Worcester, MA",Worcester County (West Central),27,0.0002
+25,302,01606,MA,"Worcester, MA",Worcester County (West Central),128,0.0011
+25,302,01607,MA,"Worcester, MA",Worcester County (West Central),101,0.0008
+25,302,01611,MA,"Cherry Valley, MA",Worcester County (West Central),2242,0.0186
+25,302,01612,MA,"Paxton, MA",Worcester County (West Central),4845,0.0403
+25,303,01503,MA,"Berlin, MA",Worcester County (East Central),2866,0.0251
+25,303,01505,MA,"Boylston, MA",Worcester County (East Central),4355,0.0381
+25,303,01510,MA,"Clinton, MA",Worcester County (East Central),13606,0.1192
+25,303,01519,MA,"Grafton, MA",Worcester County (East Central),6595,0.0578
+25,303,01532,MA,"Northborough, MA",Worcester County (East Central),14155,0.124
+25,303,01536,MA,"North Grafton, MA",Worcester County (East Central),6888,0.0603
+25,303,01545,MA,"Shrewsbury, MA",Worcester County (East Central),35299,0.3092
+25,303,01560,MA,"South Grafton, MA",Worcester County (East Central),4527,0.0397
+25,303,01568,MA,"Upton, MA",Worcester County (East Central),7480,0.0655
+25,303,01581,MA,"Westborough, MA",Worcester County (East Central),18272,0.16
+25,303,01604,MA,"Worcester, MA",Worcester County (East Central),64,0.0006
+25,303,01757,MA,"Milford, MA",Worcester County (East Central),62,0.0005
+25,304,01504,MA,"Blackstone, MA",Worcester County (South),9026,0.0596
+25,304,01507,MA,"Charlton, MA",Worcester County (South),12981,0.0857
+25,304,01516,MA,"Douglas, MA",Worcester County (South),8500,0.0561
+25,304,01518,MA,"Fiskdale, MA",Worcester County (South),2974,0.0196
+25,304,01525,MA,"Linwood, MA (PO Boxes)",Worcester County (South),290,0.0019
+25,304,01529,MA,"Millville, MA",Worcester County (South),3190,0.0211
+25,304,01534,MA,"Northbridge, MA",Worcester County (South),5631,0.0372
+25,304,01537,MA,"North Oxford, MA",Worcester County (South),2248,0.0148
+25,304,01540,MA,"Oxford, MA",Worcester County (South),11291,0.0746
+25,304,01542,MA,"Rochdale, MA",Worcester County (South),170,0.0011
+25,304,01550,MA,"Southbridge Town, MA",Worcester County (South),16719,0.1104
+25,304,01566,MA,"Sturbridge, MA",Worcester County (South),6294,0.0416
+25,304,01569,MA,"Uxbridge, MA",Worcester County (South),13569,0.0896
+25,304,01570,MA,"Webster, MA",Worcester County (South),16767,0.1107
+25,304,01571,MA,"Dudley, MA",Worcester County (South),11390,0.0752
+25,304,01588,MA,"Whitinsville, MA",Worcester County (South),9733,0.0643
+25,304,01590,MA,"Sutton, MA",Worcester County (South),8875,0.0586
+25,304,01747,MA,"Hopedale, MA",Worcester County (South),5911,0.039
+25,304,01756,MA,"Mendon, MA",Worcester County (South),5839,0.0386
+25,400,01331,MA,"Athol, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",13263,0.1232
+25,400,01366,MA,"Petersham, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",1234,0.0115
+25,400,01368,MA,"Royalston, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",1261,0.0117
+25,400,01430,MA,"Ashburnham, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",6089,0.0566
+25,400,01431,MA,"Ashby, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",3074,0.0286
+25,400,01432,MA,"Ayer, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",7089,0.0659
+25,400,01434,MA,"Devens, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",1795,0.0167
+25,400,01436,MA,"Baldwinville, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",3336,0.031
+25,400,01438,MA,"East Templeton, MA (PO Boxes)","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",559,0.0052
+25,400,01440,MA,"Gardner, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",119,0.0011
+25,400,01450,MA,"Groton, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",10646,0.0989
+25,400,01451,MA,"Harvard, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",4747,0.0441
+25,400,01452,MA,"Hubbardston, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",4382,0.0407
+25,400,01453,MA,"Leominster, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",143,0.0013
+25,400,01464,MA,"Shirley, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",7211,0.067
+25,400,01467,MA,"Still River, MA (PO Boxes)","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",316,0.0029
+25,400,01468,MA,"Templeton, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",4021,0.0374
+25,400,01469,MA,"Townsend, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",6801,0.0632
+25,400,01474,MA,"West Townsend, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",2125,0.0197
+25,400,01475,MA,"Winchendon, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",10270,0.0954
+25,400,01523,MA,"Lancaster, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",7582,0.0705
+25,400,01541,MA,"Princeton, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",3413,0.0317
+25,400,01561,MA,"South Lancaster, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",330,0.0031
+25,400,01564,MA,"Sterling, MA","Worcester & Middlesex Counties (Outside Leominster, Fitchburg & Gardner Cities)",7808,0.0726
+25,501,01463,MA,"Pepperell, MA",Middlesex County (Outside Lowell City),11497,0.1034
+25,501,01824,MA,"Chelmsford, MA",Middlesex County (Outside Lowell City),24911,0.2241
+25,501,01826,MA,"Dracut, MA",Middlesex County (Outside Lowell City),29422,0.2646
+25,501,01827,MA,"Dunstable, MA",Middlesex County (Outside Lowell City),3179,0.0286
+25,501,01854,MA,"Lowell, MA",Middlesex County (Outside Lowell City),22,0.0002
+25,501,01863,MA,"North Chelmsford, MA",Middlesex County (Outside Lowell City),8891,0.08
+25,501,01879,MA,"Tyngsboro, MA",Middlesex County (Outside Lowell City),11305,0.1017
+25,501,01886,MA,"Westford, MA",Middlesex County (Outside Lowell City),21951,0.1974
+25,502,01850,MA,"Lowell, MA",Middlesex County (Far Northeast)--Lowell City,15237,0.143
+25,502,01851,MA,"Lowell, MA",Middlesex County (Far Northeast)--Lowell City,30190,0.2834
+25,502,01852,MA,"Lowell, MA",Middlesex County (Far Northeast)--Lowell City,33508,0.3146
+25,502,01854,MA,"Lowell, MA",Middlesex County (Far Northeast)--Lowell City,27584,0.259
+25,503,01730,MA,"Bedford, MA","Middlesex County--Waltham City, Lexington, Burlington, Bedford & Lincoln Towns",13221,0.0971
+25,503,01731,MA,"Hanscom Afb, MA","Middlesex County--Waltham City, Lexington, Burlington, Bedford & Lincoln Towns",1396,0.0102
+25,503,01773,MA,"Lincoln, MA","Middlesex County--Waltham City, Lexington, Burlington, Bedford & Lincoln Towns",5076,0.0373
+25,503,01803,MA,"Burlington, MA","Middlesex County--Waltham City, Lexington, Burlington, Bedford & Lincoln Towns",24487,0.1798
+25,503,02420,MA,"Lexington, MA","Middlesex County--Waltham City, Lexington, Burlington, Bedford & Lincoln Towns",14052,0.1032
+25,503,02421,MA,"Lexington, MA","Middlesex County--Waltham City, Lexington, Burlington, Bedford & Lincoln Towns",17342,0.1273
+25,503,02451,MA,"Waltham, MA","Middlesex County--Waltham City, Lexington, Burlington, Bedford & Lincoln Towns",17426,0.1279
+25,503,02452,MA,"Waltham, MA","Middlesex County--Waltham City, Lexington, Burlington, Bedford & Lincoln Towns",14238,0.1045
+25,503,02453,MA,"Waltham, MA","Middlesex County--Waltham City, Lexington, Burlington, Bedford & Lincoln Towns",28968,0.2127
+25,504,01701,MA,"Framingham, MA","Middlesex County (South)--Framingham Town, Marlborough City & Natick Town",31217,0.2233
+25,504,01702,MA,"Framingham, MA","Middlesex County (South)--Framingham Town, Marlborough City & Natick Town",37206,0.2661
+25,504,01752,MA,"Marlborough, MA","Middlesex County (South)--Framingham Town, Marlborough City & Natick Town",38499,0.2753
+25,504,01760,MA,"Natick, MA","Middlesex County (South)--Framingham Town, Marlborough City & Natick Town",32786,0.2345
+25,504,01778,MA,"Cochituate, MA","Middlesex County (South)--Framingham Town, Marlborough City & Natick Town",115,0.0008
+25,505,01890,MA,"Winchester, MA","Middlesex County--Watertown Town City, Arlington, Belmont & Winchester Towns",21374,0.1768
+25,505,02138,MA,"Cambridge, MA","Middlesex County--Watertown Town City, Arlington, Belmont & Winchester Towns",9,0.0001
+25,505,02472,MA,"Watertown Town, MA","Middlesex County--Watertown Town City, Arlington, Belmont & Winchester Towns",31971,0.2645
+25,505,02474,MA,"Arlington, MA","Middlesex County--Watertown Town City, Arlington, Belmont & Winchester Towns",26312,0.2177
+25,505,02476,MA,"Arlington, MA","Middlesex County--Watertown Town City, Arlington, Belmont & Winchester Towns",16532,0.1368
+25,505,02478,MA,"Belmont, MA","Middlesex County--Watertown Town City, Arlington, Belmont & Winchester Towns",24664,0.2041
+25,506,02138,MA,"Cambridge, MA",Middlesex County (East)--Cambridge City,36185,0.3441
+25,506,02139,MA,"Cambridge, MA",Middlesex County (East)--Cambridge City,36349,0.3456
+25,506,02140,MA,"Cambridge, MA",Middlesex County (East)--Cambridge City,17544,0.1668
+25,506,02141,MA,"Cambridge, MA",Middlesex County (East)--Cambridge City,11910,0.1133
+25,506,02142,MA,"Cambridge, MA",Middlesex County (East)--Cambridge City,3141,0.0299
+25,506,02472,MA,"Watertown Town, MA",Middlesex County (East)--Cambridge City,33,0.0003
+25,507,02138,MA,"Cambridge, MA",Middlesex County (East)--Somerville & Everett Cities,120,0.001
+25,507,02140,MA,"Cambridge, MA",Middlesex County (East)--Somerville & Everett Cities,63,0.0005
+25,507,02143,MA,"Somerville, MA",Middlesex County (East)--Somerville & Everett Cities,24514,0.2088
+25,507,02144,MA,"Somerville, MA",Middlesex County (East)--Somerville & Everett Cities,23891,0.2035
+25,507,02145,MA,"Somerville, MA",Middlesex County (East)--Somerville & Everett Cities,25303,0.2155
+25,507,02148,MA,"Malden, MA",Middlesex County (East)--Somerville & Everett Cities,117,0.001
+25,507,02149,MA,"Everett, MA",Middlesex County (East)--Somerville & Everett Cities,41550,0.3539
+25,507,02155,MA,"Medford, MA",Middlesex County (East)--Somerville & Everett Cities,1863,0.0159
+25,508,02145,MA,"Somerville, MA",Middlesex County (East)--Malden & Medford Cities,136,0.0012
+25,508,02148,MA,"Malden, MA",Middlesex County (East)--Malden & Medford Cities,59386,0.5136
+25,508,02155,MA,"Medford, MA",Middlesex County (East)--Malden & Medford Cities,56101,0.4852
+25,701,01830,MA,"Haverhill, MA","Essex County (Northwest)--Lawrence, Haverhill & Methuen Town Cities",25137,0.1362
+25,701,01832,MA,"Haverhill, MA","Essex County (Northwest)--Lawrence, Haverhill & Methuen Town Cities",22060,0.1196
+25,701,01835,MA,"Haverhill, MA","Essex County (Northwest)--Lawrence, Haverhill & Methuen Town Cities",13682,0.0742
+25,701,01840,MA,"Lawrence, MA","Essex County (Northwest)--Lawrence, Haverhill & Methuen Town Cities",4733,0.0257
+25,701,01841,MA,"Lawrence, MA","Essex County (Northwest)--Lawrence, Haverhill & Methuen Town Cities",47225,0.2559
+25,701,01843,MA,"Lawrence, MA","Essex County (Northwest)--Lawrence, Haverhill & Methuen Town Cities",24425,0.1324
+25,701,01844,MA,"Methuen Town, MA","Essex County (Northwest)--Lawrence, Haverhill & Methuen Town Cities",47249,0.2561
+25,702,01833,MA,"Georgetown, MA",Essex County (Central)--Amesbury Town City,8183,0.0775
+25,702,01834,MA,"Groveland, MA",Essex County (Central)--Amesbury Town City,6459,0.0612
+25,702,01845,MA,"North Andover, MA",Essex County (Central)--Amesbury Town City,28352,0.2687
+25,702,01860,MA,"Merrimac, MA",Essex County (Central)--Amesbury Town City,6338,0.0601
+25,702,01913,MA,"Amesbury Town, MA",Essex County (Central)--Amesbury Town City,16283,0.1543
+25,702,01921,MA,"Boxford, MA",Essex County (Central)--Amesbury Town City,7961,0.0754
+25,702,01949,MA,"Middleton, MA",Essex County (Central)--Amesbury Town City,8987,0.0852
+25,702,01982,MA,"South Hamilton, MA",Essex County (Central)--Amesbury Town City,7764,0.0736
+25,702,01983,MA,"Topsfield, MA",Essex County (Central)--Amesbury Town City,6089,0.0577
+25,702,01984,MA,"Wenham, MA",Essex County (Central)--Amesbury Town City,4875,0.0462
+25,702,01985,MA,"West Newbury, MA",Essex County (Central)--Amesbury Town City,4235,0.0401
+25,703,01907,MA,"Swampscott, MA","Essex County (East)--Salem, Beverly, Gloucester & Newburyport Cities",231,0.0012
+25,703,01915,MA,"Beverly, MA","Essex County (East)--Salem, Beverly, Gloucester & Newburyport Cities",39502,0.2011
+25,703,01922,MA,"Byfield, MA","Essex County (East)--Salem, Beverly, Gloucester & Newburyport Cities",3108,0.0158
+25,703,01929,MA,"Essex, MA","Essex County (East)--Salem, Beverly, Gloucester & Newburyport Cities",3504,0.0178
+25,703,01930,MA,"Gloucester, MA","Essex County (East)--Salem, Beverly, Gloucester & Newburyport Cities",28789,0.1466
+25,703,01938,MA,"Ipswich, MA","Essex County (East)--Salem, Beverly, Gloucester & Newburyport Cities",13175,0.0671
+25,703,01944,MA,"Manchester, MA","Essex County (East)--Salem, Beverly, Gloucester & Newburyport Cities",5136,0.0261
+25,703,01945,MA,"Marblehead, MA","Essex County (East)--Salem, Beverly, Gloucester & Newburyport Cities",19808,0.1008
+25,703,01950,MA,"Newburyport, MA","Essex County (East)--Salem, Beverly, Gloucester & Newburyport Cities",17416,0.0887
+25,703,01951,MA,"Newbury, MA","Essex County (East)--Salem, Beverly, Gloucester & Newburyport Cities",3558,0.0181
+25,703,01952,MA,"Salisbury, MA","Essex County (East)--Salem, Beverly, Gloucester & Newburyport Cities",8283,0.0422
+25,703,01966,MA,"Rockport, MA","Essex County (East)--Salem, Beverly, Gloucester & Newburyport Cities",6952,0.0354
+25,703,01969,MA,"Rowley, MA","Essex County (East)--Salem, Beverly, Gloucester & Newburyport Cities",5856,0.0298
+25,703,01970,MA,"Salem, MA","Essex County (East)--Salem, Beverly, Gloucester & Newburyport Cities",41109,0.2093
+25,704,01901,MA,"Lynn, MA","Essex County (South)--Lynn City, Swampscott & Nahant Towns",1689,0.0157
+25,704,01902,MA,"Lynn, MA","Essex County (South)--Lynn City, Swampscott & Nahant Towns",45139,0.4198
+25,704,01904,MA,"Lynn, MA","Essex County (South)--Lynn City, Swampscott & Nahant Towns",18203,0.1693
+25,704,01905,MA,"Lynn, MA","Essex County (South)--Lynn City, Swampscott & Nahant Towns",25251,0.2348
+25,704,01906,MA,"Saugus, MA","Essex County (South)--Lynn City, Swampscott & Nahant Towns",32,0.0003
+25,704,01907,MA,"Swampscott, MA","Essex County (South)--Lynn City, Swampscott & Nahant Towns",13796,0.1283
+25,704,01908,MA,"Nahant, MA","Essex County (South)--Lynn City, Swampscott & Nahant Towns",3410,0.0317
+25,704,01940,MA,"Lynnfield, MA","Essex County (South)--Lynn City, Swampscott & Nahant Towns",6,0.0001
+25,1000,01801,MA,"Woburn, MA","Peabody City, Danvers, Reading, North Reading & Lynnfield Towns",791,0.0061
+25,1000,01864,MA,"North Reading, MA","Peabody City, Danvers, Reading, North Reading & Lynnfield Towns",14892,0.1155
+25,1000,01867,MA,"Reading, MA","Peabody City, Danvers, Reading, North Reading & Lynnfield Towns",23956,0.1857
+25,1000,01923,MA,"Danvers, MA","Peabody City, Danvers, Reading, North Reading & Lynnfield Towns",26342,0.2042
+25,1000,01937,MA,"Danvers, MA","Peabody City, Danvers, Reading, North Reading & Lynnfield Towns",151,0.0012
+25,1000,01940,MA,"Lynnfield, MA","Peabody City, Danvers, Reading, North Reading & Lynnfield Towns",11903,0.0923
+25,1000,01960,MA,"Peabody, MA","Peabody City, Danvers, Reading, North Reading & Lynnfield Towns",50944,0.395
+25,1300,01810,MA,"Andover, MA","Billerica, Andover, Tewksbury & Wilmington Towns",33201,0.2662
+25,1300,01821,MA,"Billerica, MA","Billerica, Andover, Tewksbury & Wilmington Towns",30310,0.243
+25,1300,01862,MA,"North Billerica, MA","Billerica, Andover, Tewksbury & Wilmington Towns",10227,0.082
+25,1300,01876,MA,"Tewksbury, MA","Billerica, Andover, Tewksbury & Wilmington Towns",28667,0.2298
+25,1300,01887,MA,"Wilmington, MA","Billerica, Andover, Tewksbury & Wilmington Towns",22325,0.179
+25,1400,01460,MA,"Littleton, MA",Middlesex (West Central) & Worcester (East) Counties,8924,0.0765
+25,1400,01718,MA,"Village Of Nagog Woods, MA",Middlesex (West Central) & Worcester (East) Counties,469,0.004
+25,1400,01719,MA,"Boxborough, MA",Middlesex (West Central) & Worcester (East) Counties,4996,0.0428
+25,1400,01720,MA,"Acton, MA",Middlesex (West Central) & Worcester (East) Counties,21361,0.1831
+25,1400,01740,MA,"Bolton, MA",Middlesex (West Central) & Worcester (East) Counties,4897,0.042
+25,1400,01741,MA,"Carlisle, MA",Middlesex (West Central) & Worcester (East) Counties,4852,0.0416
+25,1400,01742,MA,"Concord, MA",Middlesex (West Central) & Worcester (East) Counties,17726,0.1519
+25,1400,01749,MA,"Hudson, MA",Middlesex (West Central) & Worcester (East) Counties,19063,0.1634
+25,1400,01754,MA,"Maynard, MA",Middlesex (West Central) & Worcester (East) Counties,10106,0.0866
+25,1400,01773,MA,"Lincoln, MA",Middlesex (West Central) & Worcester (East) Counties,36,0.0003
+25,1400,01775,MA,"Stow, MA",Middlesex (West Central) & Worcester (East) Counties,6590,0.0565
+25,1400,01776,MA,"Sudbury, MA",Middlesex (West Central) & Worcester (East) Counties,17659,0.1513
+25,1600,01007,MA,"Belchertown, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,14649,0.102
+25,1600,01008,MA,"Blandford, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,1263,0.0088
+25,1600,01009,MA,"Palmer Town, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,741,0.0052
+25,1600,01010,MA,"Brimfield, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,3609,0.0251
+25,1600,01011,MA,"Chester, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,1183,0.0082
+25,1600,01027,MA,"Easthampton Town, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,17660,0.123
+25,1600,01033,MA,"Granby, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,6227,0.0434
+25,1600,01034,MA,"Granville, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,2021,0.0141
+25,1600,01035,MA,"Hadley, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,5250,0.0366
+25,1600,01050,MA,"Huntington, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,2530,0.0176
+25,1600,01053,MA,"Northampton, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,1685,0.0117
+25,1600,01057,MA,"Monson, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,8504,0.0592
+25,1600,01060,MA,"Northampton, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,15284,0.1065
+25,1600,01062,MA,"Northampton, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,11150,0.0777
+25,1600,01063,MA,"Northampton, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,430,0.003
+25,1600,01069,MA,"Palmer Town, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,8469,0.059
+25,1600,01071,MA,"Russell, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,1596,0.0111
+25,1600,01073,MA,"Southampton, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,5792,0.0403
+25,1600,01075,MA,"South Hadley, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,17527,0.1221
+25,1600,01079,MA,"Palmer Town, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,692,0.0048
+25,1600,01080,MA,"Palmer Town, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,2334,0.0163
+25,1600,01081,MA,"Wales, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,1698,0.0118
+25,1600,01082,MA,"Ware, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,9872,0.0688
+25,1600,01085,MA,"Westfield, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,710,0.0049
+25,1600,01095,MA,"Wilbraham, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,100,0.0007
+25,1600,01097,MA,"Woronoco, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,111,0.0008
+25,1600,01521,MA,"Holland, MA",Hampden (West & East) & Hampshire (South) Counties--Northampton City,2481,0.0173
+25,1900,01020,MA,"Chicopee, MA",Hampden County (Central)--Springfield City,9,0.0001
+25,1900,01103,MA,"Springfield, MA",Hampden County (Central)--Springfield City,2479,0.0162
+25,1900,01104,MA,"Springfield, MA",Hampden County (Central)--Springfield City,22865,0.1494
+25,1900,01105,MA,"Springfield, MA",Hampden County (Central)--Springfield City,12350,0.0807
+25,1900,01106,MA,"Longmeadow, MA",Hampden County (Central)--Springfield City,237,0.0015
+25,1900,01107,MA,"Springfield, MA",Hampden County (Central)--Springfield City,11611,0.0759
+25,1900,01108,MA,"Springfield, MA",Hampden County (Central)--Springfield City,26688,0.1744
+25,1900,01109,MA,"Springfield, MA",Hampden County (Central)--Springfield City,30250,0.1976
+25,1900,01118,MA,"Springfield, MA",Hampden County (Central)--Springfield City,14071,0.0919
+25,1900,01119,MA,"Springfield, MA",Hampden County (Central)--Springfield City,14152,0.0925
+25,1900,01128,MA,"Springfield, MA",Hampden County (Central)--Springfield City,2631,0.0172
+25,1900,01129,MA,"Springfield, MA",Hampden County (Central)--Springfield City,7019,0.0459
+25,1900,01151,MA,"Springfield, MA",Hampden County (Central)--Springfield City,8698,0.0568
+25,1901,01001,MA,"Agawam Town, MA",Hampden County (West of Springfield City)--Westfield & Holyoke Cities,16769,0.1138
+25,1901,01030,MA,"Agawam Town, MA",Hampden County (West of Springfield City)--Westfield & Holyoke Cities,11669,0.0792
+25,1901,01040,MA,"Holyoke, MA",Hampden County (West of Springfield City)--Westfield & Holyoke Cities,39880,0.2707
+25,1901,01077,MA,"Southwick, MA",Hampden County (West of Springfield City)--Westfield & Holyoke Cities,9502,0.0645
+25,1901,01085,MA,"Westfield, MA",Hampden County (West of Springfield City)--Westfield & Holyoke Cities,40407,0.2743
+25,1901,01086,MA,"Westfield, MA",Hampden County (West of Springfield City)--Westfield & Holyoke Cities,687,0.0047
+25,1901,01089,MA,"West Springfield Town, MA",Hampden County (West of Springfield City)--Westfield & Holyoke Cities,28391,0.1927
+25,1902,01013,MA,"Chicopee, MA",Hampden County (East of Springfield City)--Chicopee City,23188,0.1822
+25,1902,01020,MA,"Chicopee, MA",Hampden County (East of Springfield City)--Chicopee City,29659,0.2331
+25,1902,01022,MA,"Chicopee, MA",Hampden County (East of Springfield City)--Chicopee City,2451,0.0193
+25,1902,01028,MA,"East Longmeadow, MA",Hampden County (East of Springfield City)--Chicopee City,15720,0.1235
+25,1902,01036,MA,"Hampden, MA",Hampden County (East of Springfield City)--Chicopee City,5109,0.0401
+25,1902,01056,MA,"Ludlow, MA",Hampden County (East of Springfield City)--Chicopee City,21103,0.1658
+25,1902,01057,MA,"Monson, MA",Hampden County (East of Springfield City)--Chicopee City,30,0.0002
+25,1902,01095,MA,"Wilbraham, MA",Hampden County (East of Springfield City)--Chicopee City,14219,0.1117
+25,1902,01106,MA,"Longmeadow, MA",Hampden County (East of Springfield City)--Chicopee City,15784,0.124
+25,2400,01721,MA,"Ashland, MA","Middlesex (Far Southwest), Norfolk (Northwest) & Worcester (Far East) Counties",16593,0.1437
+25,2400,01745,MA,"Fayville, MA","Middlesex (Far Southwest), Norfolk (Northwest) & Worcester (Far East) Counties",397,0.0034
+25,2400,01746,MA,"Holliston, MA","Middlesex (Far Southwest), Norfolk (Northwest) & Worcester (Far East) Counties",13547,0.1173
+25,2400,01748,MA,"Hopkinton, MA","Middlesex (Far Southwest), Norfolk (Northwest) & Worcester (Far East) Counties",14925,0.1292
+25,2400,01757,MA,"Milford, MA","Middlesex (Far Southwest), Norfolk (Northwest) & Worcester (Far East) Counties",27999,0.2424
+25,2400,01772,MA,"Southborough, MA","Middlesex (Far Southwest), Norfolk (Northwest) & Worcester (Far East) Counties",9370,0.0811
+25,2400,02052,MA,"Medfield, MA","Middlesex (Far Southwest), Norfolk (Northwest) & Worcester (Far East) Counties",12024,0.1041
+25,2400,02053,MA,"Medway, MA","Middlesex (Far Southwest), Norfolk (Northwest) & Worcester (Far East) Counties",12752,0.1104
+25,2400,02054,MA,"Millis-Clicquot, MA","Middlesex (Far Southwest), Norfolk (Northwest) & Worcester (Far East) Counties",7891,0.0683
+25,2800,01801,MA,"Woburn, MA","Woburn, Melrose Cities, Saugus, Wakefield & Stoneham Towns",38112,0.276
+25,2800,01880,MA,"Wakefield, MA","Woburn, Melrose Cities, Saugus, Wakefield & Stoneham Towns",24733,0.1791
+25,2800,01890,MA,"Winchester, MA","Woburn, Melrose Cities, Saugus, Wakefield & Stoneham Towns",8,0.0001
+25,2800,01906,MA,"Saugus, MA","Woburn, Melrose Cities, Saugus, Wakefield & Stoneham Towns",26628,0.1928
+25,2800,01940,MA,"Lynnfield, MA","Woburn, Melrose Cities, Saugus, Wakefield & Stoneham Towns",199,0.0014
+25,2800,02176,MA,"Melrose, MA","Woburn, Melrose Cities, Saugus, Wakefield & Stoneham Towns",26983,0.1954
+25,2800,02180,MA,"Stoneham, MA","Woburn, Melrose Cities, Saugus, Wakefield & Stoneham Towns",21437,0.1552
+25,3301,02115,MA,"Boston, MA","Boston City--Allston, Brighton & Fenway",18937,0.161
+25,3301,02116,MA,"Boston, MA","Boston City--Allston, Brighton & Fenway",5,0
+25,3301,02120,MA,"Boston, MA","Boston City--Allston, Brighton & Fenway",2643,0.0225
+25,3301,02134,MA,"Boston, MA","Boston City--Allston, Brighton & Fenway",21503,0.1828
+25,3301,02135,MA,"Boston, MA","Boston City--Allston, Brighton & Fenway",42780,0.3637
+25,3301,02163,MA,"Boston, MA","Boston City--Allston, Brighton & Fenway",2582,0.0219
+25,3301,02215,MA,"Boston, MA","Boston City--Allston, Brighton & Fenway",25902,0.2202
+25,3301,02467,MA,"Brookline, MA","Boston City--Allston, Brighton & Fenway",3286,0.0279
+25,3302,02108,MA,"Boston, MA","Boston City--Back Bay, Beacon Hill, Charlestown, East Boston, Central & South End",3825,0.0269
+25,3302,02109,MA,"Boston, MA","Boston City--Back Bay, Beacon Hill, Charlestown, East Boston, Central & South End",3771,0.0265
+25,3302,02110,MA,"Boston, MA","Boston City--Back Bay, Beacon Hill, Charlestown, East Boston, Central & South End",1733,0.0122
+25,3302,02111,MA,"Boston, MA","Boston City--Back Bay, Beacon Hill, Charlestown, East Boston, Central & South End",7383,0.0519
+25,3302,02113,MA,"Boston, MA","Boston City--Back Bay, Beacon Hill, Charlestown, East Boston, Central & South End",6915,0.0486
+25,3302,02114,MA,"Boston, MA","Boston City--Back Bay, Beacon Hill, Charlestown, East Boston, Central & South End",11999,0.0844
+25,3302,02115,MA,"Boston, MA","Boston City--Back Bay, Beacon Hill, Charlestown, East Boston, Central & South End",5794,0.0407
+25,3302,02116,MA,"Boston, MA","Boston City--Back Bay, Beacon Hill, Charlestown, East Boston, Central & South End",20623,0.145
+25,3302,02118,MA,"Boston, MA","Boston City--Back Bay, Beacon Hill, Charlestown, East Boston, Central & South End",21890,0.1539
+25,3302,02128,MA,"Boston, MA","Boston City--Back Bay, Beacon Hill, Charlestown, East Boston, Central & South End",40508,0.2848
+25,3302,02129,MA,"Boston, MA","Boston City--Back Bay, Beacon Hill, Charlestown, East Boston, Central & South End",16439,0.1156
+25,3302,02151,MA,"Revere, MA","Boston City--Back Bay, Beacon Hill, Charlestown, East Boston, Central & South End",9,0.0001
+25,3302,02199,MA,"Boston, MA","Boston City--Back Bay, Beacon Hill, Charlestown, East Boston, Central & South End",1146,0.0081
+25,3302,02210,MA,"Boston, MA","Boston City--Back Bay, Beacon Hill, Charlestown, East Boston, Central & South End",201,0.0014
+25,3303,02122,MA,"Boston, MA",Boston City--Dorchester & South Boston,22843,0.2083
+25,3303,02124,MA,"Boston, MA",Boston City--Dorchester & South Boston,28610,0.2608
+25,3303,02125,MA,"Boston, MA",Boston City--Dorchester & South Boston,22054,0.2011
+25,3303,02126,MA,"Boston, MA",Boston City--Dorchester & South Boston,2495,0.0227
+25,3303,02127,MA,"Boston, MA",Boston City--Dorchester & South Boston,31799,0.2899
+25,3303,02210,MA,"Boston, MA",Boston City--Dorchester & South Boston,1889,0.0172
+25,3304,02115,MA,"Boston, MA",Boston City--Mattapan & Roxbury,3709,0.0296
+25,3304,02118,MA,"Boston, MA",Boston City--Mattapan & Roxbury,4608,0.0368
+25,3304,02119,MA,"Boston, MA",Boston City--Mattapan & Roxbury,24563,0.196
+25,3304,02120,MA,"Boston, MA",Boston City--Mattapan & Roxbury,12538,0.1
+25,3304,02121,MA,"Boston, MA",Boston City--Mattapan & Roxbury,25978,0.2073
+25,3304,02122,MA,"Boston, MA",Boston City--Mattapan & Roxbury,103,0.0008
+25,3304,02124,MA,"Boston, MA",Boston City--Mattapan & Roxbury,19122,0.1526
+25,3304,02125,MA,"Boston, MA",Boston City--Mattapan & Roxbury,11241,0.0897
+25,3304,02126,MA,"Boston, MA",Boston City--Mattapan & Roxbury,18139,0.1447
+25,3304,02130,MA,"Boston, MA",Boston City--Mattapan & Roxbury,5123,0.0409
+25,3304,02215,MA,"Boston, MA",Boston City--Mattapan & Roxbury,218,0.0017
+25,3305,02115,MA,"Boston, MA","Boston City--Hyde Park, Jamaica Plain, Roslindale & West Roxbury",1,0
+25,3305,02119,MA,"Boston, MA","Boston City--Hyde Park, Jamaica Plain, Roslindale & West Roxbury",783,0.0064
+25,3305,02124,MA,"Boston, MA","Boston City--Hyde Park, Jamaica Plain, Roslindale & West Roxbury",51,0.0004
+25,3305,02126,MA,"Boston, MA","Boston City--Hyde Park, Jamaica Plain, Roslindale & West Roxbury",4928,0.0403
+25,3305,02130,MA,"Boston, MA","Boston City--Hyde Park, Jamaica Plain, Roslindale & West Roxbury",30278,0.2479
+25,3305,02131,MA,"Boston, MA","Boston City--Hyde Park, Jamaica Plain, Roslindale & West Roxbury",29826,0.2442
+25,3305,02132,MA,"Boston, MA","Boston City--Hyde Park, Jamaica Plain, Roslindale & West Roxbury",25861,0.2117
+25,3305,02136,MA,"Boston, MA","Boston City--Hyde Park, Jamaica Plain, Roslindale & West Roxbury",28488,0.2332
+25,3305,02215,MA,"Boston, MA","Boston City--Hyde Park, Jamaica Plain, Roslindale & West Roxbury",4,0
+25,3305,02467,MA,"Brookline, MA","Boston City--Hyde Park, Jamaica Plain, Roslindale & West Roxbury",1941,0.0159
+25,3305,99999,MA,99999,"Boston City--Hyde Park, Jamaica Plain, Roslindale & West Roxbury",1,0
+25,3306,02122,MA,"Boston, MA","Suffolk County (North)--Revere, Chelsea & Winthrop Town Cities",533,0.0051
+25,3306,02150,MA,"Chelsea, MA","Suffolk County (North)--Revere, Chelsea & Winthrop Town Cities",35124,0.3347
+25,3306,02151,MA,"Revere, MA","Suffolk County (North)--Revere, Chelsea & Winthrop Town Cities",51799,0.4935
+25,3306,02152,MA,"Winthrop Town, MA","Suffolk County (North)--Revere, Chelsea & Winthrop Town Cities",17497,0.1667
+25,3306,99999,MA,99999,"Suffolk County (North)--Revere, Chelsea & Winthrop Town Cities",2,0
+25,3400,02215,MA,"Boston, MA",Middlesex (Southeast) & Norfolk (Northeast) Counties--Newton City & Brookline Town,1,0
+25,3400,02445,MA,"Brookline, MA",Middlesex (Southeast) & Norfolk (Northeast) Counties--Newton City & Brookline Town,20679,0.1437
+25,3400,02446,MA,"Brookline, MA",Middlesex (Southeast) & Norfolk (Northeast) Counties--Newton City & Brookline Town,29311,0.2037
+25,3400,02458,MA,"Newton, MA",Middlesex (Southeast) & Norfolk (Northeast) Counties--Newton City & Brookline Town,12131,0.0843
+25,3400,02459,MA,"Newton, MA",Middlesex (Southeast) & Norfolk (Northeast) Counties--Newton City & Brookline Town,19095,0.1327
+25,3400,02460,MA,"Newton, MA",Middlesex (Southeast) & Norfolk (Northeast) Counties--Newton City & Brookline Town,8742,0.0608
+25,3400,02461,MA,"Newton, MA",Middlesex (Southeast) & Norfolk (Northeast) Counties--Newton City & Brookline Town,7059,0.0491
+25,3400,02462,MA,"Newton, MA",Middlesex (Southeast) & Norfolk (Northeast) Counties--Newton City & Brookline Town,1554,0.0108
+25,3400,02464,MA,"Newton, MA",Middlesex (Southeast) & Norfolk (Northeast) Counties--Newton City & Brookline Town,2953,0.0205
+25,3400,02465,MA,"Newton, MA",Middlesex (Southeast) & Norfolk (Northeast) Counties--Newton City & Brookline Town,11710,0.0814
+25,3400,02466,MA,"Newton, MA",Middlesex (Southeast) & Norfolk (Northeast) Counties--Newton City & Brookline Town,8096,0.0563
+25,3400,02467,MA,"Brookline, MA",Middlesex (Southeast) & Norfolk (Northeast) Counties--Newton City & Brookline Town,17264,0.12
+25,3400,02468,MA,"Newton, MA",Middlesex (Southeast) & Norfolk (Northeast) Counties--Newton City & Brookline Town,5273,0.0366
+25,3400,02472,MA,"Watertown Town, MA",Middlesex (Southeast) & Norfolk (Northeast) Counties--Newton City & Brookline Town,10,0.0001
+25,3500,01770,MA,"Sherborn, MA",Norfolk (Northeast) & Middlesex (Southeast) Counties (West of Boston City),4119,0.0391
+25,3500,01778,MA,"Cochituate, MA",Norfolk (Northeast) & Middlesex (Southeast) Counties (West of Boston City),12994,0.1232
+25,3500,02030,MA,"Dover, MA",Norfolk (Northeast) & Middlesex (Southeast) Counties (West of Boston City),5589,0.053
+25,3500,02090,MA,"Westwood, MA",Norfolk (Northeast) & Middlesex (Southeast) Counties (West of Boston City),14618,0.1386
+25,3500,02457,MA,"Wellesley, MA",Norfolk (Northeast) & Middlesex (Southeast) Counties (West of Boston City),1432,0.0136
+25,3500,02481,MA,"Wellesley, MA",Norfolk (Northeast) & Middlesex (Southeast) Counties (West of Boston City),16244,0.154
+25,3500,02482,MA,"Wellesley, MA",Norfolk (Northeast) & Middlesex (Southeast) Counties (West of Boston City),10306,0.0977
+25,3500,02492,MA,"Needham, MA",Norfolk (Northeast) & Middlesex (Southeast) Counties (West of Boston City),19931,0.189
+25,3500,02493,MA,"Weston, MA",Norfolk (Northeast) & Middlesex (Southeast) Counties (West of Boston City),11261,0.1068
+25,3500,02494,MA,"Needham, MA",Norfolk (Northeast) & Middlesex (Southeast) Counties (West of Boston City),8955,0.0849
+25,3601,02019,MA,"Bellingham, MA",Norfolk County (Southwest)--Greater Franklin Town City,16332,0.1269
+25,3601,02032,MA,"East Walpole, MA",Norfolk County (Southwest)--Greater Franklin Town City,4226,0.0328
+25,3601,02035,MA,"Foxboro, MA",Norfolk County (Southwest)--Greater Franklin Town City,16865,0.131
+25,3601,02038,MA,"Franklin Town, MA",Norfolk County (Southwest)--Greater Franklin Town City,31635,0.2458
+25,3601,02056,MA,"Norfolk, MA",Norfolk County (Southwest)--Greater Franklin Town City,10981,0.0853
+25,3601,02067,MA,"Sharon, MA",Norfolk County (Southwest)--Greater Franklin Town City,17486,0.1359
+25,3601,02071,MA,"South Walpole, MA",Norfolk County (Southwest)--Greater Franklin Town City,1707,0.0133
+25,3601,02072,MA,"Stoughton, MA",Norfolk County (Southwest)--Greater Franklin Town City,37,0.0003
+25,3601,02081,MA,"Walpole, MA",Norfolk County (Southwest)--Greater Franklin Town City,18472,0.1435
+25,3601,02093,MA,"Wrentham, MA",Norfolk County (Southwest)--Greater Franklin Town City,10955,0.0851
+25,3602,02021,MA,"Canton, MA","Norfolk County (Central)--Randolph, Norwood, Dedham, Canton & Holbrook Towns",21561,0.183
+25,3602,02026,MA,"Dedham, MA","Norfolk County (Central)--Randolph, Norwood, Dedham, Canton & Holbrook Towns",24711,0.2098
+25,3602,02062,MA,"Norwood, MA","Norfolk County (Central)--Randolph, Norwood, Dedham, Canton & Holbrook Towns",28602,0.2428
+25,3602,02090,MA,"Westwood, MA","Norfolk County (Central)--Randolph, Norwood, Dedham, Canton & Holbrook Towns",18,0.0002
+25,3602,02343,MA,"Holbrook, MA","Norfolk County (Central)--Randolph, Norwood, Dedham, Canton & Holbrook Towns",10745,0.0912
+25,3602,02368,MA,"Randolph, MA","Norfolk County (Central)--Randolph, Norwood, Dedham, Canton & Holbrook Towns",32158,0.273
+25,3603,02169,MA,"Quincy, MA",Norfolk County (Northeast)--Quincy City & Milton Town,55055,0.4616
+25,3603,02170,MA,"Quincy, MA",Norfolk County (Northeast)--Quincy City & Milton Town,19505,0.1635
+25,3603,02171,MA,"Quincy, MA",Norfolk County (Northeast)--Quincy City & Milton Town,17711,0.1485
+25,3603,02186,MA,"Milton, MA",Norfolk County (Northeast)--Quincy City & Milton Town,27003,0.2264
+25,3900,02025,MA,"Cohasset, MA","Weymouth Town, Braintree Town Cities, Hingham, Hull & Cohasset Towns",7542,0.0582
+25,3900,02043,MA,"Hingham, MA","Weymouth Town, Braintree Town Cities, Hingham, Hull & Cohasset Towns",22157,0.1711
+25,3900,02045,MA,"Hull, MA","Weymouth Town, Braintree Town Cities, Hingham, Hull & Cohasset Towns",10293,0.0795
+25,3900,02184,MA,"Braintree Town, MA","Weymouth Town, Braintree Town Cities, Hingham, Hull & Cohasset Towns",35744,0.2761
+25,3900,02188,MA,"Weymouth Town, MA","Weymouth Town, Braintree Town Cities, Hingham, Hull & Cohasset Towns",14608,0.1128
+25,3900,02189,MA,"Weymouth Town, MA","Weymouth Town, Braintree Town Cities, Hingham, Hull & Cohasset Towns",14559,0.1124
+25,3900,02190,MA,"Weymouth Town, MA","Weymouth Town, Braintree Town Cities, Hingham, Hull & Cohasset Towns",16119,0.1245
+25,3900,02191,MA,"Weymouth Town, MA","Weymouth Town, Braintree Town Cities, Hingham, Hull & Cohasset Towns",8457,0.0653
+25,4000,02072,MA,"Stoughton, MA","Plymouth & Norfolk Counties--Brockton City, Stoughton & Avon Towns",26962,0.2155
+25,4000,02301,MA,"Brockton, MA","Plymouth & Norfolk Counties--Brockton City, Stoughton & Avon Towns",61025,0.4877
+25,4000,02302,MA,"Brockton, MA","Plymouth & Norfolk Counties--Brockton City, Stoughton & Avon Towns",32741,0.2617
+25,4000,02322,MA,"Avon, MA","Plymouth & Norfolk Counties--Brockton City, Stoughton & Avon Towns",4356,0.0348
+25,4000,02351,MA,"Abington, MA","Plymouth & Norfolk Counties--Brockton City, Stoughton & Avon Towns",44,0.0004
+25,4200,02703,MA,"Attleboro, MA","Attleboro City, North Attleborough, Swansea, Seekonk, Rehoboth & Plainville Towns",43593,0.358
+25,4200,02715,MA,"Dighton, MA","Attleboro City, North Attleborough, Swansea, Seekonk, Rehoboth & Plainville Towns",25,0.0002
+25,4200,02760,MA,"North Attleboro, MA","Attleboro City, North Attleborough, Swansea, Seekonk, Rehoboth & Plainville Towns",26739,0.2196
+25,4200,02762,MA,"Plainville, MA","Attleboro City, North Attleborough, Swansea, Seekonk, Rehoboth & Plainville Towns",8264,0.0679
+25,4200,02763,MA,"Attleboro Falls, MA","Attleboro City, North Attleborough, Swansea, Seekonk, Rehoboth & Plainville Towns",1973,0.0162
+25,4200,02769,MA,"Rehoboth, MA","Attleboro City, North Attleborough, Swansea, Seekonk, Rehoboth & Plainville Towns",11608,0.0953
+25,4200,02771,MA,"Seekonk, MA","Attleboro City, North Attleborough, Swansea, Seekonk, Rehoboth & Plainville Towns",13708,0.1126
+25,4200,02777,MA,"Swansea, MA","Attleboro City, North Attleborough, Swansea, Seekonk, Rehoboth & Plainville Towns",15840,0.1301
+25,4200,02861,MA,"Pawtucket, RI","Attleboro City, North Attleborough, Swansea, Seekonk, Rehoboth & Plainville Towns",14,0.0001
+25,4301,02532,MA,"Buzzards Bay, MA",Bristol (Outside New Bedford City) & Plymouth (South) Counties,1967,0.0184
+25,4301,02538,MA,"White Island Shores, MA",Bristol (Outside New Bedford City) & Plymouth (South) Counties,3603,0.0338
+25,4301,02558,MA,"Onset, MA",Bristol (Outside New Bedford City) & Plymouth (South) Counties,2156,0.0202
+25,4301,02571,MA,"Wareham, MA",Bristol (Outside New Bedford City) & Plymouth (South) Counties,10481,0.0982
+25,4301,02576,MA,"West Wareham, MA",Bristol (Outside New Bedford City) & Plymouth (South) Counties,3754,0.0352
+25,4301,02702,MA,"Assonet, MA",Bristol (Outside New Bedford City) & Plymouth (South) Counties,4125,0.0386
+25,4301,02717,MA,"East Freetown, MA",Bristol (Outside New Bedford City) & Plymouth (South) Counties,4745,0.0445
+25,4301,02738,MA,"Marion, MA",Bristol (Outside New Bedford City) & Plymouth (South) Counties,4907,0.046
+25,4301,02739,MA,"Mattapoisett, MA",Bristol (Outside New Bedford City) & Plymouth (South) Counties,6045,0.0566
+25,4301,02740,MA,"New Bedford, MA",Bristol (Outside New Bedford City) & Plymouth (South) Counties,12,0.0001
+25,4301,02743,MA,"Acushnet, MA",Bristol (Outside New Bedford City) & Plymouth (South) Counties,10303,0.0965
+25,4301,02747,MA,"North Dartmouth, MA",Bristol (Outside New Bedford City) & Plymouth (South) Counties,22576,0.2115
+25,4301,02748,MA,"South Dartmouth, MA",Bristol (Outside New Bedford City) & Plymouth (South) Counties,11429,0.1071
+25,4301,02770,MA,"Rochester, MA",Bristol (Outside New Bedford City) & Plymouth (South) Counties,5093,0.0477
+25,4301,02790,MA,"Westport, MA",Bristol (Outside New Bedford City) & Plymouth (South) Counties,15301,0.1433
+25,4301,02791,MA,"Westport Point, MA (PO Boxes)",Bristol (Outside New Bedford City) & Plymouth (South) Counties,246,0.0023
+25,4302,02720,MA,"Fall River, MA",Bristol County (Central)--Fall River City & Somerset Town,30287,0.283
+25,4302,02721,MA,"Fall River, MA",Bristol County (Central)--Fall River City & Somerset Town,26290,0.2457
+25,4302,02723,MA,"Fall River, MA",Bristol County (Central)--Fall River City & Somerset Town,14767,0.138
+25,4302,02724,MA,"Fall River, MA",Bristol County (Central)--Fall River City & Somerset Town,16908,0.158
+25,4302,02725,MA,"Somerset, MA",Bristol County (Central)--Fall River City & Somerset Town,2631,0.0246
+25,4302,02726,MA,"Somerset, MA",Bristol County (Central)--Fall River City & Somerset Town,15534,0.1451
+25,4302,02747,MA,"North Dartmouth, MA",Bristol County (Central)--Fall River City & Somerset Town,189,0.0018
+25,4302,02790,MA,"Westport, MA",Bristol County (Central)--Fall River City & Somerset Town,416,0.0039
+25,4303,02048,MA,"Mansfield, MA","Bristol County--Taunton City, Mansfield, Norton, Raynam, Dighton & Berkley Towns",23184,0.1855
+25,4303,02715,MA,"Dighton, MA","Bristol County--Taunton City, Mansfield, Norton, Raynam, Dighton & Berkley Towns",3098,0.0248
+25,4303,02718,MA,"Taunton, MA","Bristol County--Taunton City, Mansfield, Norton, Raynam, Dighton & Berkley Towns",6655,0.0533
+25,4303,02764,MA,"North Dighton, MA","Bristol County--Taunton City, Mansfield, Norton, Raynam, Dighton & Berkley Towns",3988,0.0319
+25,4303,02766,MA,"Norton, MA","Bristol County--Taunton City, Mansfield, Norton, Raynam, Dighton & Berkley Towns",19031,0.1523
+25,4303,02767,MA,"Raynham, MA","Bristol County--Taunton City, Mansfield, Norton, Raynam, Dighton & Berkley Towns",13566,0.1086
+25,4303,02779,MA,"Berkley, MA","Bristol County--Taunton City, Mansfield, Norton, Raynam, Dighton & Berkley Towns",6411,0.0513
+25,4303,02780,MA,"Taunton, MA","Bristol County--Taunton City, Mansfield, Norton, Raynam, Dighton & Berkley Towns",49036,0.3924
+25,4500,02719,MA,"Fairhaven, MA",Bristol County (South)--New Bedford City & Fairhaven Town,15873,0.1431
+25,4500,02740,MA,"New Bedford, MA",Bristol County (South)--New Bedford City & Fairhaven Town,43075,0.3883
+25,4500,02743,MA,"Acushnet, MA",Bristol County (South)--New Bedford City & Fairhaven Town,4,0
+25,4500,02744,MA,"New Bedford, MA",Bristol County (South)--New Bedford City & Fairhaven Town,11900,0.1073
+25,4500,02745,MA,"New Bedford, MA",Bristol County (South)--New Bedford City & Fairhaven Town,24576,0.2215
+25,4500,02746,MA,"New Bedford, MA",Bristol County (South)--New Bedford City & Fairhaven Town,15342,0.1383
+25,4500,02747,MA,"North Dartmouth, MA",Bristol County (South)--New Bedford City & Fairhaven Town,162,0.0015
+25,4500,02748,MA,"South Dartmouth, MA",Bristol County (South)--New Bedford City & Fairhaven Town,13,0.0001
+25,4700,02532,MA,"Buzzards Bay, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,10723,0.0818
+25,4700,02534,MA,"Cataumet, MA (PO Boxes)",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,842,0.0064
+25,4700,02536,MA,"East Falmouth, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,19583,0.1493
+25,4700,02537,MA,"East Sandwich, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,6293,0.048
+25,4700,02540,MA,"Falmouth, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,8221,0.0627
+25,4700,02542,MA,"Buzzards Bay, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,1139,0.0087
+25,4700,02543,MA,"Woods Hole, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,612,0.0047
+25,4700,02553,MA,"Monument Beach, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,226,0.0017
+25,4700,02556,MA,"North Falmouth, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,3115,0.0237
+25,4700,02559,MA,"Pocasset, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,3376,0.0257
+25,4700,02561,MA,"Sagamore, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,539,0.0041
+25,4700,02562,MA,"Sagamore, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,2977,0.0227
+25,4700,02563,MA,"Sandwich, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,10359,0.079
+25,4700,02601,MA,"Barnstable Town, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,14089,0.1074
+25,4700,02630,MA,"Barnstable Town, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,1850,0.0141
+25,4700,02632,MA,"Barnstable Town, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,10742,0.0819
+25,4700,02635,MA,"Barnstable Town, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,3296,0.0251
+25,4700,02637,MA,"Barnstable Town, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,253,0.0019
+25,4700,02644,MA,"Forestdale, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,3955,0.0302
+25,4700,02647,MA,"Barnstable Town, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,129,0.001
+25,4700,02648,MA,"Barnstable Town, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,7301,0.0557
+25,4700,02649,MA,"Mashpee, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,14006,0.1068
+25,4700,02655,MA,"Barnstable Town, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,3518,0.0268
+25,4700,02668,MA,"Barnstable Town, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,3278,0.025
+25,4700,02672,MA,"Barnstable Town, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,180,0.0014
+25,4700,02673,MA,"West Yarmouth, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,6,0
+25,4700,02675,MA,"Yarmouth Port, MA",Barnstable County (West)--Inner Cape Cod Towns & Barnstable Town City,551,0.0042
+25,4800,02535,MA,"Chilmark, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",1177,0.0106
+25,4800,02539,MA,"Edgartown, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",4067,0.0365
+25,4800,02543,MA,"Woods Hole, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",23,0.0002
+25,4800,02554,MA,"Nantucket, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",9852,0.0884
+25,4800,02557,MA,"Oak Bluffs, MA (PO Boxes)","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",4491,0.0403
+25,4800,02564,MA,"Siasconset, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",310,0.0028
+25,4800,02568,MA,"Vineyard Haven, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",4000,0.0359
+25,4800,02575,MA,"West Tisbury, MA (PO Boxes)","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",2725,0.0245
+25,4800,02584,MA,"Nantucket, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",10,0.0001
+25,4800,02631,MA,"Brewster, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",9679,0.0869
+25,4800,02633,MA,"Chatham, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",3884,0.0349
+25,4800,02638,MA,"Dennis, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",3207,0.0288
+25,4800,02639,MA,"Dennis Port, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",2875,0.0258
+25,4800,02641,MA,"East Dennis, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",532,0.0048
+25,4800,02642,MA,"Eastham, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",4937,0.0443
+25,4800,02643,MA,"East Orleans, MA (PO Boxes)","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",26,0.0002
+25,4800,02645,MA,"East Harwich, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",9663,0.0867
+25,4800,02646,MA,"Harwich Port, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",1676,0.015
+25,4800,02650,MA,"North Chatham, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",848,0.0076
+25,4800,02651,MA,"North Eastham, MA (PO Boxes)","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",16,0.0001
+25,4800,02652,MA,"North Truro, MA (PO Boxes)","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",1175,0.0105
+25,4800,02653,MA,"Orleans, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",5911,0.053
+25,4800,02657,MA,"Provincetown, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",2942,0.0264
+25,4800,02659,MA,"South Chatham, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",1108,0.0099
+25,4800,02660,MA,"South Dennis, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",6261,0.0562
+25,4800,02663,MA,"South Wellfleet, MA (PO Boxes)","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",173,0.0016
+25,4800,02664,MA,"South Yarmouth, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",9371,0.0841
+25,4800,02666,MA,"Truro, MA (PO Boxes)","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",828,0.0074
+25,4800,02667,MA,"Wellfleet, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",2580,0.0232
+25,4800,02669,MA,"West Chatham, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",285,0.0026
+25,4800,02670,MA,"West Dennis, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",1307,0.0117
+25,4800,02671,MA,"Northwest Harwich, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",1023,0.0092
+25,4800,02673,MA,"West Yarmouth, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",8396,0.0753
+25,4800,02675,MA,"Yarmouth Port, MA","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",6026,0.0541
+25,4800,02713,MA,"Cuttyhunk, MA (PO Boxes)","Barnstable (East), Dukes & Nantucket Counties--Outer Cape Cod Towns",52,0.0005
+25,4901,02324,MA,"Bridgewater, MA",Plymouth & Bristol Counties (Outside Brockton City),26563,0.2244
+25,4901,02333,MA,"East Bridgewater, MA",Plymouth & Bristol Counties (Outside Brockton City),13794,0.1166
+25,4901,02351,MA,"Abington, MA",Plymouth & Bristol Counties (Outside Brockton City),15985,0.1351
+25,4901,02356,MA,"North Easton, MA",Plymouth & Bristol Counties (Outside Brockton City),12564,0.1062
+25,4901,02357,MA,"Easton, North Easton, MA",Plymouth & Bristol Counties (Outside Brockton City),1360,0.0115
+25,4901,02370,MA,"Rockland, MA",Plymouth & Bristol Counties (Outside Brockton City),17489,0.1478
+25,4901,02375,MA,"South Easton, MA",Plymouth & Bristol Counties (Outside Brockton City),9188,0.0776
+25,4901,02379,MA,"West Bridgewater, MA",Plymouth & Bristol Counties (Outside Brockton City),6916,0.0584
+25,4901,02382,MA,"Whitman, MA",Plymouth & Bristol Counties (Outside Brockton City),14489,0.1224
+25,4902,02061,MA,"Norwell, MA",Plymouth County (Central),10506,0.0973
+25,4902,02330,MA,"Carver, MA",Plymouth County (Central),11509,0.1066
+25,4902,02338,MA,"Halifax, MA",Plymouth County (Central),7518,0.0696
+25,4902,02339,MA,"Hanover, MA",Plymouth County (Central),13879,0.1285
+25,4902,02341,MA,"Hanson, MA",Plymouth County (Central),10218,0.0946
+25,4902,02346,MA,"Middleboro, MA",Plymouth County (Central),23106,0.214
+25,4902,02347,MA,"Lakeville, MA",Plymouth County (Central),10612,0.0983
+25,4902,02359,MA,"Pembroke, MA",Plymouth County (Central),17828,0.1651
+25,4902,02367,MA,"Plympton, MA",Plymouth County (Central),2820,0.0261
+25,4903,02047,MA,"Humarock, MA (PO Boxes)","Plymouth County (East)--Plymouth, Marshfield, Scituate, Duxbury & Kingston Towns",180,0.0014
+25,4903,02050,MA,"Marshfield, MA","Plymouth County (East)--Plymouth, Marshfield, Scituate, Duxbury & Kingston Towns",25429,0.1996
+25,4903,02066,MA,"Scituate, MA","Plymouth County (East)--Plymouth, Marshfield, Scituate, Duxbury & Kingston Towns",17656,0.1386
+25,4903,02332,MA,"Duxbury, MA","Plymouth County (East)--Plymouth, Marshfield, Scituate, Duxbury & Kingston Towns",15059,0.1182
+25,4903,02360,MA,"Plymouth, MA","Plymouth County (East)--Plymouth, Marshfield, Scituate, Duxbury & Kingston Towns",56271,0.4416
+25,4903,02364,MA,"Kingston, MA","Plymouth County (East)--Plymouth, Marshfield, Scituate, Duxbury & Kingston Towns",12629,0.0991
+25,4903,02366,MA,"South Carver, MA (PO Boxes)","Plymouth County (East)--Plymouth, Marshfield, Scituate, Duxbury & Kingston Towns",197,0.0015
