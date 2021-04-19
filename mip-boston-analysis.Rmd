@@ -309,6 +309,7 @@ data <- data %>%
 ### Interest in program participation
 
 ```{r, fig.width = 9, fig.height = 5, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
+#Boxplot in violin
 
 # Violin plot of interest in program
 violin <- data %>% 
@@ -329,12 +330,12 @@ violin_plot0 <- violin %>%
    names_to = "behavior",
    values_to = "value",
    values_drop_na = TRUE) %>% 
-    mutate(behavior = recode(behavior, var96 = "Purchase an EV", var100 = "Purchase \ncarbon offsets", var106 = "Purchase green \nenergy", var108 = "Install solar \npanels", var98 = "Fly less", var104 = "Eat less meat", var110 = "Reduce food \nwaste")) 
+    mutate(behavior = recode(behavior, var96 = "Purchase an EV", var100 = "Purchase \ncarbon offsets", var106 = "Purchase green \nenergy", var108 = "Install solar \npanels", var98 = "Fly less", var104 = "Eat less meat", var110 = "Reduce food \nwaste"))
 
-violin_plot0 <- ggplot(violin_plot0, aes(x = reorder(as_factor(behavior), -value), y = value, fill = value, weight = wt)) +
-    geom_violin() +
-    stat_summary(fun.y = median, geom = "point", size = 2, color = "red") +
-  theme(axis.line = element_line(color = "grey"),
+p <- ggplot(violin_plot0, aes(x = behavior, y = value)) + 
+  geom_violin()
+
+p + geom_boxplot(width = 0.1, color = "grey") + stat_summary(fun.y=median, geom="point", size=2, color="red") + theme(axis.line = element_line(color = "grey"),
         axis.ticks = element_line(color = "grey"),
         axis.title.y = element_text(color = "black", size = 11),
         axis.title.x = element_text(color = "black", size = 11),
@@ -345,12 +346,7 @@ violin_plot0 <- ggplot(violin_plot0, aes(x = reorder(as_factor(behavior), -value
         panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
                                 colour = "grey"),
         panel.background = element_blank(),
-        panel.border = element_rect(colour = "grey", fill = NA, size = 0.5)) +
-  labs(x ="",y = "Interest in a program which helps adopt behaviors")
-
-#ggsave("violin_plot.png", units = "in", width = 8, height = 5, dpi = 300)
-
-violin_plot0
+        panel.border = element_rect(colour = "grey", fill = NA, size = 0.5))
 ```
 
 ```{r, fig.width = 9, fig.height = 5, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, eval = FALSE}
