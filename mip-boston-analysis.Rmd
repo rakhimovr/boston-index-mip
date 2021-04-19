@@ -21,11 +21,13 @@ library(survey)
 options(scipen = 999)
 
 data <- read_sav("spss_4_17_2021.sav")
-lucid_data <-read.csv("lucid_response.csv")
+lucid_data <-read.csv("lucid_response_4_19_2021.csv")
 ```
 
-```{r, include = FALSE, echo = FALSE, results = 'asis'}
+```{r, include = FALSE, echo = FALSE, results = 'asis', eval = FALSE}
+# Incompletes match between Lucid and Alchemer
 lucid <- read.csv("lucid_data_analysis_4_17_2021.csv")
+
 test <- lucid %>% 
   filter(FulcrumStatus == 3 & ClientStatus == 10 & SupplierName != "Z - Test Supplier") %>% 
   mutate(
@@ -54,7 +56,8 @@ data <- merge(x = lucid_data, y = data, by = "ID", all.y = TRUE)
 ```
 
 ```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE}
-data <- data %>% 
+data <- data %>%
+select(-PID, -MID, -RespondentSID, -Response.ID, -IsLive, -Survey.Number, -SurveyName, -STATE.4., -ZIP.2., -Vcid, -Vcomment, -Vlanguage, -Vreferer, -Vsessionid, -Vuseragent, -VGeoCountry, -Vpostal, var10, -var112, -var113, -var10) %>% 
 rename(sex = var3,
        age = var2,
        White = var8O33,
@@ -65,6 +68,12 @@ rename(sex = var3,
        Other = var8O38,
        ethnicity = ETHNICITY.8.) %>% 
 mutate(sex = case_when(sex == 10003 ~ "Male", TRUE ~ "Female"),
+       ethnicity = case_when(Vrid == 394 ~ "White", 
+                             Vrid == 1008 ~ "Asian", 
+                             Vrid == 184 ~ "White", 
+                             Vrid == 1505 ~ "Black", 
+                             Vrid == 193 ~ "Black", 
+                             TRUE ~ ethnicity),
        ethnicity = case_when(ethnicity == 1 ~ "White", 
                              ethnicity == 2 ~ "Black", 
                              ethnicity == 3 ~ "Alaska_Native", 
@@ -76,8 +85,7 @@ mutate(sex = case_when(sex == 10003 ~ "Male", TRUE ~ "Female"),
                              ethnicity == 9 ~ "Asian", 
                              ethnicity == 10 ~ "Asian", 
                              ethnicity == 15 ~ "Other", 
-                             TRUE ~ "NG"),
-       ethnicity = case_when(Vrid == 394 ~ "White", Vrid == 1008 ~ "Asian", Vrid == 184 ~ "White", Vrid == 1505 ~ "Black", Vrid == 193 ~ "Black", TRUE ~ ethnicity)) %>% 
+                             TRUE ~ ethnicity)) %>%
   filter(age >= 18 & age <= 150)
 ```
 
@@ -103,8 +111,8 @@ setDT(data)[ , age_group := cut(age,
 
 data$ethnicity <- as.factor(data$ethnicity)
 
-##
-
+#Demo sample
+#Counting demos in sample
 d <- data %>% 
   select(Vrid, sex, age_group, ethnicity)
 
@@ -115,12 +123,14 @@ d <- d %>%
 d <- d %>% 
   mutate(sample.demo.prop = count/sum(d$count))
 
-d <- merge(d, demo, by = c("ethnicity", "age_group", "sex"))
+#Merging population and sample demos. Demo groups in pop need to be the same as demo groups in sample.
 
-d <- d %>% 
-  mutate(demo_weight = pop.demo.prop/sample.demo.prop) 
+d <- merge(x = d, y = demo, by = c("ethnicity", "age_group", "sex"), all.x = TRUE)
 
-d <- d %>% select(ethnicity, age_group, sex, demo_weight)
+#d <- d %>% 
+#  mutate(demo_weight = pop.demo.prop/sample.demo.prop) 
+
+#d <- d %>% select(ethnicity, age_group, sex, demo_weight)
 ```
 
 ```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE}
@@ -166,9 +176,8 @@ df <- df %>%
   select(zip, zip.weight)
 ```
 
-### weighting by puma
-
 ```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE, eval = FALSE}
+### weighting by puma
 #population
 puma <- read.csv("geocorr_puma_export.csv")
 
@@ -238,14 +247,17 @@ puma_zip <- puma_zip %>%
 
 ```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE}
 data$zip <- as.numeric(as.character(data$var21))
+
 df$Vrid <- df$ID
 
-#merge demos
-data <- merge(x = d, y = data, by = c("ethnicity", "age_group", "sex"), all.y = TRUE)
+#merge demos (don't need to do that)
+#data <- merge(x = d, y = data, by = c("ethnicity", "age_group", "sex"), all.y = #TRUE)
+
 data <- data %>% 
   unite(demo, ethnicity, sex, age_group, remove = FALSE)
 
-data <- merge(x = df, y = data, by = "zip", all.y = TRUE)
+#dont need to do that
+#data <- merge(x = df, y = data, by = "zip", all.y = TRUE)
 ```
 
 ```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE}
@@ -258,9 +270,9 @@ d <- d %>%
 demo <- merge(x = d, y = demo, by = c("demo"), all.x = TRUE)
 
 demo.dist <- data.frame(demo = demo$demo,
-                       Freq = nrow(data) * demo$pop.demo.prop)
+                       Freq = nrow(data) * demo$pop.demo.prop.x)
 
-demo.dist$demo <- as.character(demo.dist$demo)
+#demo.dist$demo <- as.character(demo.dist$demo)
 
 #puma.dist <- data.frame(puma = puma$puma,
 #                        Freq = nrow(data) * puma$puma_prop)
@@ -270,17 +282,17 @@ zip1 <- merge(x = df, y = pop_zip, by = "zip", all.x = TRUE)
 zip.dist <- data.frame(zip = zip1$zip,
                              Freq = nrow(data) * zip1$pop.zip.prop)
 
-# Create the unweighted survey object
+# Create the un-weighted survey object
 svy.unweighted <- svydesign(ids = ~ 1, data = data)
 
 #data <- data %>% rename(zip = zip.x)
 
 # Create survey design object with weights
 svy.rake <- rake(design = svy.unweighted,
-                   sample.margins = list(~zip, ~demo),
-                   population.margins = list(zip.dist, demo.dist))
+                   sample.margins = list(~demo, ~zip),
+                   population.margins = list(demo.dist, zip.dist))
 
-#summary(weights(svy.rake))
+summary(weights(svy.rake))
 
 #svy.rake.trim <- trimWeights(svy.rake, lower = 0.3, upper = 3, strict = TRUE)
 
@@ -291,12 +303,13 @@ wt <- data.frame(wt = weights(svy.rake))
 data <- cbind(data, wt)
 
 data <- data %>% 
-  select(wt, demo:var15)
+  select(wt, ID:var15)
 ```
 
-### Interest in program participation (weighted by ZIP and age-sex-ethnicity)
+### Interest in program participation
 
 ```{r, fig.width = 9, fig.height = 5, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
+
 # Violin plot of interest in program
 violin <- data %>% 
   select(wt,
@@ -310,18 +323,16 @@ violin <- data %>%
 
 violin <- mutate_all(violin, function(x) as.numeric(as.character(x)))
 
-dodge <- position_dodge(width = 0.5)
-
 violin_plot0 <- violin %>%
    pivot_longer(
    cols = starts_with(c("var")),
    names_to = "behavior",
    values_to = "value",
    values_drop_na = TRUE) %>% 
-    mutate(behavior = recode(behavior, var96 = "Purchase an \nelectric car", var100 = "Purchase \ncarbon offsets", var106 = "Purchase green \nenergy", var108 = "Install solar \npanels", var98 = "Fly less", var104 = "Eat less meat", var110 = "Reduce food \nwaste")) %>%
-  ggplot(aes(x = reorder(as_factor(behavior), -value), y = value, fill = value, weight = wt)) +
-    geom_violin(position = dodge) +
-  geom_boxplot(position = dodge, width = 0.1, color = "grey", alpha = 0.2, outlier.shape = NA) +
+    mutate(behavior = recode(behavior, var96 = "Purchase an EV", var100 = "Purchase \ncarbon offsets", var106 = "Purchase green \nenergy", var108 = "Install solar \npanels", var98 = "Fly less", var104 = "Eat less meat", var110 = "Reduce food \nwaste")) 
+
+violin_plot0 <- ggplot(violin_plot0, aes(x = reorder(as_factor(behavior), -value), y = value, fill = value, weight = wt)) +
+    geom_violin() +
     stat_summary(fun.y = median, geom = "point", size = 2, color = "red") +
   theme(axis.line = element_line(color = "grey"),
         axis.ticks = element_line(color = "grey"),
@@ -335,12 +346,11 @@ violin_plot0 <- violin %>%
                                 colour = "grey"),
         panel.background = element_blank(),
         panel.border = element_rect(colour = "grey", fill = NA, size = 0.5)) +
-  #scale_y_continuous(labels = function(x) paste0(x,"%")) +
   labs(x ="",y = "Interest in a program which helps adopt behaviors")
 
-violin_plot0
-
 #ggsave("violin_plot.png", units = "in", width = 8, height = 5, dpi = 300)
+
+violin_plot0
 ```
 
 ```{r, fig.width = 9, fig.height = 5, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, eval = FALSE}
@@ -674,8 +684,7 @@ index_long <- index_long %>%
    cols = ends_with(c("intent", "program_interest", "ee", "pnb", "ne", "adoption", "rank")),
    names_to = "indicator",
    values_to = "value",
-   values_drop_na = TRUE
- )
+   values_drop_na = TRUE)
 
 index_long <- index_long %>%
   mutate(behavior = indicator)
@@ -742,9 +751,8 @@ reactable(t,
     style = list(fontFamily = "-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif")))
 ```
 
-### Boston Index (weighted by ZIP and age-sex-ethnicity)
-
 ```{r, echo = FALSE, results = 'asis', message = FALSE}
+### Boston Index (weighted by ZIP and age-sex-ethnicity)
 t11 <- group_by(fin_table, behavior, ind)
 
 t11 <- summarise(t11, w.mean = weighted.mean(value, wt, na.rm = TRUE))
@@ -780,6 +788,7 @@ t11 <- t11 %>%
   select(Behavior, Adoption, Intention, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`, `Program interest`, `Carbon impact ranking`)
 
 tt = reactable(t11,
+  style = list(fontSize = "12px"),
   defaultSortOrder = 'asc',
   defaultSorted = 'Behavior',
   showSortIcon = FALSE,
@@ -790,9 +799,10 @@ tt = reactable(t11,
     # borderless - TRUE or FALSE
     borderless = FALSE,
     # Stripes - TRUE or FALSE
-    striped = FALSE,
-    # fullWidth - either fit to width or not
-    fullWidth = FALSE,
+    striped = TRUE,
+    highlight = TRUE,  
+  # fullWidth - either fit to width or not
+    fullWidth = TRUE,
     # apply defaults
     # 100 px and align to center of column
     defaultColDef = colDef(
@@ -806,14 +816,17 @@ tt = reactable(t11,
         borderColor = "#555"
       )
     ),
+  
   columns = list(
     Behavior = colDef(
-      minWidth = 160,
-        align = "left"),
+      minWidth = 170,
+      align = "left"),
     Adoption = colDef(
-      format = colFormat(digits = 2)),
+      format = colFormat(digits = 2),
+      maxWidth = 65),
     Intention = colDef(
-      format = colFormat(digits = 2)),
+      format = colFormat(digits = 2),
+      maxWidth = 65),
     `Belief that others are engaging in the behavior` = colDef(
       name = "Others are adopting",
       format = colFormat(digits = 2)),
@@ -822,11 +835,16 @@ tt = reactable(t11,
       format = colFormat(digits = 2)),
     `Belief that others think people should engage in the behavior` = colDef(
       name = "Others think people should adopt",
-      format = colFormat(digits = 2)),
+      format = colFormat(digits = 2),
+      minWidth = 120),
     `Program interest` = colDef(
-      format = colFormat(digits = 2)),
+      format = colFormat(digits = 2),
+      maxWidth = 70),
     `Carbon impact ranking` = colDef(
-      format = colFormat(digits = 2))))
+      format = colFormat(digits = 2))),
+  
+  columnGroups = list(
+    colGroup(name = "Beliefs that...", columns = c("Belief that others are engaging in the behavior", "Belief that others should engage in the behavior", "Belief that others think people should engage in the behavior"))))
 
 div(
   class = "Behavior",
@@ -834,15 +852,11 @@ div(
     # this can be called with CSS now via .title
     class = "title",
     h2("MIP Index: Boston"),
-    #This is kind of like a sub-title, but really it's just raw text
-    "This is kind of like a sub-title, but really it's just raw text"
+    "The survey was fielded from March 31 – April 21, 2021, drawing on the stratified sample of the Boston CBSA (n = 1,120)
+    "
   ),
   # The actual table
-  tt,
-  # I use a span here so I can assigna  color to this text
-  #tags$span(style = "color:#C8C8C8", "
-  #          Location: Boston CBSA | Period: Data collected between March 31, 2021 and April 21, 2021")
-)
+  tt)
 ```
 
 ```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE, eval = FALSE}
