@@ -4,7 +4,7 @@ output: html_document
 date: '`r format(Sys.time(), "%d %B, %Y")`'
 author:
 - Erik Thulin, ethulin@rare.org
-- Rakhim Rakhimov, arakhimov@rare.org
+- Rakhim Rakhimov, rrakhimov@rare.org
 ---
 
 ```{r setup, include = FALSE, echo = FALSE, results = 'asis'}
@@ -307,7 +307,16 @@ data <- data %>%
   select(wt, ID:var15)
 ```
 
-### Interest in program participation
+### Research Overview
+
+- Sampled 1,120 adult residents of the Boston core-based statistical area (CBSA), quota matched on age, gender, and ethnicity and weighted by ZIP.
+- For each MIP behavior, measured current self-reported *adoption*, *intention to adopt in the future*, and three social expectation measures - *belief that others are adopting the behavior*, *belief that others should adopt the behavior*, and *belief that others think people should adopt the behavior*.
+- For each MIP behavior, measured stated *interest in participating in a program* which helps adopt the behavior. 
+- For six out of seven MIP behaviors, measured perceived relative *carbon mitigation impact* of that behavior compared to a list of low-impact behaviors.
+
+### Results
+
+#### Program Participation Interest
 
 ```{r, fig.width = 9, fig.height = 5, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
 #Boxplot in violin
@@ -333,10 +342,12 @@ violin_plot0 <- violin %>%
    values_drop_na = TRUE) %>% 
     mutate(behavior = recode(behavior, var96 = "Purchase \nan EV", var100 = "Purchase \ncarbon offsets", var106 = "Purchase green \nenergy", var108 = "Install solar \npanels", var98 = "Fly less", var104 = "Eat less meat", var110 = "Reduce food \nwaste"))
 
-p <- ggplot(violin_plot0, aes(x = behavior, y = value)) + 
+p <- ggplot(violin_plot0, aes(x = reorder(behavior, -value), y = value)) + 
   geom_violin()
 
-p + geom_boxplot(width = 0.1, color = "grey") + stat_summary(fun.y=median, geom="point", size=2, color="red") + theme(axis.line = element_line(color = "grey"),
+p + geom_boxplot(width = 0.1, color = "grey") + 
+  stat_summary(fun.y = median, geom = "point", size = 2, color = "red") + 
+  theme(axis.line = element_line(color = "grey"),
         axis.ticks = element_line(color = "grey"),
         axis.title.y = element_text(color = "black", size = 11),
         axis.title.x = element_text(color = "black", size = 11),
@@ -348,7 +359,7 @@ p + geom_boxplot(width = 0.1, color = "grey") + stat_summary(fun.y=median, geom=
                                 colour = "grey"),
         panel.background = element_blank(),
         panel.border = element_rect(colour = "grey", fill = NA, size = 0.5)) +
-  labs(x ="",y = "Interest in a program which helps adopt behaviors") + 
+  labs(x = "",y = "Interest in a program which helps adopt behaviors") + 
 scale_y_continuous(breaks= pretty_breaks())
 ```
 
@@ -744,6 +755,8 @@ reactable(iris, columns = list(
 ))
 ```
 
+#### Boston Index
+
 ```{r, echo = FALSE, results = 'asis', message = FALSE}
 ### Boston Index (weighted by ZIP and age-sex-ethnicity)
 t11 <- group_by(fin_table, behavior, ind)
@@ -875,8 +888,8 @@ div(
   class = "Behavior",
   div(
     # this can be called with CSS now via .title
-    class = "title",
-    h2("MIP Index: Boston"),
+    #class = "title",
+    #h2("MIP Index: Boston"),
     "The survey was fielded from March 31 – April 21, 2021, drawing on the stratified sample of the Boston CBSA (n = 1,120)
     "
   ),
@@ -1038,3 +1051,4 @@ reactable(t2,
     style = list(fontFamily = "-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif")))
 ```
 
+For eating less meat, flying less, and reducing food waste, adoption variable measured current attempt, rather than reported adoption (e.g., *Are you trying to fly less frequently than you used to?*)
