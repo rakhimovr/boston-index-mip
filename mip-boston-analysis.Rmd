@@ -795,7 +795,6 @@ t11 <- t11 %>%
 
 orange_pal <- function(x) rgb(colorRamp(c("#ffe4cc", "#ff9500"))(x), maxColorValue = 255)
 
-
 tt = reactable(t11,
   style = list(fontSize = "12px"),
   defaultSortOrder = 'asc',
@@ -1052,3 +1051,80 @@ reactable(t2,
 ```
 
 For eating less meat, flying less, and reducing food waste, adoption variable measured current attempt, rather than reported adoption (e.g., *Are you trying to fly less frequently than you used to?*)
+
+#### Carbon Impact Ranking
+
+```{r, echo = FALSE, results = 'asis', message = FALSE, fig.align = 'center'}
+#Ranking table
+ranking_table <- index %>% 
+  select(Vrid, offset_hrank:pack_lrank) %>% 
+  pivot_longer(
+   cols = ends_with(c("rank")),
+   names_to = "behavior",
+   values_to = "value",
+   values_drop_na = TRUE) %>%
+  group_by(behavior) %>% 
+  summarise(mean = mean(value))
+
+# Rename columns
+ranking_table <- ranking_table %>% 
+  rename('Behavior' = behavior,
+         'Average ranking' = mean)
+
+# Rename rows
+ranking_table$Behavior[ranking_table$Behavior == "solar_hrank"] <- "Get 100% of electricity from solar panels on the roof instead of from the grid for one year"
+ranking_table$Behavior[ranking_table$Behavior == "recycling_lrank"] <- "Recycle 100% of recyclable materials generated as waste, including newspaper, magazines, glass, plastic, and metal for one year"
+ranking_table$Behavior[ranking_table$Behavior == "recs_hrank"] <- "Purchase 100% of household energy from renewable sources for one year"
+ranking_table$Behavior[ranking_table$Behavior == "ev_hrank"] <- "Drive a fully electric car for one year"
+ranking_table$Behavior[ranking_table$Behavior == "trees_lrank"] <- "Plant 10 trees"
+ranking_table$Behavior[ranking_table$Behavior == "bulbs_lrank"] <- "Replace 25 incandescent light bulbs with ENERGY STAR lights"
+ranking_table$Behavior[ranking_table$Behavior == "fridge_lrank"] <- "Replace old refrigerator with ENERGY STAR refrigerator"
+ranking_table$Behavior[ranking_table$Behavior == "offset_hrank"] <- "Purchase carbon offsets to offset average American’s annual carbon footprint"
+ranking_table$Behavior[ranking_table$Behavior == "pack_lrank"] <- "Eliminate all food packaging for one year"
+ranking_table$Behavior[ranking_table$Behavior == "local_lrank"] <- "Source all of food locally for one year"
+ranking_table$Behavior[ranking_table$Behavior == "fly_hrank"] <- "Take one fewer round-trip flight"
+ranking_table$Behavior[ranking_table$Behavior == "pbd_hrank"] <- "Avoid eating all meat for one year"
+
+ranking_t = reactable(ranking_table,
+  style = list(fontSize = "12px"),
+  defaultPageSize = 12,
+  defaultSortOrder = 'asc',
+  defaultSorted = 'Average ranking',
+  showSortIcon = FALSE,
+  # ALL one page option (no scrolling or page swapping)
+    pagination = TRUE,
+    # compact for an overall smaller table width wise
+    compact = TRUE,
+    # borderless - TRUE or FALSE
+    borderless = FALSE,
+    # Stripes - TRUE or FALSE
+    striped = FALSE,
+    highlight = TRUE,  
+  # fullWidth - either fit to width or not
+    fullWidth = FALSE,
+    # apply defaults
+    # 100 px and align to center of column
+    defaultColDef = colDef(
+      align = "center",
+      minWidth = 100),
+  # Add theme for the top border
+    theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )
+    ),
+  columns = list(
+    Behavior = colDef(
+      minWidth = 490,
+      align = "left"),
+    `Average ranking` = colDef(
+      format = colFormat(digits = 2),
+      maxWidth = 100)),
+  rowStyle = function(index) {
+  if (index == 2 | index == 3 | index == 6 | index == 8 |index == 9| index == 11) list(background = "#E9F8CB")
+})
+
+ranking_t  
+```
