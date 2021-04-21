@@ -21,13 +21,13 @@ library(survey)
 options(scipen = 999)
 library(scales)
 
-data <- read_sav("spss_4_17_2021.sav")
-lucid_data <-read.csv("lucid_response_4_19_2021.csv")
+data <- read_sav("spss_4_21_2021.sav")
+lucid_data <-read.csv("lucid_response_4_21_2021.csv")
 ```
 
 ```{r, include = FALSE, echo = FALSE, results = 'asis', eval = FALSE}
 # Incompletes match between Lucid and Alchemer
-lucid <- read.csv("lucid_data_analysis_4_17_2021.csv")
+lucid <- read.csv("lucid_data_analysis_4_21_2021.csv")
 
 test <- lucid %>% 
   filter(FulcrumStatus == 3 & ClientStatus == 10 & SupplierName != "Z - Test Supplier") %>% 
@@ -309,7 +309,7 @@ data <- data %>%
 
 ### Research Overview
 
-- Sampled 1,120 adult residents of the Boston core-based statistical area (CBSA), quota matched on age, gender, and ethnicity and weighted by ZIP.
+- Sampled 1,123 adult residents of the Boston core-based statistical area (CBSA), quota matched on age, gender, and ethnicity and weighted by ZIP.
 - For each MIP behavior, measured current self-reported *adoption*, *intention to adopt in the future*, and three social expectation measures - *belief that others are adopting the behavior*, *belief that others should adopt the behavior*, and *belief that others think people should adopt the behavior*.
 - For each MIP behavior, measured stated *interest in participating in a program* which helps adopt the behavior. 
 - For six out of seven MIP behaviors, measured perceived relative *carbon mitigation impact* of that behavior compared to a list of low-impact behaviors.
@@ -630,9 +630,7 @@ index <- index %>%
   mutate(
   #Adoption
   ev_adoption = case_when(ev_adoption == 0 ~ 0, TRUE ~ 1), 
-  fly_adoption = case_when(fly_adoption == 1 ~ 1, TRUE ~ 0),
   recs_adoption = case_when(recs_adoption == 1 ~ 1, TRUE ~ 0),
-  pbd_adoption = case_when(pbd_adoption == 1 ~1, TRUE ~ 0),
   #EE
   ev_ee = ev_ee/10,
   fly_ee = fly_ee/10,
@@ -641,8 +639,6 @@ index <- index %>%
   offset_ee = offset_ee/10,
   foodwaste_ee = foodwaste_ee/10,
   pbd_ee = pbd_ee/10,
-  #PNB - recoded
-  fly_pnb = case_when(fly_pnb == 10144 ~ 0, TRUE ~ 1),
   #NE
   ev_ne = ev_ne/10,
   fly_ne = fly_ne/10,
@@ -651,8 +647,6 @@ index <- index %>%
   offset_ne = offset_ne/10,
   foodwaste_ne = foodwaste_ne/10,
   pbd_ne = pbd_ne/10,
-  #Intent - recoded
-  fly_intent = case_when(fly_intent == 0 ~ 0, fly_intent == 10 ~ 1, fly_intent == 20 ~ 2, fly_intent == 30 ~ 3, fly_intent == 40 ~ 4, fly_intent == 50 ~ 5, fly_intent == 60 ~ 6, fly_intent == 70 ~ 7, fly_intent == 80 ~ 8, fly_intent == 10571 ~ 9, TRUE ~ 10),
   #Program interest
   ev_program_interest = ev_program_interest/10,
   fly_program_interest = fly_program_interest/10,
@@ -663,7 +657,7 @@ index <- index %>%
   pbd_program_interest = pbd_program_interest/10,
   #Intent
   ev_intent = ev_intent/100,
-  fly_intent = fly_intent/10, # needs recoding
+  fly_intent = fly_intent/100,
   solar_intent = solar_intent/100,
   recs_intent = recs_intent/100,
   offset_intent = offset_intent/100,
@@ -878,7 +872,7 @@ div(
     # this can be called with CSS now via .title
     #class = "title",
     #h2("MIP Index: Boston"),
-    "The survey was fielded from March 31 – April 21, 2021, drawing on the stratified sample of the Boston CBSA (n = 1,120)
+    "The survey was fielded from March 31 – April 21, 2021, drawing on the stratified sample of the Boston CBSA (n = 1,123)
     "
   ),
   # The actual table
@@ -1043,7 +1037,7 @@ For eating less meat, flying less, and reducing food waste, adoption variable me
 
 #### Carbon Impact Ranking
 
-The table below presents average ranking in terms of carbon mitigation potential of MIP (highlighted) and low-impact behaviors assigned by participants. For example, on average, installing rooftop solar was assigned rank 4.62 out of 12.
+The table below presents average ranking in terms of carbon mitigation potential of MIP (highlighted) and low-impact behaviors assigned by participants. For example, on average, installing rooftop solar was assigned rank 4.61 out of 12.
 
 ```{r, echo = FALSE, results = 'asis', message = FALSE, fig.align = 'center'}
 #Ranking table
@@ -1111,6 +1105,7 @@ ranking_t = reactable(ranking_table,
       minWidth = 490,
       align = "left"),
     `Average position` = colDef(
+      name = "Average position",
       format = colFormat(digits = 2),
       maxWidth = 100)),
   rowStyle = function(index) {
