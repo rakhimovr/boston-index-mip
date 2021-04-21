@@ -318,6 +318,7 @@ data <- data %>%
 
 #### Program Participation Interest
 
+##### How interested would you be in participating in a program which helps you *[adopt behavior]*?
 ```{r, fig.width = 9, fig.height = 5, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
 #Boxplot in violin
 
@@ -741,18 +742,6 @@ good_color(seq(0.1, 0.9, length.out = 12))
 seq(0.1, 0.9, length.out = 12) %>% 
   good_color() %>% 
   scales::show_col()
-
-
-iris <- iris[10:29, ]
-orange_pal <- function(x) rgb(colorRamp(c("#ffe4cc", "#ff9500"))(x), maxColorValue = 255)
-
-reactable(iris, columns = list(
-  Sepal.Width = colDef(style = function(value) {
-    normalized <- (value - min(iris$Sepal.Width)) / (max(iris$Sepal.Width) - min(iris$Sepal.Width))
-    color <- orange_pal(normalized)
-    list(background = color)
-  })
-))
 ```
 
 #### Boston Index
@@ -850,7 +839,7 @@ tt = reactable(t11,
     color <- good_color(normalized)
     list(background = color)
   },
-      name = "Others are adopting",
+      name = "Others have adopted",
       format = colFormat(digits = 2)),
     `Belief that others should engage in the behavior` = colDef(
        style = function(value) {
@@ -1053,6 +1042,8 @@ reactable(t2,
 For eating less meat, flying less, and reducing food waste, adoption variable measured current attempt, rather than reported adoption (e.g., *Are you trying to fly less frequently than you used to?*)
 
 #### Carbon Impact Ranking
+
+The table below presents average ranking in terms of carbon mitigation potential of MIP (highlighted) and low-impact behaviors assigned by participants. For example, on average, installing rooftop solar was assigned rank 4.62 out of 12.
 
 ```{r, echo = FALSE, results = 'asis', message = FALSE, fig.align = 'center'}
 #Ranking table
