@@ -1060,7 +1060,7 @@ ranking_table <- index %>%
 # Rename columns
 ranking_table <- ranking_table %>% 
   rename('Behavior' = behavior,
-         'Average ranking' = mean)
+         'Average position' = mean)
 
 # Rename rows
 ranking_table$Behavior[ranking_table$Behavior == "solar_hrank"] <- "Get 100% of electricity from solar panels on the roof instead of from the grid for one year"
@@ -1080,7 +1080,7 @@ ranking_t = reactable(ranking_table,
   style = list(fontSize = "12px"),
   defaultPageSize = 12,
   defaultSortOrder = 'asc',
-  defaultSorted = 'Average ranking',
+  defaultSorted = 'Average position',
   showSortIcon = FALSE,
   # ALL one page option (no scrolling or page swapping)
     pagination = TRUE,
@@ -1110,12 +1110,12 @@ ranking_t = reactable(ranking_table,
     Behavior = colDef(
       minWidth = 490,
       align = "left"),
-    `Average ranking` = colDef(
+    `Average position` = colDef(
       format = colFormat(digits = 2),
       maxWidth = 100)),
   rowStyle = function(index) {
   if (index == 2 | index == 3 | index == 6 | index == 8 |index == 9| index == 11) list(background = "#E9F8CB")
 })
 
-ranking_t  
+ranking_t
 ```
