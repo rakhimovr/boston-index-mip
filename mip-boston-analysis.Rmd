@@ -20,14 +20,17 @@ library(hrbrthemes)
 library(survey)
 options(scipen = 999)
 library(scales)
+library(fastDummies)
+require(lattice)
+library(corrr)
 
-data <- read_sav("spss_4_21_2021.sav")
-lucid_data <-read.csv("lucid_response_4_21_2021.csv")
+data <- read_sav("spss_4_23_2021.sav")
+lucid_data <-read.csv("lucid_response_4_23_2021.csv")
 ```
 
 ```{r, include = FALSE, echo = FALSE, results = 'asis', eval = FALSE}
 # Incompletes match between Lucid and Alchemer
-lucid <- read.csv("lucid_data_analysis_4_21_2021.csv")
+lucid <- read.csv("lucid_data_analysis_4_23_2021.csv")
 
 test <- lucid %>% 
   filter(FulcrumStatus == 3 & ClientStatus == 10 & SupplierName != "Z - Test Supplier") %>% 
@@ -304,7 +307,7 @@ wt <- data.frame(wt = weights(svy.rake))
 data <- cbind(data, wt)
 
 data <- data %>% 
-  select(wt, ID:var15)
+  select(wt, ID:age_group)
 ```
 
 ### Research Overview
@@ -776,8 +779,6 @@ t11$Behavior[t11$Behavior == "foodwaste"] <- "Waste less food*"
 t11 <- t11 %>% 
   select(Behavior, Adoption, Intention, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`, `Program interest`, `Carbon impact ranking`)
 
-orange_pal <- function(x) rgb(colorRamp(c("#ffe4cc", "#ff9500"))(x), maxColorValue = 255)
-
 tt = reactable(t11,
   style = list(fontSize = "12px"),
   defaultSortOrder = 'asc',
@@ -922,7 +923,6 @@ reactable(t,
     cellPadding = "8px 12px",
     style = list(fontFamily = "-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif")))
 ```
-
 
 ```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE, eval = FALSE}
 ### Boston Index Demo Weighted
@@ -1113,4 +1113,586 @@ ranking_t = reactable(ranking_table,
 })
 
 ranking_t
+```
+
+#### Correlation tables
+
+##### Pearson correlations between reported intention (I) to engage in the behaviors and interest in a program (PI) that helps adopt these behaviors
+```{r, echo = FALSE, results = 'asis', message = FALSE, fig.align = 'center', warning = FALSE}
+#Corr between intention to adopt and program interest 
+cor_table_1 <- data %>% 
+  select(
+  #Vrid,
+  #var13, #RID
+  #EV
+  var94, #intent
+  var96, #program interest
+  #Fly
+  var97, #intent
+  var98, #program interest
+  #Offsets
+  var99, #intent
+  var100, #program interest
+  #PBD
+  var103, #intent
+  var104, #program interest
+  #RECs
+  var105, #intent
+  var106, #program interest
+  #Solar
+  var107, #intent
+  var108, #program interest
+  #Food waste
+  var109, #intent
+  var110 #program interest
+  ) %>% 
+  rename(
+  #EV
+  "I: EV" = var94,
+  "PI: EV" = var96,
+  #Fly
+  "I: Fly" = var97,
+  "PI: Fly" = var98,
+  #Offset
+  "PI: Offsets" = var100, #program interest
+  "I: Offsets" = var99,
+  #PBD
+  "PI: PBD" = var104, #program interest
+  "I: PBD" = var103, 
+  #RECs
+  "PI: RECs" = var106, #program interest
+  "I: RECs" = var105,
+  #Solar
+  "PI: Solar" = var108, #program interest
+  "I: Solar" = var107,
+  #Food waste
+  "PI: Food Waste" = var110, #program interest
+  "I: Food Waste" = var109)
+
+res <- cor(cor_table_1)
+res <- round(res, 2)
+res <- as.data.frame(res)
+#upper.tri(res, diag = FALSE)
+#upper <- res
+#upper[upper.tri(res)] <- ""
+#upper < -as.data.frame(res)
+#upper
+
+res_table1 <- reactable(res,
+  style = list(fontSize = "11px"),
+  defaultPageSize = 14,
+  #defaultSortOrder = 'asc',
+  #defaultSorted = 'Behavior',
+  showSortIcon = FALSE,
+  # ALL one page option (no scrolling or page swapping)
+    pagination = TRUE,
+    # compact for an overall smaller table width wise
+    compact = TRUE,
+    # borderless - TRUE or FALSE
+    borderless = FALSE,
+    # Stripes - TRUE or FALSE
+    striped = TRUE,
+    highlight = TRUE,  
+  # fullWidth - either fit to width or not
+    fullWidth = TRUE,
+    # Add theme for the top border
+    theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )
+    ),
+  columns = list(
+    `I: EV` = colDef(
+      style = function(value) {
+    normalized <- (value - min(res$`I: EV`)) / (max(res$`I: EV`) - min(res$`I: EV`))
+    color <- good_color(normalized)
+    list(background = color)
+  },
+      format = colFormat(digits = 2),
+      maxWidth = 65),
+    `PI: EV` = colDef(
+      style = function(value) {
+    normalized <- (value - min(res$`PI: EV`)) / (max(res$`PI: EV`) - min(res$`PI: EV`))
+    color <- good_color(normalized)
+    list(background = color)
+  },
+      format = colFormat(digits = 2),
+      maxWidth = 65),
+    `I: Fly` = colDef(
+      style = function(value) {
+    normalized <- (value - min(res$`I: Fly`)) / (max(res$`I: Fly`) - min(res$`I: Fly`))
+    color <- good_color(normalized)
+    list(background = color)
+  },
+  maxWidth = 65,
+      format = colFormat(digits = 2)),
+    `PI: Fly` = colDef(
+       style = function(value) {
+    normalized <- (value - min(res$`PI: Fly`)) / (max(res$`PI: Fly`) - min(res$`PI: Fly`))
+    color <- good_color(normalized)
+    list(background = color)
+  },
+      maxWidth = 65,
+      format = colFormat(digits = 2)),
+    `I: Solar` = colDef(
+      style = function(value) {
+    normalized <- (value - min(res$`I: Solar`)) / (max(res$`I: Solar`) - min(res$`I: Solar`))
+    color <- good_color(normalized)
+    list(background = color)
+  },
+      format = colFormat(digits = 2),
+      maxWidth = 65),
+    `PI: Solar` = colDef(
+      style = function(value) {
+    normalized <- (value - min(res$`PI: Solar`)) / (max(res$`PI: Solar`) - min(res$`PI: Solar`))
+    color <- good_color(normalized)
+    list(background = color)
+  },
+      format = colFormat(digits = 2),
+      maxWidth = 65),
+    `I: Offsets` = colDef(
+      style = function(value) {
+    normalized <- (value - min(res$`I: Offsets`)) / (max(res$`I: Offsets`) - min(res$`I: Offsets`))
+    color <- good_color(normalized)
+    list(background = color)
+  },
+      format = colFormat(digits = 2),
+      maxWidth = 65),
+    `PI: Offsets` = colDef(
+      style = function(value) {
+    normalized <- (value - min(res$`PI: Offsets`)) / (max(res$`PI: Offsets`) - min(res$`PI: Offsets`))
+    color <- good_color(normalized)
+    list(background = color)
+  },
+      format = colFormat(digits = 2),
+      maxWidth = 70),
+    `I: PBD` = colDef(
+      style = function(value) {
+    normalized <- (value - min(res$`I: PBD`)) / (max(res$`I: PBD`) - min(res$`I: PBD`))
+    color <- good_color(normalized)
+    list(background = color)
+  },
+      maxWidth = 65,
+      format = colFormat(digits = 2)),
+    `PI: PBD` = colDef(
+       style = function(value) {
+    normalized <- (value - min(res$`PI: PBD`)) / (max(res$`PI: PBD`) - min(res$`PI: PBD`))
+    color <- good_color(normalized)
+    list(background = color)
+  },
+      maxWidth = 65,
+      format = colFormat(digits = 2)),
+    `I: RECs` = colDef(
+      style = function(value) {
+    normalized <- (value - min(res$`I: RECs`)) / (max(res$`I: RECs`) - min(res$`I: RECs`))
+    color <- good_color(normalized)
+    list(background = color)
+  },
+      format = colFormat(digits = 2),
+      maxWidth = 65),
+    `PI: RECs` = colDef(
+      style = function(value) {
+    normalized <- (value - min(res$`PI: RECs`)) / (max(res$`PI: RECs`) - min(res$`PI: RECs`))
+    color <- good_color(normalized)
+    list(background = color)
+  },
+      format = colFormat(digits = 2),
+      maxWidth = 65),
+      `I: Food Waste` = colDef(
+      style = function(value) {
+    normalized <- (value - min(res$`I: Food Waste`)) / (max(res$`I: Food Waste`) - min(res$`I: Food Waste`))
+    color <- good_color(normalized)
+    list(background = color)
+  },
+      format = colFormat(digits = 2),
+      maxWidth = 90),
+    `PI: Food Waste` = colDef(
+      style = function(value) {
+    normalized <- (value - min(res$`PI: Food Waste`)) / (max(res$`PI: Food Waste`) - min(res$`PI: Food Waste`))
+    color <- good_color(normalized)
+    list(background = color)
+  },
+      format = colFormat(digits = 2),
+      maxWidth = 95)))
+
+res_table1
+```
+
+```{r, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
+ev_cols <- c("EV: PI", "EV: Intent", "EV: Beliefs that others have adopted", "Beliefs that others should drive an EV", "Beliefs that others think people should drive an EV")
+
+#social_cols <- c("EV: Beliefs that others have adopted", "EV: Beliefs that others should adopt", "EV: Beliefs that others think people should adopt")
+
+BuYlRd <- function(x) rgb(colorRamp(c("#7fb7d7", "#ffffbf", "#fc8d59"))(x), maxColorValue = 255)
+```
+
+##### Pearson correlations between demographic and pscyhographic predictors and behavior-related variables
+
+```{r, echo = FALSE, results = 'asis', message = FALSE, fig.align = 'center', warning = FALSE}
+#Corr table 2
+corr_table_2 <- data %>% 
+  select(
+  #wt,
+  #Vrid,
+  #var13, #RID
+  #EV
+  #var26, #adoption
+  var87, #EE
+  var28, #PNB,
+  var88, #NE
+  var94, #intent
+  var96, #program interest
+  #Fly
+  #var70, #Are you trying to fly less frequently than you used to?
+  var69, #EE
+  var38, #PNB
+  var35, #NE
+  var97, #intent
+  var98, #program interest
+  #Offsets
+  #var39, #adoption
+  var40, #EE
+  var41, #PNB
+  var42, #NE
+  var99, #intent
+  var100, #program interest
+  #PBD
+  #var71, #Are you trying to eat less meat than you used to?
+  #var115, #adoption % of meals
+  var72, #EE
+  var66, #PNB
+  var48, #NE
+  var103, #intent
+  var104, #program interest
+  #RECs
+  #var54, #adoption
+  var55, #EE
+  var56, #PNB
+  var57, #NE
+  var105, #intent
+  var106, #program interest
+  #Solar
+  #var59, #adoption
+  var60, #EE
+  var61, #PNB
+  var62, #NE
+  var107, #intent
+  var108, #program interest
+  #Food waste
+  #var73, #Are you currently trying to reduce the amount of food waste you produce?
+  var74, #EE
+  var75, #PNB
+  var76, #NE
+  var109, #intent
+  var110, #program interest
+  #demographics
+  age_group,
+  sex,
+  ethnicity,
+  var20, #politics
+  var19, #income
+  var17, #education
+  #employment info
+  var92, #empl status
+  var93, #empl sector
+  var102, #empl size
+  #social participation & donation
+  var118O832:var119O841) %>% 
+  rename(
+  #EV
+  #ev_adoption = var26,
+  ev_ee = var87,
+  ev_pnb = var28,
+  ev_ne = var88,
+  ev_intent = var94,
+  ev_program_interest = var96,
+  #Fly
+  #fly_adoption = var70, #trying to fly less
+  fly_ee = var69, #EE
+  fly_pnb = var38, #PNB
+  fly_ne = var35, #NE
+  fly_intent = var97,
+  fly_program_interest = var98,
+  #Offset
+  #offset_adoption = var39, #adoption
+  offset_ee = var40, #EE
+  offset_pnb = var41, #PNB
+  offset_ne = var42, #NE
+  offset_program_interest = var100, #program interest
+  offset_intent = var99,
+  #PBD
+  #pbd_adoption = var71, #trying to
+  pbd_ee = var72, #EE
+  pbd_pnb = var66, #PNB
+  pbd_ne = var48, #NE
+  pbd_program_interest = var104, #program interest
+  pbd_intent = var103, 
+  #RECs
+  #recs_adoption = var54, #adoption
+  recs_ee = var55, #EE
+  recs_pnb = var56, #PNB
+  recs_ne = var57, #NE
+  recs_program_interest = var106, #program interest
+  recs_intent = var105,
+  #Solar
+  #solar_adoption = var59, #adoption
+  solar_ee = var60, #EE
+  solar_pnb = var61, #PNB
+  solar_ne = var62, #NE
+  solar_program_interest = var108, #program interest
+  solar_intent = var107,
+  #Food waste
+  #foodwaste_adoption = var73, #attempt
+  foodwaste_ee = var74, #EE
+  foodwaste_pnb = var75, #PNB
+  foodwaste_ne = var76, #NE
+  foodwaste_program_interest = var110, #program interest
+  foodwaste_intent = var109,
+  #dem
+  politics = var20,
+  income = var19, 
+  education = var17,
+  #employment info
+  employment_status = var92, #empl status
+  employment_sector = var93, #empl sector
+  company_size = var102, #empl size
+  #social participation
+  part_religion = var118O832,
+  part_school = var118O833,
+  part_alumni = var118O834,
+  part_neighbor = var118O835,
+  part_none = var118O836,
+  #social donation
+  donation_religion = var119O837,
+  donation_school = var119O838,
+  donation_alumni = var119O839,
+  donation_neighbor = var119O840,
+  donate_none = var119O841) 
+
+corr_table_2 <- dummy_cols(corr_table_2, select_columns = c("sex", "ethnicity", "age_group", "employment_status", "employment_sector"))
+
+corr_table_2 <- data.frame(lapply(corr_table_2, function(x) as.numeric(as.character(x))))
+
+corr_table_2 <- corr_table_2 %>% 
+  select(ev_ee:foodwaste_program_interest, politics:education, company_size:age_group_65.:employment_status_10792, employment_sector_10492, employment_sector_10496, employment_sector_10499)
+
+corr_table_2 <- corr_table_2 %>% 
+  mutate(
+    income = case_when(income == 10063 ~ 11, TRUE ~ income))
+
+res.cor2 <- correlate(corr_table_2)
+
+res.cor2$term[res.cor2$term == "income"] <- "Household income"
+res.cor2$term[res.cor2$term == "age_group_18.24"] <- "Age: 18-24"
+res.cor2$term[res.cor2$term == "age_group_25.34"] <- "Age: 25-34"
+res.cor2$term[res.cor2$term == "age_group_35.44"] <- "Age: 35-44"
+res.cor2$term[res.cor2$term == "age_group_45.54"] <- "Age: 45-54"
+res.cor2$term[res.cor2$term == "age_group_55.64"] <- "Age: 55-64"
+res.cor2$term[res.cor2$term == "age_group_65."] <- "Age: 65+"
+res.cor2$term[res.cor2$term == "sex_Female"] <- "Female"
+res.cor2$term[res.cor2$term == "sex_Male"] <- "Male"
+
+res.cor2$term[res.cor2$term == "ethnicity_White"] <- "Ethnicity: White"
+res.cor2$term[res.cor2$term == "ethnicity_Black"] <- "Ethnicity: Black"
+res.cor2$term[res.cor2$term == "ethnicity_Asian"] <- "Ethnicity: Asian"
+res.cor2$term[res.cor2$term == "ethnicity_Other"] <- "Ethnicity: Other"
+
+res.cor2$term[res.cor2$term == "education"] <- "Education level"
+res.cor2$term[res.cor2$term == "politics"] <- "Political orientation: Conservative"
+
+res.cor2$term[res.cor2$term == "employment_status_10485"] <- "Employed"
+res.cor2$term[res.cor2$term == "employment_status_10792"] <- "Retired"
+res.cor2$term[res.cor2$term == "employment_status_10487"] <- "Unemployed"
+
+res.cor2$term[res.cor2$term == "company_size"] <- "Employer size"
+res.cor2$term[res.cor2$term == "employment_sector_10499"] <- "Industry: Technology/Software"
+res.cor2$term[res.cor2$term == "employment_sector_10496"] <- "Industry: Healthcare"
+res.cor2$term[res.cor2$term == "employment_sector_10492"] <- "Industry: Education"
+
+res.cor2$term[res.cor2$term == "part_religion"] <- "Participation: Religious Group"
+res.cor2$term[res.cor2$term == "part_school"] <- "Participation: School Association"
+res.cor2$term[res.cor2$term == "part_alumni"] <- "Participation: Alumni Group"
+res.cor2$term[res.cor2$term == "part_neighbor"] <- "Participation: Neighborhood Org"
+
+res.cor2$term[res.cor2$term == "donation_religion"] <- "Past Donation: Religious Group"
+res.cor2$term[res.cor2$term == "donation_school"] <- "Past Donation: School Association"
+res.cor2$term[res.cor2$term == "donation_alumni"] <- "Past Donation: Alumni Group"
+res.cor2$term[res.cor2$term == "donation_neighbor"] <- "Past Donation: Neighborhood Org"
+
+res.cor2 <- res.cor2 %>% mutate_if(is.numeric, round, digits = 2)
+
+res.cor2[is.na(res.cor2)] <- 0
+
+x2 <- c("Age: 18-24", "Age: 25-34", "Age: 35-44", "Age: 45-54", "Age: 55-64", "Age: 65+",
+        "Female", "Male", 
+        "Ethnicity: White", "Ethnicity: Black", "Ethnicity: Asian", "Ethnicity: Other", "Household income", "Education level", "Political orientation: Conservative", 
+        "Employed", "Retired", "Unemployed", "Company Size", "Industry: Technology/Software", "Industry: Healthcare", "Industry: Education", 
+        "Participation: Religious Group", "Participation: School Association", "Participation: Alumni Group", "Participation: Neighborhood Org", "Past Donation: Religious Group", "Past Donation: School Association", "Past Donation: Alumni Group", "Past Donation: Neighborhood Org")
+
+tt3 = res.cor2 %>% 
+  focus(ev_program_interest, ev_intent, ev_ee, ev_pnb, ev_ne,
+        solar_program_interest, solar_intent, solar_ee, solar_pnb, solar_ne,
+        recs_program_interest, recs_intent, recs_ee, recs_pnb, recs_ne,
+        offset_program_interest, offset_intent, offset_ee, offset_pnb, offset_ne,
+        fly_program_interest, fly_intent, fly_ee, fly_pnb, fly_ne, 
+        pbd_program_interest, pbd_intent, pbd_ee, pbd_pnb, pbd_ne,
+        foodwaste_program_interest, foodwaste_intent, foodwaste_ee, foodwaste_pnb, foodwaste_ne) %>% 
+  rename('Predictor' = term,
+         'Interest in EV program' = ev_program_interest,
+         'Intention to buy an EV' = ev_intent,
+         'EV: Beliefs that others have adopted' = ev_ee,
+         'Beliefs that others should driven an EV' = ev_pnb,
+         'Beliefs that others think people should drive an EV' = ev_ne,
+         'Interest in solar program' = solar_program_interest,
+         'Intention to install solar' = solar_intent,
+         'Beliefs that others have solar' = solar_ee,
+         'Beliefs that others should install solar' = solar_pnb,
+         'Beliefs that others think people should install solar' = solar_ne,
+         'Interest in green energy program' = recs_program_interest,
+         'Intention to contract for green energy' = recs_intent,
+         'Beliefs that others have green energy' = recs_ee,
+         'Beliefs that others should have green energy' = recs_pnb,
+         'Beliefs that others think people should have green energy' = recs_ne,
+         'Interest in offsets program' = offset_program_interest,
+         'Intention to buy offsets' = offset_intent,
+         'Beliefs that others bougth offsets' = offset_ee,
+         'Beliefs that others should buy offsets' = offset_pnb,
+         'Beliefs that others think people should buy offsets' = offset_ne,
+         'Interest in flying less program' = fly_program_interest,
+         'Intention to fly less' = fly_intent,
+         'Beliefs that others are flying less' = fly_ee,
+         'Beliefs that others should fly less' = fly_pnb,
+         'Beliefs that others think people should fly less' = fly_ne,
+         'Interest in eating less meat program' = pbd_program_interest,
+         'Intention to eat less meat' = pbd_intent,
+         'Beliefs that others eat less meat' = pbd_ee,
+         'Beliefs that others should eat less meat' = pbd_pnb,
+         'Beliefs that others think people should eat less meat' = pbd_ne,
+         'Interest in reducing food waste program' = foodwaste_program_interest,
+         'Intention to reduce food waste' = foodwaste_intent,
+         'Beliefs that others reduce food waste' = foodwaste_ee,
+         'Beliefs that others should reduce food waste' = foodwaste_pnb,
+         'Beliefs that others think people should reduce food waste' = foodwaste_ne) %>%
+  slice(match(x2, Predictor)) #%>% #reorder predictors
+
+sticky_style <- list(position = "sticky", left = 0, background = "#fff", zIndex = 1,
+                     borderRight = "1px solid #eee")
+
+tt5 = reactable(tt3,
+                height = 500,
+  defaultColDef = colDef(
+    footer = function(values, name) htmltools::div(name, style = list(fontWeight = 600)),
+    style = function(value) {
+      if (!is.numeric(value)) return()
+      normalized <- (value - min(tt3[-1])) / (max(tt3[-1]) - min(tt3[-1]))
+      color <- BuYlRd(normalized)
+      list(background = color)
+    },
+    format = colFormat(digits = 2),
+  ),
+  style = list(fontSize = "11px"),
+  defaultPageSize = 30,
+  #defaultSortOrder = 'asc',
+  #defaultSorted = 'Behavior',
+  showSortIcon = FALSE,
+  # ALL one page option (no scrolling or page swapping)
+    pagination = TRUE,
+    # compact for an overall smaller table width wise
+    compact = TRUE,
+    # borderless - TRUE or FALSE
+    borderless = FALSE,
+    # Stripes - TRUE or FALSE
+    striped = TRUE,
+    highlight = TRUE,  
+  # fullWidth - either fit to width or not
+    fullWidth = TRUE,
+    # Add theme for the top border
+  columns = list(
+  `Predictor` =  colDef(
+            style = sticky_style,
+      headerStyle = sticky_style
+    )  
+  ),  
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+
+tt5
+```
+
+```{r, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, eval = FALSE}
+### 
+
+tt4 = reactable(tt3,
+                columns = list(
+    `EV: PI` = colDef(
+      name = "Program interest",
+      style = function(value) {
+    normalized <- (value - min(tt3$`EV: PI`)) / (max(tt3$`EV: PI`) - min(tt3$`EV: PI`))
+    color <- BuYlRd(normalized)
+    list(background = color)
+  }),
+  `EV: Intent` = colDef(
+    name = "Intention",
+    style = function(value) {
+    normalized <- (value - min(tt3$`EV: Intent`)) / (max(tt3$`EV: Intent`) - min(tt3$`EV: Intent`))
+    color <- BuYlRd(normalized)
+    list(background = color)
+  }),
+  `EV: Beliefs that others have adopted` = colDef(
+    name = "Beliefs that others drive an EV",
+    style = function(value) {
+    normalized <- (value - min(tt3$`EV: Beliefs that others have adopted`)) / (max(tt3$`EV: Beliefs that others have adopted`) - min(tt3$`EV: Beliefs that others have adopted`))
+    color <- BuYlRd(normalized)
+    list(background = color)
+  }),
+  `Solar: PI` = colDef(style = function(value) {
+    normalized <- (value - min(tt3$`Solar: PI`)) / (max(tt3$`Solar: PI`) - min(tt3$`Solar: PI`))
+    color <- BuYlRd(normalized)
+    list(background = color)
+  }),
+  `Solar: Intent` = colDef(style = function(value) {
+    normalized <- (value - min(tt3$`Solar: Intent`)) / (max(tt3$`Solar: Intent`) - min(tt3$`Solar: Intent`))
+    color <- BuYlRd(normalized)
+    list(background = color)
+  }),
+  `Solar: Beliefs that others have adopted` = colDef(style = function(value) {
+    normalized <- (value - min(tt3$`Solar: Beliefs that others have adopted`)) / (max(tt3$`Solar: Beliefs that others have adopted`) - min(tt3$`Solar: Beliefs that others have adopted`))
+    color <- BuYlRd(normalized)
+    list(background = color)
+  })
+  ),
+  style = list(fontSize = "11px"),
+  defaultPageSize = 30,
+  #defaultSortOrder = 'asc',
+  #defaultSorted = 'Behavior',
+  showSortIcon = FALSE,
+  # ALL one page option (no scrolling or page swapping)
+    pagination = TRUE,
+    # compact for an overall smaller table width wise
+    compact = TRUE,
+    # borderless - TRUE or FALSE
+    borderless = FALSE,
+    # Stripes - TRUE or FALSE
+    striped = TRUE,
+    highlight = TRUE,  
+  # fullWidth - either fit to width or not
+    fullWidth = TRUE,
+    # Add theme for the top border
+    theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )
+    ),
+   columnGroups = list(
+    colGroup(name = "Electric Vehicles", columns = c("Program interest", "Intention", "EV: Beliefs that others have adopted", "EV: Beliefs that others should adopt", "EV: Beliefs that others think people should adopt")))) 
+
+tt4
 ```
