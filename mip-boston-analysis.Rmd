@@ -1115,10 +1115,17 @@ ranking_t = reactable(ranking_table,
 ranking_t
 ```
 
+```{r, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
+ev_cols <- c("EV: PI", "EV: Intent", "EV: Beliefs that others have adopted", "Beliefs that others should drive an EV", "Beliefs that others think people should drive an EV")
+
+#social_cols <- c("EV: Beliefs that others have adopted", "EV: Beliefs that others should adopt", "EV: Beliefs that others think people should adopt")
+
+BuYlRd <- function(x) rgb(colorRamp(c("#7fb7d7", "#ffffbf", "#fc8d59"))(x), maxColorValue = 255)
+```
+
 #### Correlation tables
 
-##### Pearson correlations between reported intention (I) to engage in the behaviors and interest in a program (PI) that helps adopt these behaviors
-```{r, echo = FALSE, results = 'asis', message = FALSE, fig.align = 'center', warning = FALSE}
+```{r, echo = FALSE, results = 'asis', message = FALSE, fig.align = 'center', warning = FALSE, include = FALSE}
 #Corr between intention to adopt and program interest 
 cor_table_1 <- data %>% 
   select(
@@ -1320,12 +1327,164 @@ res_table1 <- reactable(res,
 res_table1
 ```
 
-```{r, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
-ev_cols <- c("EV: PI", "EV: Intent", "EV: Beliefs that others have adopted", "Beliefs that others should drive an EV", "Beliefs that others think people should drive an EV")
+##### Pearson correlations between reported intention to engage in the behaviors
 
-#social_cols <- c("EV: Beliefs that others have adopted", "EV: Beliefs that others should adopt", "EV: Beliefs that others think people should adopt")
+```{r, echo = FALSE, results = 'asis', message = FALSE, fig.align = 'center', warning = FALSE}
+#Corr between intention to adopt and program interest 
+intention_table <- data %>% 
+  select(
+  #Vrid,
+  #var13, #RID
+  #EV
+  var94, #intent
+  #Fly
+  var97, #intent
+  #Offsets
+  var99, #intent
+  #PBD
+  var103, #intent
+  #RECs
+  var105, #intent
+  #Solar
+  var107, #intent
+  #Food waste
+  var109, #intent
+  ) %>% 
+  rename(
+  #EV
+  "Intetion to drive an EV" = var94,
+  #Fly
+  "Intention to fly less" = var97,
+  #Offset
+  "Intention to buy offsets" = var99,
+  #PBD
+  "Intention to eat less meat" = var103, 
+  #RECs
+  "Intention to contract for green energy" = var105,
+  #Solar
+  "Intention to install solar" = var107,
+  #Food waste
+  "Intention to reduce food waste" = var109)
 
-BuYlRd <- function(x) rgb(colorRamp(c("#7fb7d7", "#ffffbf", "#fc8d59"))(x), maxColorValue = 255)
+intention_table <- cor(intention_table)
+intention_table <- round(intention_table, 2)
+intention_table <- as.data.frame(intention_table)
+
+intention_reactable = reactable(intention_table,
+  defaultColDef = colDef(
+    style = function(value) {
+      if (!is.numeric(value)) return()
+      normalized <- (value - min(intention_table)) / (max(intention_table) - min(intention_table))
+      color <- BuYlRd(normalized)
+      list(background = color)
+    },
+    format = colFormat(digits = 2),
+  ),
+  style = list(fontSize = "11px"),
+  defaultPageSize = 30,
+  #defaultSortOrder = 'asc',
+  #defaultSorted = 'Behavior',
+  showSortIcon = FALSE,
+  # ALL one page option (no scrolling or page swapping)
+    pagination = TRUE,
+    # compact for an overall smaller table width wise
+    compact = TRUE,
+    # borderless - TRUE or FALSE
+    borderless = FALSE,
+    # Stripes - TRUE or FALSE
+    striped = TRUE,
+    highlight = TRUE,  
+  # fullWidth - either fit to width or not
+    fullWidth = TRUE,
+    # Add theme for the top border
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+
+intention_reactable
+```
+
+##### Pearson correlations between interest in programs that help adopt the behaviors
+
+```{r, echo = FALSE, results = 'asis', message = FALSE, fig.align = 'center', warning = FALSE}
+#Corr between intention to adopt and program interest 
+interest_table <- data %>% 
+  select(
+  #Vrid,
+  #var13, #RID
+  #EV
+  var96, #program interest
+  #Fly
+  var98, #program interest
+  #Offsets
+  var100, #program interest
+  #PBD
+  var104, #program interest
+  #RECs
+  var106, #program interest
+  #Solar
+  var108, #program interest
+  #Food waste
+  var110 #program interest
+  ) %>% 
+  rename(
+  #EV
+  "Interest in EV program" = var96,
+  #Fly
+  "Interest in fly less program" = var98,
+  #Offset
+  "Interest in offsets program" = var100, #program interest
+  #PBD
+  "Interest in eat less meat program" = var104, #program interest
+  #RECs
+  "Interest in green energy program" = var106, #program interest
+  #Solar
+  "Interest in solar program" = var108, #program interest
+  #Food waste
+  "Interest in reducing food waste program" = var110)
+
+interest_table <- cor(interest_table)
+interest_table <- round(interest_table, 2)
+interest_table <- as.data.frame(interest_table)
+
+interest_reactable = reactable(interest_table,
+  defaultColDef = colDef(
+    style = function(value) {
+      if (!is.numeric(value)) return()
+      normalized <- (value - min(interest_table)) / (max(interest_table) - min(interest_table))
+      color <- BuYlRd(normalized)
+      list(background = color)
+    },
+    format = colFormat(digits = 2),
+  ),
+  style = list(fontSize = "11px"),
+  defaultPageSize = 30,
+  #defaultSortOrder = 'asc',
+  #defaultSorted = 'Behavior',
+  showSortIcon = FALSE,
+  # ALL one page option (no scrolling or page swapping)
+    pagination = TRUE,
+    # compact for an overall smaller table width wise
+    compact = TRUE,
+    # borderless - TRUE or FALSE
+    borderless = FALSE,
+    # Stripes - TRUE or FALSE
+    striped = TRUE,
+    highlight = TRUE,  
+  # fullWidth - either fit to width or not
+    fullWidth = TRUE,
+    # Add theme for the top border
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+
+interest_reactable
 ```
 
 ##### Pearson correlations between demographic and pscyhographic predictors and behavior-related variables
@@ -1542,7 +1701,7 @@ tt3 = res.cor2 %>%
   rename('Predictor' = term,
          'Interest in EV program' = ev_program_interest,
          'Intention to buy an EV' = ev_intent,
-         'EV: Beliefs that others have adopted' = ev_ee,
+         'Beliefs that others drive an EV' = ev_ee,
          'Beliefs that others should driven an EV' = ev_pnb,
          'Beliefs that others think people should drive an EV' = ev_ne,
          'Interest in solar program' = solar_program_interest,
