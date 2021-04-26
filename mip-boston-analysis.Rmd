@@ -23,6 +23,7 @@ library(scales)
 library(fastDummies)
 require(lattice)
 library(corrr)
+library(dotwhisker)
 
 data <- read_sav("spss_4_23_2021.sav")
 lucid_data <-read.csv("lucid_response_4_23_2021.csv")
@@ -223,7 +224,7 @@ puma_zip <- merge(x = puma, y = zip_puma, by = c("puma"), all.x = TRUE)
 ```
 
 ```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE, eval = FALSE}
-#sample
+#sample PUMAs
 df <- data %>% 
   select(Vrid, var21) %>% 
   rename(zip = var21,
@@ -1118,6 +1119,8 @@ ranking_t
 ```{r, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
 ev_cols <- c("EV: PI", "EV: Intent", "EV: Beliefs that others have adopted", "Beliefs that others should drive an EV", "Beliefs that others think people should drive an EV")
 
+
+
 #social_cols <- c("EV: Beliefs that others have adopted", "EV: Beliefs that others should adopt", "EV: Beliefs that others think people should adopt")
 
 BuYlRd <- function(x) rgb(colorRamp(c("#7fb7d7", "#ffffbf", "#fc8d59"))(x), maxColorValue = 255)
@@ -1666,7 +1669,7 @@ res.cor2$term[res.cor2$term == "employment_status_10792"] <- "Retired"
 res.cor2$term[res.cor2$term == "employment_status_10487"] <- "Unemployed"
 
 res.cor2$term[res.cor2$term == "company_size"] <- "Employer size"
-res.cor2$term[res.cor2$term == "employment_sector_10499"] <- "Industry: Technology/Software"
+res.cor2$term[res.cor2$term == "employment_sector_10499"] <- "Industry: Technology/ Software"
 res.cor2$term[res.cor2$term == "employment_sector_10496"] <- "Industry: Healthcare"
 res.cor2$term[res.cor2$term == "employment_sector_10492"] <- "Industry: Education"
 
@@ -1687,7 +1690,7 @@ res.cor2[is.na(res.cor2)] <- 0
 x2 <- c("Age: 18-24", "Age: 25-34", "Age: 35-44", "Age: 45-54", "Age: 55-64", "Age: 65+",
         "Female", "Male", 
         "Ethnicity: White", "Ethnicity: Black", "Ethnicity: Asian", "Ethnicity: Other", "Household income", "Education level", "Political orientation: Conservative", 
-        "Employed", "Retired", "Unemployed", "Company Size", "Industry: Technology/Software", "Industry: Healthcare", "Industry: Education", 
+        "Employed", "Retired", "Unemployed", "Company Size", "Industry: Technology/ Software", "Industry: Healthcare", "Industry: Education", 
         "Participation: Religious Group", "Participation: School Association", "Participation: Alumni Group", "Participation: Neighborhood Org", "Past Donation: Religious Group", "Past Donation: School Association", "Past Donation: Alumni Group", "Past Donation: Neighborhood Org")
 
 tt3 = res.cor2 %>% 
@@ -1770,9 +1773,19 @@ tt5 = reactable(tt3,
     # Add theme for the top border
   columns = list(
   `Predictor` =  colDef(
-            style = sticky_style,
-      headerStyle = sticky_style
-    )  
+      style = sticky_style,
+      headerStyle = sticky_style,
+      minWidth = 120),
+  `Beliefs that others think people should drive an EV` = colDef(
+minWidth = 120),
+    `Beliefs that others think people should install solar` = colDef(
+minWidth = 120),
+    `Beliefs that others think people should have green energy` = colDef(
+      minWidth = 120),
+    `Beliefs that others think people should eat less meat` = colDef(
+minWidth = 120),
+    `Beliefs that others think people should reduce food waste` = colDef(
+      minWidth = 120)
   ),  
   theme = reactableTheme(
       headerStyle = list(
@@ -1854,4 +1867,279 @@ tt4 = reactable(tt3,
     colGroup(name = "Electric Vehicles", columns = c("Program interest", "Intention", "EV: Beliefs that others have adopted", "EV: Beliefs that others should adopt", "EV: Beliefs that others think people should adopt")))) 
 
 tt4
+```
+
+```{r, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
+
+library(jtools)
+options("jtools-digits" = 6)
+reg <- data %>% 
+  select(
+  wt,
+  #Vrid,
+  #var13, #RID
+  #EV
+  #var26, #adoption
+  var87, #EE
+  var28, #PNB,
+  var88, #NE
+  var94, #intent
+  #var96, #program interest
+  #Fly
+  #var70, #Are you trying to fly less frequently than you used to?
+  var69, #EE
+  var38, #PNB
+  var35, #NE
+  var97, #intent
+  #var98, #program interest
+  #Offsets
+  #var39, #adoption
+  var40, #EE
+  var41, #PNB
+  var42, #NE
+  var99, #intent
+  #var100, #program interest
+  #PBD
+  #var71, #Are you trying to eat less meat than you used to?
+  #var115, #adoption % of meals
+  var72, #EE
+  var66, #PNB
+  var48, #NE
+  var103, #intent
+  #var104, #program interest
+  #RECs
+  #var54, #adoption
+  var55, #EE
+  var56, #PNB
+  var57, #NE
+  var105, #intent
+  #var106, #program interest
+  #Solar
+  #var59, #adoption
+  var60, #EE
+  var61, #PNB
+  var62, #NE
+  var107, #intent
+  #var108, #program interest
+  #Food waste
+  #var73, #Are you currently trying to reduce the amount of food waste you produce?
+  var74, #EE
+  var75, #PNB
+  var76, #NE
+  var109, #intent
+  #var110, #program interest
+  #demographics
+  age_group,
+  sex,
+  ethnicity,
+  var20, #politics
+  var19, #income
+  var17, #education
+  ) %>% 
+  rename(
+  #EV
+  #ev_adoption = var26,
+  ev_ee = var87,
+  ev_pnb = var28,
+  ev_ne = var88,
+  ev_intent = var94,
+  #ev_program_interest = var96,
+  #Fly
+  #fly_adoption = var70, #trying to fly less
+  fly_ee = var69, #EE
+  fly_pnb = var38, #PNB
+  fly_ne = var35, #NE
+  fly_intent = var97,
+  #fly_program_interest = var98,
+  #Offset
+  #offset_adoption = var39, #adoption
+  offset_ee = var40, #EE
+  offset_pnb = var41, #PNB
+  offset_ne = var42, #NE
+  #offset_program_interest = var100, #program interest
+  offset_intent = var99,
+  #PBD
+  #pbd_adoption = var71, #trying to
+  pbd_ee = var72, #EE
+  pbd_pnb = var66, #PNB
+  pbd_ne = var48, #NE
+  #pbd_program_interest = var104, #program interest
+  pbd_intent = var103, 
+  #RECs
+  #recs_adoption = var54, #adoption
+  recs_ee = var55, #EE
+  recs_pnb = var56, #PNB
+  recs_ne = var57, #NE
+  #recs_program_interest = var106, #program interest
+  recs_intent = var105,
+  #Solar
+  #solar_adoption = var59, #adoption
+  solar_ee = var60, #EE
+  solar_pnb = var61, #PNB
+  solar_ne = var62, #NE
+  #solar_program_interest = var108, #program interest
+  solar_intent = var107,
+  #Food waste
+  #foodwaste_adoption = var73, #attempt
+  foodwaste_ee = var74, #EE
+  foodwaste_pnb = var75, #PNB
+  foodwaste_ne = var76, #NE
+  #foodwaste_program_interest = var110, #program interest
+  foodwaste_intent = var109,
+  #dem
+  politics = var20,
+  income = var19, 
+  education = var17) 
+
+reg <- within(reg, ethnicity <- relevel(ethnicity, ref = "White"))
+
+reg <- reg %>% 
+  mutate(
+    income = as.numeric(income),
+    income = case_when(income == 10063 ~ 11, TRUE ~ income))
+  
+ev_w <- reg %>% 
+  lm(scale(ev_intent) ~ scale(ev_ee) + scale(ev_pnb) + scale(ev_ne) + scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+
+ev_w1 <- tidy(ev_w) %>% 
+  filter(!grepl('eth*', term), term != "scale(income)", term != "scale(education)", term != "age_group25-34", term != "age_group35-44", term != "age_group45-54", term != "age_group55-64", term != "age_group65+", term != "sexMale") %>% mutate(model = "EV_w")
+
+ev_w1
+
+summary(ev_w) 
+
+solar_w <- reg %>% 
+  lm(scale(solar_intent) ~ scale(solar_ee) + scale(solar_pnb) + scale(solar_ne) + scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+
+solar_w1 <- tidy(solar_w) %>% 
+  filter(!grepl('eth*', term), term != "scale(income)", term != "scale(education)", term != "age_group25-34", term != "age_group35-44", term != "age_group45-54", term != "age_group55-64", term != "age_group65+", term != "sexMale") %>% mutate(model = "Solar_w")
+
+summary(solar_w)
+
+offset_w <- reg %>% 
+  lm(scale(offset_intent) ~ scale(offset_ee) + scale(offset_pnb) + scale(offset_ne) + scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+
+summary(offset_w)
+
+offset_w1 <- tidy(offset_w) %>% 
+  filter(!grepl('ethi*', term), term != "scale(income)", term != "scale(education)", term != "age_group25-34", term != "age_group35-44", term != "age_group45-54", term != "age_group55-64", term != "age_group65+", term != "sexMale") %>% mutate(model = "Offset_w")
+
+summary(offset_w1)
+
+recs_w <- reg %>% 
+  lm(scale(recs_intent) ~ scale(recs_ee) + scale(recs_pnb) + scale(recs_ne) + scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+
+recs_w1 <- tidy(recs_w) %>% 
+  filter(!grepl('eth*', term), term != "scale(income)", term != "scale(education)", term != "age_group25-34", term != "age_group35-44", term != "age_group45-54", term != "age_group55-64", term != "age_group65+", term != "sexMale") %>% mutate(model = "RECs_w")
+
+summary(recs_w)
+
+fly_less_w <- reg %>% 
+  lm(scale(fly_intent) ~ scale(fly_ee) + scale(fly_pnb) + scale(fly_ne) + scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+
+fly_less_w1 <- tidy(fly_less_w) %>% 
+  filter(!grepl('eth*', term), term != "scale(income)", term != "scale(education)", term != "age_group25-34", term != "age_group35-44", term != "age_group45-54", term != "age_group55-64", term != "age_group65+", term != "sexMale") %>% mutate(model = "fly_less_w")
+
+summary(fly_less_w)
+
+pbd_w <- reg %>% 
+  lm(scale(pbd_intent) ~ scale(pbd_ee) + scale(pbd_pnb) + scale(fly_ne) + scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+
+pbd_w_1 <- tidy(pbd_w) %>% 
+  filter(!grepl('eth*', term), term != "scale(income)", term != "scale(education)", term != "age_group25-34", term != "age_group35-44", term != "age_group45-54", term != "age_group55-64", term != "age_group65+", term != "sexMale") %>% mutate(model = "pbd_w")
+
+summary(pbd_w)
+
+food_waste_w <- reg %>% 
+  lm(scale(foodwaste_intent) ~ scale(foodwaste_ee) + scale(foodwaste_pnb) + scale(foodwaste_ne) + scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+
+food_waste_w1 <- tidy(food_waste_w) %>% 
+  filter(!grepl('eth*', term), term != "scale(income)", term != "scale(education)", term != "age_group25-34", term != "age_group35-44", term != "age_group45-54", term != "age_group55-64", term != "age_group65+", term != "sexMale") %>% mutate(model = "food_waste_w")
+
+summary(food_waste_w)
+```
+
+##### Plots of regression coefficients from linear models regressing intention to perform the behavior on each listed variables
+
+- Across the behaviors, the greatest predictors of intention to adopt the behaviors are the people's belief that other people are engaging in the behavior and people's beliefs that engaging in these behaviors is the right thing to do.
+- Political orientation shows inconsistent and largely insignificant effect.
+- All models are adjusted for demographic controls for age, gender, ethnicity, household income, and education level.
+
+```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, fig.width = 9, fig.height = 5}
+# Use tibble dfs
+models <- rbind(ev_w1, offset_w1, recs_w1, solar_w1, pbd_w_1, food_waste_w1, fly_less_w1)
+
+# Create list of brackets (label, topmost included predictor, bottommost included predictor)
+bracket <- list(c("Beliefs about ...", "Others' behavior", "What others' think \nshould be done"))
+
+p <- {dwplot(models, 
+        vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2), 
+        # Customize the of appearance of the dots and whiskers
+        dot_args = list(aes(shape = model)),
+        whisker_args = list(aes(linetype = model))) %>%
+    # Put models on one graph by assigning them to the same names
+    relabel_predictors(c("scale(ev_ee)" = "Others' behavior",                  
+                         "scale(ev_pnb)" = "What should be done", 
+                         "scale(ev_ne)" = "What others' think \nshould be done", 
+                         "scale(offset_ee)" = "Others' behavior",            
+                         "scale(offset_pnb)" = "What should be done", 
+                         "scale(offset_ne)" = "What others' think \nshould be done",
+                         "scale(recs_ee)" = "Others' behavior",                 
+                         "scale(recs_pnb)" = "What should be done", 
+                         "scale(recs_ne)" = "What others' think \nshould be done",
+                         "scale(solar_ee)" = "Others' behavior",                       
+                         "scale(solar_pnb)" = "What should be done", 
+                         "scale(solar_ne)" = "What others' think \nshould be done",
+                         "scale(foodwaste_ee)" = "Others' behavior",            
+                         "scale(foodwaste_pnb)" = "What should be done", 
+                         "scale(foodwaste_ne)" = "What others' think \nshould be done",
+                         "scale(pbd_ee)" = "Others' behavior",                 
+                         "scale(pbd_pnb)" = "What should be done", 
+                         "scale(pbd_ne)" = "What others' think \nshould be done",
+                         "scale(fly_ee)" = "Others' behavior",                       
+                         "scale(fly_pnb)" = "What should be done", 
+                         "scale(fly_ne)" = "What others' think \nshould be done",
+                         "scale(politics)" = "Political orientation")) +
+    xlab("Standardized coefficient estimate") + ylab("") + 
+    theme_bw() +
+    # Add colorblind-friendly palette & legend values = c("#000000","#D55E00","#CC79A7","#0072B2")
+    scale_colour_manual(values = c("#000000","#000000","#000000","#000000", "red", "red", "red"), 
+                     name = "", 
+                     labels = c("Purchase an electric vehicle", "Purchase carbon offsets", "Contract for green energy", "Install solar panels", "Reduce food waste", "Eat less meat", "Fly less"),
+                     guide = guide_legend(reverse = TRUE)) +
+    # Add customized glyphs
+    scale_shape_manual(values = c(16, 4, 15, 3, 8, 6, 0),
+                      name = "",
+                      labels = c("Purchase an electric vehicle", "Purchase carbon offsets", "Contract for green energy", "Install solar panels", "Reduce food waste", "Eat less meat", "Fly less"),
+                      guide = guide_legend(reverse = TRUE)) +
+   theme(#axis.title = element_text(size = 16),
+         #plot.margin = unit(c(0,0,0,0),"cm"),
+         #text = element_text(family="TT Times New Roman"),
+         legend.justification = c(0, 0), 
+         # Legend bottom right position 
+         legend.position = c(0.66, 0.000001),
+         # Legend text size
+         legend.text = element_text(size = 8, colour = "black"),
+         #legend.title.align = .5,
+         # Transparent legend text and glyph background
+         legend.background = element_rect(fill= "transparent"),
+         legend.key = element_rect(colour = "transparent", fill = "transparent"),
+         # Axis
+         axis.line = element_line(color = "grey"),
+         axis.ticks = element_line(color = "grey"),
+         axis.text.x  = element_text(hjust = 1, size = 11, color = "black"),
+         axis.text.y = element_text(size = 11, color = "black"),
+         axis.title.x = element_text(color = "black", size = 11),
+         axis.title.y = element_text(color = "black", size = 11),
+         # Panel
+         #panel.grid.major = element_line(size = 0.25, linetype = 'solid', color = "grey"), 
+         #panel.grid.minor = element_line(size = 0.25, linetype = 'solid', color = "grey"),
+         panel.background = element_blank(),
+         panel.border = element_rect(color = "grey", fill = NA, size = 0.5))} %>% add_brackets(bracket, face = "bold.italic")
+
+grid.draw(p)
+ggsave("Fig2.tiff", units = "in", width = 9, height = 5, device='tiff', dpi = 300)
+```
+
+```{r}
 ```
