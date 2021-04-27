@@ -2141,5 +2141,164 @@ grid.draw(p)
 ggsave("Fig2.tiff", units = "in", width = 9, height = 5, device='tiff', dpi = 300)
 ```
 
-```{r}
+##### People underestimate how many people think they should take actions
+
+```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
+pnb_ne_plot <- data %>% 
+  select(
+  #wt,
+  #Vrid,
+  #var13, #RID
+  #EV
+  #var26, #adoption
+  #var87, #EE
+  var28, #PNB,
+  var88, #NE
+  #var94, #intent
+  #var96, #program interest
+  #Fly
+  #var70, #Are you trying to fly less frequently than you used to?
+  #var69, #EE
+  var38, #PNB
+  var35, #NE
+  #var97, #intent
+  #var98, #program interest
+  #Offsets
+  #var39, #adoption
+  #var40, #EE
+  var41, #PNB
+  var42, #NE
+  #var99, #intent
+  #var100, #program interest
+  #PBD
+  #var71, #Are you trying to eat less meat than you used to?
+  #var115, #adoption % of meals
+  #var72, #EE
+  var66, #PNB
+  var48, #NE
+  #var103, #intent
+  #var104, #program interest
+  #RECs
+  #var54, #adoption
+  #var55, #EE
+  var56, #PNB
+  var57, #NE
+  #var105, #intent
+  #var106, #program interest
+  #Solar
+  #var59, #adoption
+  #var60, #EE
+  var61, #PNB
+  var62, #NE
+  #var107, #intent
+  #var108, #program interest
+  #Food waste
+  #var73, #Are you currently trying to reduce the amount of food waste you produce?
+  #var74, #EE
+  var75, #PNB
+  var76, #NE
+  #var109, #intent
+  #var110, #program interest
+  #demographics
+  #age_group,
+  #sex,
+  #ethnicity,
+  #var20, #politics
+  #var19, #income
+  #var17, #education
+  ) %>% 
+  rename(
+  #EV
+  #ev_adoption = var26,
+  #ev_ee = var87,
+  ev_pnb = var28,
+  ev_ne = var88,
+  #ev_intent = var94,
+  #ev_program_interest = var96,
+  #Fly
+  #fly_adoption = var70, #trying to fly less
+  #fly_ee = var69, #EE
+  fly_pnb = var38, #PNB
+  fly_ne = var35, #NE
+  #fly_intent = var97,
+  #fly_program_interest = var98,
+  #Offset
+  #offset_adoption = var39, #adoption
+  #offset_ee = var40, #EE
+  offset_pnb = var41, #PNB
+  offset_ne = var42, #NE
+  #offset_program_interest = var100, #program interest
+  #offset_intent = var99,
+  #PBD
+  #pbd_adoption = var71, #trying to
+  #pbd_ee = var72, #EE
+  pbd_pnb = var66, #PNB
+  pbd_ne = var48, #NE
+  #pbd_program_interest = var104, #program interest
+  #pbd_intent = var103, 
+  #RECs
+  #recs_adoption = var54, #adoption
+  #recs_ee = var55, #EE
+  recs_pnb = var56, #PNB
+  recs_ne = var57, #NE
+  #recs_program_interest = var106, #program interest
+  #recs_intent = var105,
+  #Solar
+  #solar_adoption = var59, #adoption
+  #solar_ee = var60, #EE
+  solar_pnb = var61, #PNB
+  solar_ne = var62, #NE
+  #solar_program_interest = var108, #program interest
+  #solar_intent = var107,
+  #Food waste
+  #foodwaste_adoption = var73, #attempt
+  #foodwaste_ee = var74, #EE
+  foodwaste_pnb = var75, #PNB
+  foodwaste_ne = var76, #NE
+  #foodwaste_program_interest = var110, #program interest
+  #foodwaste_intent = var109
+  )
+
+avgNE = pnb_ne_plot %>%
+  select(ev_ne, offset_ne, pbd_ne, fly_ne, solar_ne, recs_ne, foodwaste_ne) %>%
+  summarise_all(mean) %>%
+  gather() %>%
+  mutate(
+    value = value*10,
+    key = recode(key, ev_ne = "Next car \nis EV", offset_ne = "Buy offsets", pbd_ne = "Eat less \nmeat", fly_ne = "Fly less", recs_ne = "Buy green \nenergy", solar_ne = "Install solar", foodwaste_ne = "Reduce food \nwaste"))
+
+
+avgPNB = pnb_ne_plot %>%
+  select(ev_pnb, offset_pnb, pbd_pnb, fly_pnb, solar_pnb, recs_pnb, foodwaste_pnb)%>%
+  summarise_all(mean)%>%
+  gather()%>%
+  mutate(
+    value = value*100,
+    key = recode(key, ev_pnb = "Next car \nis EV", offset_pnb = "Buy offsets", pbd_pnb = "Eat less \nmeat", fly_pnb = "Fly less", recs_pnb = "Buy green \nenergy", solar_pnb = "Install solar", foodwaste_pnb = "Reduce food \nwaste"))
+
+normativediff = full_join(avgPNB, avgNE, by = "key") %>%
+  arrange(value.x) %>%
+  rename("Perceived proportion\nthinking people should" = value.y, "Actual proportion\nthinking people should" = value.x) %>% 
+  mutate(
+    
+  )
+
+normativediff %>%
+gather("belief", "Prevalence", -key)%>%
+  ggplot(aes(x = reorder(key, -Prevalence),y = Prevalence, fill = belief))+
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = c("#005BBB", "grey"),
+                    name = "Beliefs", labels = c("Actual % thinking people should \nadopt the behaviors", "Perceived % thinking people \nshould adopt the behaviors")) +
+theme(axis.line = element_line(color="white"),
+        axis.ticks = element_line(color="white"),
+        panel.border = element_blank(),
+        axis.title.y = element_text(color = "black", size = 10.5),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(colour="black", size = 10.5),
+        axis.text.y = element_text(colour="black", size = 10.5),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        legend.position = "bottom") +
+  scale_y_continuous(labels = function(x) paste0(x,"%"))
 ```
