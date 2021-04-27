@@ -1999,17 +1999,30 @@ reg <- data %>%
 reg <- within(reg, ethnicity <- relevel(ethnicity, ref = "White"))
 reg <- within(reg, age_group <- relevel(age_group, ref = "65+"))
 
-
 reg <- reg %>% 
   mutate(
     income = as.numeric(income),
     income = case_when(income == 10063 ~ 11, TRUE ~ income))
-  
+
+reg$education_category = recode(reg$education, '1' = "No college degree", '2' = "No college degree", '3' = "No college degree", '4' = "College degree", '5' = "College degree", '6' = "Graduate degree")
+
+reg$education_category <- as.factor(reg$education_category)
+
+reg <- within(reg, education_category <- relevel(education_category, ref = "No college degree"))
+
+reg$income_category = recode(reg$income, '1' = "Less than $29,000", '2' = "Less than $29,000", '3' = "$30,000 to $49,000", '4' = "$30,000 to $49,000", '5' = "$50,000 to $69,000", '6' = "$50,000 to $69,000", '7' = "$70,000 to $89,000", '8' = "$70,000 to $89,000", '9' = "$90,000 to $149,000", '10' = "$90,000 to $149,000", '11' = "$150,000 or more")
+
+reg$income_category <- as.factor(reg$income_category)
+
+reg <- within(reg, income_category <- relevel(income_category, ref = "Less than $29,000"))
+```
+
+```{r, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
 ev_w <- reg %>% 
-  lm(scale(ev_intent) ~ scale(ev_ee) + scale(ev_pnb) + scale(ev_ne) + scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+  lm(scale(ev_intent) ~ scale(ev_ee) + scale(ev_pnb) + scale(ev_ne) + scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
 
 ev_d_w <- reg %>% 
-  lm(scale(ev_intent) ~ scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+  lm(scale(ev_intent) ~ scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
 
 ev_d_w <- tidy(ev_d_w) %>% mutate(model = "EV_d_w")
 
@@ -2023,10 +2036,10 @@ ev_w2 <- tidy(ev_w) %>% mutate(model = "EV_w2")
 summary(ev_w) 
 
 solar_w <- reg %>% 
-  lm(scale(solar_intent) ~ scale(solar_ee) + scale(solar_pnb) + scale(solar_ne) + scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+  lm(scale(solar_intent) ~ scale(solar_ee) + scale(solar_pnb) + scale(solar_ne) + scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
 
 solar_d_w <- reg %>%
-    lm(scale(solar_intent) ~ scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+    lm(scale(solar_intent) ~ scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
   
 solar_d_w <- tidy(solar_d_w) %>% mutate(model = "solar_d_w")
 
@@ -2039,10 +2052,10 @@ solar_w2 <- tidy(solar_w) %>% mutate(model = "Solar_w2")
 summary(solar_w)
 
 offset_w <- reg %>% 
-  lm(scale(offset_intent) ~ scale(offset_ee) + scale(offset_pnb) + scale(offset_ne) + scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+  lm(scale(offset_intent) ~ scale(offset_ee) + scale(offset_pnb) + scale(offset_ne) + scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
 
 offset_d_w <- reg %>% 
-  lm(scale(offset_intent) ~ scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+  lm(scale(offset_intent) ~ scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
 
 offset_d_w <- tidy(offset_d_w) %>% mutate(model = "offset_d_w")
 
@@ -2058,10 +2071,10 @@ offset_w2 <- tidy(offset_w) %>% mutate(model = "offset_w2")
 
 
 recs_w <- reg %>% 
-  lm(scale(recs_intent) ~ scale(recs_ee) + scale(recs_pnb) + scale(recs_ne) + scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+  lm(scale(recs_intent) ~ scale(recs_ee) + scale(recs_pnb) + scale(recs_ne) + scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
 
 recs_d_w <- reg %>% 
-  lm(scale(recs_intent) ~ scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+  lm(scale(recs_intent) ~ scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
 
 
 
@@ -2077,10 +2090,10 @@ recs_w2 <- tidy(recs_w) %>% mutate(model = "recs_w2")
 summary(recs_w)
 
 fly_less_w <- reg %>% 
-  lm(scale(fly_intent) ~ scale(fly_ee) + scale(fly_pnb) + scale(fly_ne) + scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+  lm(scale(fly_intent) ~ scale(fly_ee) + scale(fly_pnb) + scale(fly_ne) + scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
 
 fly_less_d_w <- reg %>% 
-  lm(scale(fly_intent) ~ scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+  lm(scale(fly_intent) ~ scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
 
 fly_less_d_w <- tidy(fly_less_d_w) %>% mutate(model = "fly_less_d_w")
 
@@ -2094,10 +2107,10 @@ fly_less_w2 <- tidy(fly_less_w) %>% mutate(model = "fly_less_w2")
 summary(fly_less_w)
 
 pbd_w <- reg %>% 
-  lm(scale(pbd_intent) ~ scale(pbd_ee) + scale(pbd_pnb) + scale(pbd_ne) + scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+  lm(scale(pbd_intent) ~ scale(pbd_ee) + scale(pbd_pnb) + scale(pbd_ne) + scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
 
 pbd_d_w <- reg %>% 
-  lm(scale(pbd_intent) ~ scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+  lm(scale(pbd_intent) ~ scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
 
 pbd_d_w <- tidy(pbd_d_w) %>% mutate(model = "pbd_d_w")
 
@@ -2111,10 +2124,10 @@ pbd_w2 <- tidy(pbd_w) %>% mutate(model = "pbd_w2")
 summary(pbd_w)
 
 food_waste_w <- reg %>% 
-  lm(scale(foodwaste_intent) ~ scale(foodwaste_ee) + scale(foodwaste_pnb) + scale(foodwaste_ne) + scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+  lm(scale(foodwaste_intent) ~ scale(foodwaste_ee) + scale(foodwaste_pnb) + scale(foodwaste_ne) + scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
 
 food_waste_d_w <- reg %>% 
-  lm(scale(foodwaste_intent) ~ scale(politics) + scale(income) + scale(education) + age_group + sex + ethnicity, data =.)
+  lm(scale(foodwaste_intent) ~ scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
 
 food_waste_d_w <- tidy(food_waste_d_w) %>% mutate(model = "food_waste_d_w")
 
@@ -2211,9 +2224,9 @@ ggsave("Dot-whisker.tiff", units = "in", width = 9, height = 5, device='tiff', d
 
 ##### Coefficients from linear models that included demographic and psychological variables
 
-```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, fig.width = 10, fig.height = 11}
+```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, fig.width = 8, fig.height = 14}
 # Use tibble dfs
-models <- rbind(ev_w2, offset_w2, recs_w2, solar_w2, pbd_w2, food_waste_w2, fly_less_w2)
+models <- rbind(ev_w2, offset_w2, recs_w2, solar_w2, food_waste_w2, pbd_w2, fly_less_w2)
 
 # Create list of brackets (label, topmost included predictor, bottommost included predictor)
 #bracket <- list(c("Beliefs about ...", "Others' behavior", "What others' think \nshould be done"))
@@ -2224,27 +2237,27 @@ p <- {dwplot(models,
         dot_args = list(aes(shape = model)),
         whisker_args = list(aes(linetype = model))) %>%
     # Put models on one graph by assigning them to the same names
-    relabel_predictors(c("scale(ev_ee)" = "Others' behavior",                  
-                         "scale(ev_pnb)" = "What should be done", 
-                         "scale(ev_ne)" = "What others' think \nshould be done", 
-                         "scale(offset_ee)" = "Others' behavior",            
-                         "scale(offset_pnb)" = "What should be done", 
-                         "scale(offset_ne)" = "What others' think \nshould be done",
-                         "scale(recs_ee)" = "Others' behavior",                 
-                         "scale(recs_pnb)" = "What should be done", 
-                         "scale(recs_ne)" = "What others' think \nshould be done",
-                         "scale(solar_ee)" = "Others' behavior",                       
-                         "scale(solar_pnb)" = "What should be done", 
-                         "scale(solar_ne)" = "What others' think \nshould be done",
-                         "scale(foodwaste_ee)" = "Others' behavior",            
-                         "scale(foodwaste_pnb)" = "What should be done", 
-                         "scale(foodwaste_ne)" = "What others' think \nshould be done",
-                         "scale(pbd_ee)" = "Others' behavior",                 
-                         "scale(pbd_pnb)" = "What should be done", 
-                         "scale(pbd_ne)" = "What others' think \nshould be done",
-                         "scale(fly_ee)" = "Others' behavior",                       
-                         "scale(fly_pnb)" = "What should be done", 
-                         "scale(fly_ne)" = "What others' think \nshould be done",
+    relabel_predictors(c("scale(ev_ee)" = "Beliefs about \nothers' behavior",                  
+                         "scale(ev_pnb)" = "Beliefs about \nwhat should be done", 
+                         "scale(ev_ne)" = "Beliefs about \nwhat others' think \nshould be done", 
+                         "scale(offset_ee)" = "Beliefs about \nothers' behavior",            
+                         "scale(offset_pnb)" = "Beliefs about \nwhat should be done", 
+                         "scale(offset_ne)" = "Beliefs about \nwhat others' think \nshould be done",
+                         "scale(recs_ee)" = "Beliefs about \nothers' behavior",                 
+                         "scale(recs_pnb)" = "Beliefs about \nwhat should be done", 
+                         "scale(recs_ne)" = "Beliefs about \nwhat others' think \nshould be done",
+                         "scale(solar_ee)" = "Beliefs about \nothers' behavior",                       
+                         "scale(solar_pnb)" = "Beliefs about \nwhat should be done", 
+                         "scale(solar_ne)" = "Beliefs about \nwhat others' think \nshould be done",
+                         "scale(foodwaste_ee)" = "Beliefs about \nothers' behavior",            
+                         "scale(foodwaste_pnb)" = "Beliefs about \nwhat should be done", 
+                         "scale(foodwaste_ne)" = "Beliefs about \nwhat others' think \nshould be done",
+                         "scale(pbd_ee)" = "Beliefs about \nothers' behavior",                 
+                         "scale(pbd_pnb)" = "Beliefs about \nwhat should be done", 
+                         "scale(pbd_ne)" = "Beliefs about \nwhat others' think \nshould be done",
+                         "scale(fly_ee)" = "Beliefs about \nothers' behavior",                       
+                         "scale(fly_pnb)" = "Beliefs about \nwhat should be done", 
+                         "scale(fly_ne)" = "Beliefs about \nwhat others' think \nshould be done",
                          "sexMale" = "Gender: Male",
                          "age_group18-24" = "Age: 18-24",
                          "age_group25-34" = "Age: 25-34",
@@ -2254,27 +2267,32 @@ p <- {dwplot(models,
                          "ethnicityAsian" = "Ethnicity: Asian",
                          "ethnicityBlack" = "Ethnicity: Black or \nAfrican American",
                          "ethnicityOther" = "Ethnicity: Other",
-                         "scale(income)" = "Household income",
-                         "scale(education)" = "Education level",
+                         "income_category$30,000 to $49,000" = "Household income: \n$30,000 to $49,000",
+                         "income_category$50,000 to $69,000" = "Household income: \n$50,000 to $69,000",
+                         "income_category$70,000 to $89,000" = "Household income: \n$70,000 to $89,000",
+                         "income_category$90,000 to $149,000" = "Household income: \n$90,000 to $149,000",
+                         "income_category$150,000 or more" = "Household income: \n$150,000 or more",
+                         "education_categoryCollege degree" = "Education level: \nCollege degree",
+                         "education_categoryGraduate degree" = "Education level: \nGraduate degree",
                          "scale(politics)" = "Political orientation")) +
     xlab("Standardized coefficient estimate") + ylab("") + 
     theme_bw() +
     # Add colorblind-friendly palette & legend values = c("#000000","#D55E00","#CC79A7","#0072B2")
     scale_colour_manual(values = c("#000000","#000000","#000000","#000000", "red", "red", "red"), 
                      name = "", 
-                     labels = c("Purchase an electric vehicle", "Purchase carbon offsets", "Contract for green energy", "Install solar panels", "Reduce food waste", "Eat less meat", "Fly less"),
+                     labels = c("Purchase an EV", "Purchase offsets", "Contract for green \nenergy", "Install solar", "Reduce food waste", "Eat less meat", "Fly less"),
                      guide = guide_legend(reverse = TRUE)) +
     # Add customized glyphs
     scale_shape_manual(values = c(16, 4, 15, 3, 8, 6, 0),
                       name = "",
-                      labels = c("Purchase an electric vehicle", "Purchase carbon offsets", "Contract for green energy", "Install solar panels", "Reduce food waste", "Eat less meat", "Fly less"),
+                      labels = c("Purchase an EV", "Purchase offsets", "Contract for green \nenergy", "Install solar", "Reduce food waste", "Eat less meat", "Fly less"),
                       guide = guide_legend(reverse = TRUE)) +
    theme(#axis.title = element_text(size = 16),
          #plot.margin = unit(c(0,0,0,0),"cm"),
          #text = element_text(family="TT Times New Roman"),
          legend.justification = c(0, 0), 
          # Legend bottom right position 
-         legend.position = c(0.70, 0.000001),
+         legend.position = c(0.77, 0.000001),
          # Legend text size
          legend.text = element_text(size = 8, colour = "black"),
          #legend.title.align = .5,
@@ -2292,7 +2310,7 @@ p <- {dwplot(models,
          #panel.grid.major = element_line(size = 0.25, linetype = 'solid', color = "grey"), 
          #panel.grid.minor = element_line(size = 0.25, linetype = 'solid', color = "grey"),
          panel.background = element_blank(),
-         panel.border = element_rect(color = "grey", fill = NA, size = 0.5))} %>% add_brackets(bracket, face = "bold.italic")
+         panel.border = element_rect(color = "grey", fill = NA, size = 0.5))} #%>% add_brackets(bracket, face = "bold.italic")
 
 grid.draw(p)
 #ggsave("Dot-whisker.tiff", units = "in", width = 11, height = 6, device='tiff', dpi = 300)
@@ -2300,9 +2318,9 @@ grid.draw(p)
 
 ##### Coefficients from linear models that included demographic variables and political orientation only
 
-```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, fig.width = 7, fig.height = 9}
+```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, fig.width = 8, fig.height = 12}
 # Use tibble dfs
-models <- rbind(ev_d_w, offset_d_w, recs_d_w, solar_d_w, pbd_d_w, food_waste_d_w, fly_less_d_w)
+models <- rbind(ev_d_w, offset_d_w, recs_d_w, solar_d_w, food_waste_d_w, pbd_d_w, fly_less_d_w)
 
 # Create list of brackets (label, topmost included predictor, bottommost included predictor)
 #bracket <- list(c("Beliefs about ...", "Others' behavior", "What others' think \nshould be done"))
@@ -2322,27 +2340,32 @@ p <- {dwplot(models,
                          "ethnicityAsian" = "Ethnicity: Asian",
                          "ethnicityBlack" = "Ethnicity: Black or \nAfrican American",
                          "ethnicityOther" = "Ethnicity: Other",
-                         "scale(income)" = "Household income",
-                         "scale(education)" = "Education level",
+                         "income_category$30,000 to $49,000" = "Household income: \n$30,000 to $49,000",
+                         "income_category$50,000 to $69,000" = "Household income: \n$50,000 to $69,000",
+                         "income_category$70,000 to $89,000" = "Household income: \n$70,000 to $89,000",
+                         "income_category$90,000 to $149,000" = "Household income: \n$90,000 to $149,000",
+                         "income_category$150,000 or more" = "Household income: \n$150,000 or more",
+                         "education_categoryCollege degree" = "Education level: \nCollege degree",
+                         "education_categoryGraduate degree" = "Education level: \nGraduate degree",
                          "scale(politics)" = "Political orientation")) +
     xlab("Standardized coefficient estimate") + ylab("") + 
     theme_bw() +
     # Add colorblind-friendly palette & legend values = c("#000000","#D55E00","#CC79A7","#0072B2")
     scale_colour_manual(values = c("#000000","#000000","#000000","#000000", "red", "red", "red"), 
                      name = "", 
-                     labels = c("Purchase an electric vehicle", "Purchase carbon offsets", "Contract for green energy", "Install solar panels", "Reduce food waste", "Eat less meat", "Fly less"),
+                     labels = c("Purchase an EV", "Purchase offsets", "Contract for green energy", "Install solar", "Reduce food waste", "Eat less meat", "Fly less"),
                      guide = guide_legend(reverse = TRUE)) +
     # Add customized glyphs
     scale_shape_manual(values = c(16, 4, 15, 3, 8, 6, 0),
                       name = "",
-                      labels = c("Purchase an electric vehicle", "Purchase carbon offsets", "Contract for green energy", "Install solar panels", "Reduce food waste", "Eat less meat", "Fly less"),
+                      labels = c("Purchase an EV", "Purchase offsets", "Contract for green energy", "Install solar", "Reduce food waste", "Eat less meat", "Fly less"),
                       guide = guide_legend(reverse = TRUE)) +
    theme(#axis.title = element_text(size = 16),
          #plot.margin = unit(c(0,0,0,0),"cm"),
          #text = element_text(family="TT Times New Roman"),
          legend.justification = c(0, 0), 
          # Legend bottom right position 
-         legend.position = c(0.66, 0.000001),
+         legend.position = c(0.71, 0.000001),
          # Legend text size
          legend.text = element_text(size = 8, colour = "black"),
          #legend.title.align = .5,
