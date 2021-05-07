@@ -320,8 +320,9 @@ data <- data %>%
 ### Research Overview
 
 - Sampled 1,155 adult residents of the Boston core-based statistical area (CBSA), quota matched on age, gender, and ethnicity and weighted by ZIP
-- For each MIP behavior, measured current self-reported *adoption*, *intention to adopt in the future*, and three social expectation measures - *belief that others are adopting the behavior*, *belief that others should adopt the behavior*, and *belief that others think people should adopt the behavior*
-- For each MIP behavior, measured stated *interest in participating in a program* that helps adopt the behavior
+- For each MIP behavior:
+  + Measured current self-reported *adoption*, *intention to adopt in the future*, and three social expectation measures - *belief that others are adopting the behavior*, *belief that others should adopt the behavior*, and *belief that others think people should adopt the behavior*
+  + Measured stated *interest in participating in a program* that helps adopt the behavior
 - For six out of seven MIP behaviors, measured perceived relative *carbon mitigation impact* of that behavior compared to a list of low-impact behaviors
 
 ### Results Overview
@@ -383,7 +384,7 @@ df
   + People underestimate the impact of several MIP actions, including flying less and eating less meat
   + Lack of knowledge about how carbon offsets work
   + People overestimate the impact of low-impact behaviors, including recycling, replacing bulbs, and planting trees
-- People underestimate how many people think they should take actions
+- People underestimate how many people think they should adopt the behaviors
   + There is a large difference between the *perceived % of the population thinking people should adopt these behaviors* and the *actual % of the population thinking people should adopt the behaviors*
 
 #### Program interest  
@@ -2441,11 +2442,7 @@ lasso = glmnet(x_vars[train, ], y_var[train],
 coef(lasso)
 ```
 
-##### Plots of standardized regression coefficients from linear models regressing intention to perform each behavior on each of the listed covariates
-
-- Across the behaviors, the greatest predictors of intention to adopt the behaviors are the people's belief that other people are engaging in the behavior and people's beliefs that engaging in these behaviors is the right thing to do.
-- Political orientation and demographic measures show inconsistent and largely insignificant effects
-- All models are adjusted for demographic controls for age, gender, ethnicity, household income, and education level
+#### Plots of standardized regression coefficients from linear models regressing intention to perform each behavior/program interest on each of the listed covariates
 
 ```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, fig.width = 9, fig.height = 5, include = FALSE}
 # Use tibble dfs
@@ -2878,7 +2875,7 @@ grid.draw(p)
 #ggsave("Dot-whisker.tiff", units = "in", width = 11, height = 6, device='tiff', dpi = 300)
 ```
 
-##### People underestimate how many people think they should take actions
+#### People underestimate how many people think they should take actions
 
 ```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
 pnb_ne_plot <- data %>% 
