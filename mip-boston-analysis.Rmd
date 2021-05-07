@@ -25,13 +25,13 @@ require(lattice)
 library(corrr)
 library(dotwhisker)
 
-data <- read_sav("spss_4_23_2021.sav")
-lucid_data <-read.csv("lucid_response_4_23_2021.csv")
+data <- read_sav("spss_4_29_2021.sav")
+lucid_data <-read.csv("lucid_response_4_29_2021.csv")
 ```
 
 ```{r, include = FALSE, echo = FALSE, results = 'asis', eval = FALSE}
 # Incompletes match between Lucid and Alchemer
-lucid <- read.csv("lucid_data_analysis_4_23_2021.csv")
+lucid <- read.csv("lucid_data_analysis_4_29_2021.csv")
 
 test <- lucid %>% 
   filter(FulcrumStatus == 3 & ClientStatus == 10 & SupplierName != "Z - Test Supplier") %>% 
@@ -77,7 +77,8 @@ mutate(sex = case_when(sex == 10003 ~ "Male", TRUE ~ "Female"),
                              Vrid == 1008 ~ "Asian", 
                              Vrid == 184 ~ "White", 
                              Vrid == 1505 ~ "Black", 
-                             Vrid == 193 ~ "Black", 
+                             Vrid == 193 ~ "Black",
+                             Vrid == 1815 ~ "Black",
                              TRUE ~ ethnicity),
        ethnicity = case_when(ethnicity == 1 ~ "White", 
                              ethnicity == 2 ~ "Black", 
@@ -318,12 +319,100 @@ data <- data %>%
 
 ### Research Overview
 
-- Sampled 1,123 adult residents of the Boston core-based statistical area (CBSA), quota matched on age, gender, and ethnicity and weighted by ZIP.
-- For each MIP behavior, measured current self-reported *adoption*, *intention to adopt in the future*, and three social expectation measures - *belief that others are adopting the behavior*, *belief that others should adopt the behavior*, and *belief that others think people should adopt the behavior*.
-- For each MIP behavior, measured stated *interest in participating in a program* which helps adopt the behavior. 
-- For six out of seven MIP behaviors, measured perceived relative *carbon mitigation impact* of that behavior compared to a list of low-impact behaviors.
+- Sampled 1,155 adult residents of the Boston core-based statistical area (CBSA), quota matched on age, gender, and ethnicity and weighted by ZIP
+- For each MIP behavior, measured current self-reported *adoption*, *intention to adopt in the future*, and three social expectation measures - *belief that others are adopting the behavior*, *belief that others should adopt the behavior*, and *belief that others think people should adopt the behavior*
+- For each MIP behavior, measured stated *interest in participating in a program* which helps adopt the behavior
+- For six out of seven MIP behaviors, measured perceived relative *carbon mitigation impact* of that behavior compared to a list of low-impact behaviors
 
-### Results
+### Results Overview
+
+#### General trends  
+* Higher reported adoption of MIP behaviors among Boston residents compared to the general population
+  + Reported flying frequency and food waste reduction measures are not reported due to the difference in survey items between two samples
+```{r, echo = FALSE, results = 'asis', message = FALSE}
+Behavior <- c("Proportion that have at least 1 EV", "Proportion that bought a carbon offset in the last 12 month", "Proportion that get electricity from a green energy provider", "Proportion that have solar panels", "Proportion of people's meals that do not include meat")
+`Reported adoption among Boston residents` <- c("15%", "6%", "15%", "11%", "5%")
+`Reported adoption in the general population` <- c("11%", "2%", "9%", "4%", "6%")
+
+df <- data.frame(Behavior, `Reported adoption among Boston residents`, `Reported adoption in the general population`)
+
+df = reactable(df,
+  style = list(fontSize = "12px"),
+  defaultSorted = 'Behavior',
+  showSortIcon = FALSE,
+  # ALL one page option (no scrolling or page swapping)
+    pagination = TRUE,
+    # compact for an overall smaller table width wise
+    compact = TRUE,
+    # borderless - TRUE or FALSE
+    borderless = FALSE,
+    # Stripes - TRUE or FALSE
+    striped = FALSE,
+    highlight = TRUE,  
+  # fullWidth - either fit to width or not
+    fullWidth = FALSE,
+    # apply defaults
+    # 100 px and align to center of column
+    defaultColDef = colDef(
+      align = "center",
+      minWidth = 100),
+  # Add theme for the top border
+    theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )
+    ),
+  columns = list(
+    Behavior = colDef(
+      minWidth = 350,
+      align = "left"),
+    `Reported.adoption.in.the.general.population` = colDef(
+      name = "Reported adoption in the general population",
+      minWidth = 250,
+      align = "left"),
+    `Reported.adoption.among.Boston.residents` = colDef(
+      name = "Reported adoption among Boston residents",
+      minWidth = 250,
+      align = "left")))
+
+df
+```
+- Lack of awareness about the relative climate impact of low-impact and high-impact behaviors
+  + People underestimate the impact of several MIP actions, including flying less and eating less meat
+  + Lack of knowledge about how carbon offsets work
+  + People overestimate the impact of low-impact behaviors, including recycling, replacing bulbs, and planting trees
+- People underestimate how many people think they should take actions
+  + There is a large difference between *perceived % of population thinking people should adopt these behaviors* and *actual % of population thinking people should adopt the behaviors*
+
+#### Program interest  
+* Interest in one program is predictive of interest in another program
+  + People that are interested in one program are also likely to be interested in another program
+* Program interest is the highest for buying an EV, reducing food waste, and contracting for green energy
+* Program interest is the lowest for installing solar, buying offsets, eating less meat and flying less frequently
+* Beliefs about what should be done and beliefs about what other's think should be done predict the interest
+* Income does not predict program interest
+* Ethnicity is a weak predictor of interest
+* Education is predictive of program interest
+  + This is especially true for those with graduate degrees
+  + Education confounds the relationship between income and program interest (Once we add education into the linear regression, coefficients for income are reduced)
+* Participation in and donation to religious groups is not correlated with program interest
+* Participation in and donation to other social organizations is weakly correlated with program interest
+* Being retired is negative correlated with interest in programs and intention to adopt the behaviors
+
+#### Intention to adopt
+* Intention to adopt the behaviors is the highest for reducing food waste and flying less
+* Intention to adopt is moderate for purchasing an EV, eating less meat, and contracting for green energy
+* Intention to adopt is the lowest for offsets and solar panels
+* Moderate correlations between various behaviors, suggesting that some behaviors could be offered in a bundle:
+  + Buy an EV and buy offsets
+  + Buy offsets and install solar
+  + Eat less meat and reduce food waste
+  + Contract for green energy and install solar
+* All three social expectations are moderate predictors of intention to adopt the behaviors
+
+### Results in Detail
 
 #### Program Participation Interest
 
@@ -544,7 +633,7 @@ index <- data %>%
   var100, #program interest
   #PBD
   var71, #Are you trying to eat less meat than you used to?
-  #var115, #adoption % of meals
+  var115, #adoption % of meals
   var72, #EE
   var66, #PNB
   var48, #NE
@@ -1875,7 +1964,6 @@ tt4
 ```
 
 ```{r, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
-
 library(jtools)
 options("jtools-digits" = 6)
 reg <- data %>% 
@@ -2021,6 +2109,7 @@ reg <- within(reg, income_category <- relevel(income_category, ref = "Less than 
 ev_w <- reg %>% 
   lm(scale(ev_intent) ~ scale(ev_ee) + scale(ev_pnb) + scale(ev_ne) + scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
 
+
 ev_d_w <- reg %>% 
   lm(scale(ev_intent) ~ scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
 
@@ -2150,6 +2239,8 @@ ev_p <- tidy(ev_p) %>% mutate(model = "ev_p")
 ev_p_d <- reg %>% 
   lm(scale(ev_program_interest) ~ scale(politics) + income_category + education_category + age_group + sex + ethnicity, data =.)
 
+summary(ev_p_d)
+
 ev_p_d <- tidy(ev_p_d) %>% mutate(model = "EV_p_d")
 
 ##
@@ -2224,6 +2315,130 @@ food_waste_p_d <- reg %>%
 food_waste_p_d <- tidy(food_waste_p_d) %>% mutate(model = "food_waste_p_d")
 
 food_waste_p <- tidy(food_waste_p) %>% mutate(model = "food_waste_p")
+```
+
+```{r, include = FALSE, eval = FALSE}
+ev_p_d1 <- reg %>% 
+  lm(scale(ev_program_interest) ~ income_category, data =.)
+summary(ev_p_d1)
+
+ev_p_d2 <- reg %>% 
+  lm(scale(ev_program_interest) ~ income_category + education_category, data =.)
+summary(ev_p_d2)
+
+ev_p_d3 <- reg %>% 
+  lm(scale(ev_program_interest) ~ income_category + ethnicity, data =.)
+summary(ev_p_d3)
+
+ev_p_d4 <- reg %>% 
+  lm(scale(ev_program_interest) ~ age_group, data =.)
+summary(ev_p_d4)
+
++ education_category + age_group + sex + ethnicity
+
+###
+
+solar_p_d1 <- reg %>% 
+  lm(scale(solar_program_interest) ~ income_category + education_category + ethnicity + sex + age_group, data =.)
+summary(solar_p_d1)
+summ(solar_p_d1, vifs = TRUE)
+#summ(ev_p_d2, vifs = TRUE)
+
+solar_p_d2 <- reg %>% 
+  lm(scale(solar_program_interest) ~ education_category + income_category + age_group, data =.)
+summary(solar_p_d2)
+
+ev_p_d3 <- reg %>% 
+  lm(scale(ev_program_interest) ~ income_category + ethnicity, data =.)
+summary(ev_p_d3)
+
+ev_p_d4 <- reg %>% 
+  lm(scale(ev_program_interest) ~ age_group, data =.)
+summary(ev_p_d4)
+
+###
+
+
+carbon_p_d <- reg %>% 
+  lm(scale(offset_program_interest) ~ income_category + education_category, data =.)
+summary(carbon_p_d)
+
+
+## fly less
+
+fly_p_d <- reg %>% 
+  lm(scale(fly_program_interest) ~ education_category + income_category + sex, data =.)
+summary(fly_p_d)
+
+## reduce food waste
+
+food_waste_p_d <- reg %>% 
+  lm(scale(foodwaste_program_interest) ~ sex + ethnicity, data =.)
+summary(food_waste_p_d)
+
+
+### pbd
+
+pbd_program <- reg %>% 
+  lm(scale(pbd_program_interest) ~ ethnicity, data =.)
+summary(pbd_program)
+
+
+## correlations between demographics
+
+corr_table_3 <- corr_table_2 %>% 
+  select(education, income, sex_Female, sex_Male, ethnicity_Asian:age_group_65.)
+
+res.cor2 <- correlate(corr_table_3)
+
+res.cor2$term[res.cor2$term == "income"] <- "Household income"
+res.cor2$term[res.cor2$term == "age_group_18.24"] <- "Age: 18-24"
+res.cor2$term[res.cor2$term == "age_group_25.34"] <- "Age: 25-34"
+res.cor2$term[res.cor2$term == "age_group_35.44"] <- "Age: 35-44"
+res.cor2$term[res.cor2$term == "age_group_45.54"] <- "Age: 45-54"
+res.cor2$term[res.cor2$term == "age_group_55.64"] <- "Age: 55-64"
+res.cor2$term[res.cor2$term == "age_group_65."] <- "Age: 65+"
+res.cor2$term[res.cor2$term == "sex_Female"] <- "Female"
+res.cor2$term[res.cor2$term == "sex_Male"] <- "Male"
+
+res.cor2$term[res.cor2$term == "ethnicity_White"] <- "Ethnicity: White"
+res.cor2$term[res.cor2$term == "ethnicity_Black"] <- "Ethnicity: Black"
+res.cor2$term[res.cor2$term == "ethnicity_Asian"] <- "Ethnicity: Asian"
+res.cor2$term[res.cor2$term == "ethnicity_Other"] <- "Ethnicity: Other"
+
+res.cor2$term[res.cor2$term == "education"] <- "Education level"
+#res.cor2$term[res.cor2$term == "politics"] <- "Political orientation: Conservative"
+```
+
+```{r, eval = FALSE, include = FALSE}
+reg1 <- reg %>% 
+  select(fly_program_interest, sex, age_group, income_category, politics, education_category, ethnicity)
+
+# Create variables 
+x_vars = model.matrix(fly_program_interest~., reg1)[ ,-1] # remove DV, leave only predictors
+y_var = reg1$fly_program_interest
+lam = 10^seq(2,-2, by = -.1)
+
+# Create a test/train sample split (equal split)
+set.seed(1)
+train = sample(1:nrow(x_vars),nrow(x_vars)/(2))
+x_test = reg1[-train, ]
+y_test = x_test$fly_program_interest
+
+library(glmnet)
+
+# Identify the best lambda
+cv_output = cv.glmnet(x_vars[train, ], y_var[train],
+                      alpha= 1, lambda = lam)
+best_lam = cv_output$lambda.min
+#best_lam
+
+
+# Use the best lambda to train the LASSO model
+lasso = glmnet(x_vars[train, ], y_var[train], 
+               alpha=1, lambda = best_lam)
+
+coef(lasso)
 ```
 
 ##### Plots of standardized regression coefficients from linear models regressing intention to perform each behavior on each of the listed covariates
