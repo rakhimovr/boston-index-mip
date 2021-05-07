@@ -1,5 +1,5 @@
 ---
-title: "Make It Personal: Boston Index Preliminary Results"
+title: "Make It Personal: Boston Index Results"
 output: html_document
 date: '`r format(Sys.time(), "%d %B, %Y")`'
 author:
@@ -321,20 +321,20 @@ data <- data %>%
 
 - Sampled 1,155 adult residents of the Boston core-based statistical area (CBSA), quota matched on age, gender, and ethnicity and weighted by ZIP
 - For each MIP behavior, measured current self-reported *adoption*, *intention to adopt in the future*, and three social expectation measures - *belief that others are adopting the behavior*, *belief that others should adopt the behavior*, and *belief that others think people should adopt the behavior*
-- For each MIP behavior, measured stated *interest in participating in a program* which helps adopt the behavior
+- For each MIP behavior, measured stated *interest in participating in a program* that helps adopt the behavior
 - For six out of seven MIP behaviors, measured perceived relative *carbon mitigation impact* of that behavior compared to a list of low-impact behaviors
 
 ### Results Overview
 
 #### General trends  
 * Higher reported adoption of MIP behaviors among Boston residents compared to the general population
-  + Reported flying frequency and food waste reduction measures are not reported due to the difference in survey items between two samples
+  + Reported flying frequency and food waste reduction measures are not reported due to the difference in survey items between the two samples
 ```{r, echo = FALSE, results = 'asis', message = FALSE}
-Behavior <- c("Proportion that have at least 1 EV", "Proportion that bought a carbon offset in the last 12 month", "Proportion that get electricity from a green energy provider", "Proportion that have solar panels", "Proportion of people's meals that do not include meat")
-`Reported adoption among Boston residents` <- c("15%", "6%", "15%", "11%", "5%")
-`Reported adoption in the general population` <- c("11%", "2%", "9%", "4%", "6%")
+Behavior <- c("% of households that own at least 1 EV", "% of people that bought a carbon offset in the last year", "% of households that get electricity from a green energy provider", "% of households that have solar panels", "% of people's meals that do not include meat")
+`Boston sample` <- c("15%", "6%", "15%", "11%", "5%")
+`General population` <- c("11%", "2%", "9%", "4%", "6%")
 
-df <- data.frame(Behavior, `Reported adoption among Boston residents`, `Reported adoption in the general population`)
+df <- data.frame(Behavior, `Boston sample`, `General population`)
 
 df = reactable(df,
   style = list(fontSize = "12px"),
@@ -366,15 +366,15 @@ df = reactable(df,
     ),
   columns = list(
     Behavior = colDef(
-      minWidth = 350,
+      minWidth = 360,
       align = "left"),
-    `Reported.adoption.in.the.general.population` = colDef(
-      name = "Reported adoption in the general population",
-      minWidth = 250,
+    `General.population` = colDef(
+      name = "General population",
+      minWidth = 140,
       align = "left"),
-    `Reported.adoption.among.Boston.residents` = colDef(
-      name = "Reported adoption among Boston residents",
-      minWidth = 250,
+    `Boston.sample` = colDef(
+      name = "Boston sample",
+      minWidth = 100,
       align = "left")))
 
 df
@@ -384,13 +384,13 @@ df
   + Lack of knowledge about how carbon offsets work
   + People overestimate the impact of low-impact behaviors, including recycling, replacing bulbs, and planting trees
 - People underestimate how many people think they should take actions
-  + There is a large difference between *perceived % of population thinking people should adopt these behaviors* and *actual % of population thinking people should adopt the behaviors*
+  + There is a large difference between the *perceived % of the population thinking people should adopt these behaviors* and the *actual % of the population thinking people should adopt the behaviors*
 
 #### Program interest  
 * Interest in one program is predictive of interest in another program
   + People that are interested in one program are also likely to be interested in another program
 * Program interest is the highest for buying an EV, reducing food waste, and contracting for green energy
-* Program interest is the lowest for installing solar, buying offsets, eating less meat and flying less frequently
+* Program interest is the lowest for installing solar, buying offsets, eating less meat, and flying less frequently
 * Beliefs about what should be done and beliefs about what other's think should be done predict the interest
 * Income does not predict program interest
 * Ethnicity is a weak predictor of interest
@@ -399,7 +399,7 @@ df
   + Education confounds the relationship between income and program interest (Once we add education into the linear regression, coefficients for income are reduced)
 * Participation in and donation to religious groups is not correlated with program interest
 * Participation in and donation to other social organizations is weakly correlated with program interest
-* Being retired is negative correlated with interest in programs and intention to adopt the behaviors
+* Being retired is negatively correlated with interest in programs and intention to adopt the behaviors
 
 #### Intention to adopt
 * Intention to adopt the behaviors is the highest for reducing food waste and flying less
@@ -968,7 +968,7 @@ div(
     # this can be called with CSS now via .title
     #class = "title",
     #h2("MIP Index: Boston"),
-    "The survey was fielded from March 31 – April 21, 2021, drawing on the stratified sample of the Boston CBSA (n = 1,123)
+    "The survey was fielded from March 31 – April 21, 2021, drawing on the stratified sample of the Boston CBSA (n = 1,155)
     "
   ),
   # The actual table
@@ -1132,7 +1132,7 @@ For eating less meat, flying less, and reducing food waste, adoption variable me
 
 #### Carbon Impact Ranking
 
-The table below presents average ranking in terms of carbon mitigation potential of MIP (highlighted) and low-impact behaviors assigned by participants. For example, on average, installing rooftop solar was assigned rank 4.61 out of 12.
+The table below presents the average ranking in terms of the carbon mitigation potential of MIP (highlighted) and low-impact behaviors assigned by participants. For example, on average, installing rooftop solar was assigned rank 4.61 out of 12.
 
 ```{r, echo = FALSE, results = 'asis', message = FALSE, fig.align = 'center'}
 #Ranking table
@@ -1449,7 +1449,7 @@ intention_table <- data %>%
   ) %>% 
   rename(
   #EV
-  "Intetion to drive an EV" = var94,
+  "Intention to drive an EV" = var94,
   #Fly
   "Intention to fly less" = var97,
   #Offset
@@ -1584,7 +1584,7 @@ interest_reactable = reactable(interest_table,
 interest_reactable
 ```
 
-##### Pearson correlations between demographic and pscyhographic predictors and behavior-related variables
+##### Pearson correlations between demographic and psychographic predictors and behavior-related variables
 
 ```{r, echo = FALSE, results = 'asis', message = FALSE, fig.align = 'center', warning = FALSE}
 #Corr table 2
@@ -1799,7 +1799,7 @@ tt3 = res.cor2 %>%
          'Interest in EV program' = ev_program_interest,
          'Intention to buy an EV' = ev_intent,
          'Beliefs that others drive an EV' = ev_ee,
-         'Beliefs that others should driven an EV' = ev_pnb,
+         'Beliefs that others should drive an EV' = ev_pnb,
          'Beliefs that others think people should drive an EV' = ev_ne,
          'Interest in solar program' = solar_program_interest,
          'Intention to install solar' = solar_intent,
@@ -1813,7 +1813,7 @@ tt3 = res.cor2 %>%
          'Beliefs that others think people should have green energy' = recs_ne,
          'Interest in offsets program' = offset_program_interest,
          'Intention to buy offsets' = offset_intent,
-         'Beliefs that others bougth offsets' = offset_ee,
+         'Beliefs that others bought offsets' = offset_ee,
          'Beliefs that others should buy offsets' = offset_pnb,
          'Beliefs that others think people should buy offsets' = offset_ne,
          'Interest in flying less program' = fly_program_interest,
@@ -2444,8 +2444,8 @@ coef(lasso)
 ##### Plots of standardized regression coefficients from linear models regressing intention to perform each behavior on each of the listed covariates
 
 - Across the behaviors, the greatest predictors of intention to adopt the behaviors are the people's belief that other people are engaging in the behavior and people's beliefs that engaging in these behaviors is the right thing to do.
-- Political orientation and demographic measures show inconsistent and largely insignificant effect.
-- All models are adjusted for demographic controls for age, gender, ethnicity, household income, and education level.
+- Political orientation and demographic measures show inconsistent and largely insignificant effects
+- All models are adjusted for demographic controls for age, gender, ethnicity, household income, and education level
 
 ```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, fig.width = 9, fig.height = 5, include = FALSE}
 # Use tibble dfs
