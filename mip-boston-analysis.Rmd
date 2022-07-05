@@ -1,6 +1,8 @@
 ---
 title: "Make It Personal: Boston Index Results"
-output: html_document
+output: 
+      html_document:
+            toc: TRUE
 date: '`r format(Sys.time(), "%d %B, %Y")`'
 author:
 - Erik Thulin, ethulin@rare.org
@@ -24,27 +26,10 @@ library(fastDummies)
 require(lattice)
 library(corrr)
 library(dotwhisker)
+library(socviz)
 
 data <- read_sav("spss_4_29_2021.sav")
 lucid_data <-read.csv("lucid_response_4_29_2021.csv")
-```
-
-```{r, include = FALSE, echo = FALSE, results = 'asis', eval = FALSE}
-# Incompletes match between Lucid and Alchemer
-lucid <- read.csv("lucid_data_analysis_4_29_2021.csv")
-
-test <- lucid %>% 
-  filter(FulcrumStatus == 3 & ClientStatus == 10 & SupplierName != "Z - Test Supplier") %>% 
-  mutate(
-    var13 = as.character(Response.ID),
-    var13 = tolower(var13))
-
-test_merge <- merge(x = data, y = test, by = "var13", all.x = TRUE)
-
-test_merge <- test_merge %>% 
-  select(var13, Response.ID)
-
-test_merge$Response.ID <- as.character(test_merge$Response.ID)
 ```
 
 ```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE}
@@ -180,75 +165,6 @@ df <- df %>%
 
 df <- df %>% 
   select(zip, zip.weight)
-```
-
-```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE, eval = FALSE}
-### weighting by puma
-#population
-puma <- read.csv("geocorr_puma_export.csv")
-
-puma <- puma %>% 
-  filter(cbsa == "14460") %>% 
-  select(PUMAname, pop10) %>% 
-  rename(puma = PUMAname,
-         puma.pop = pop10)
-
-puma$puma.pop <- as.numeric(as.character(puma$puma.pop))
-
-puma$puma <- as.character(puma$puma)
-puma$puma <- as.factor(puma$puma)
-
-puma <- puma %>% 
-  mutate(pop.puma.prop = puma.pop/sum(puma.pop))
-```
-
-```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE, eval = FALSE}
-#DF matching ZIPs to PUMAs
-zip_puma <- read.csv("geocorr_puma_zip.csv")
-
-zip_puma <- zip_puma %>% 
-  filter(state == "25") %>% 
-  select(zcta5, PUMAname, pop10) %>% 
-  rename(zip = zcta5,
-         puma = PUMAname,
-         zip.pop = pop10)
-
-zip_puma$zip <- as.numeric(as.character(zip_puma$zip))
-zip_puma$zip.pop <- as.numeric(as.character(zip_puma$zip.pop))
-zip_puma$puma <- as.character(zip_puma$puma)
-zip_puma$puma <- as.factor(zip_puma$puma)
-
-zip_puma <- zip_puma %>% 
-  filter(zip < 99999)
-
-puma_zip <- merge(x = puma, y = zip_puma, by = c("puma"), all.x = TRUE)
-```
-
-```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE, eval = FALSE}
-#sample PUMAs
-df <- data %>% 
-  select(Vrid, var21) %>% 
-  rename(zip = var21,
-         ID = Vrid)
-  
-df$zip <- as.numeric(as.character(df$zip))
-df$ID <- as.numeric(as.character(df$ID))
-
-df <- merge(x = df, y = puma_zip, by = c("zip"), all.x = TRUE)
-
-#df <- df %>% 
-#  select(ID, zip, puma, zip_pop)
-
-df <- df %>% 
-  group_by(ID) %>% 
-  mutate(total.puma = sum(puma.pop),
-         puma.weight = puma.pop/total.puma)
-
-df <- df %>% 
-  select(ID, zip, puma, puma.weight)
-
-puma_zip <- puma_zip %>% 
-  select(puma, zip)
 ```
 
 ```{r, echo = FALSE, include = FALSE, results = 'asis', message = FALSE}
@@ -865,15 +781,19 @@ t11 <- t11 %>%
 
 # Rename rows
 t11$Behavior[t11$Behavior == "ev"] <- "Purchase an EV"
-t11$Behavior[t11$Behavior == "fly"] <- "Fly less*"
+t11$Behavior[t11$Behavior == "fly"] <- "Fly less"
 t11$Behavior[t11$Behavior == "offset"] <- "Purchase carbon offsets"
 t11$Behavior[t11$Behavior == "recs"] <- "Purchase green energy"
 t11$Behavior[t11$Behavior == "solar"] <- "Install solar panels"
-t11$Behavior[t11$Behavior == "pbd"] <- "Eat less meat*"
-t11$Behavior[t11$Behavior == "foodwaste"] <- "Waste less food*"
+t11$Behavior[t11$Behavior == "pbd"] <- "Eat less meat"
+t11$Behavior[t11$Behavior == "foodwaste"] <- "Waste less food"
 
 t11 <- t11 %>% 
   select(Behavior, Adoption, Intention, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`, `Program interest`, `Carbon impact ranking`)
+
+mip_boston_comparison <- t11 %>% select(Behavior, Adoption, Intention, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`)
+
+write.csv(mip_boston_comparison, "mip_boston_comparison.csv")
 
 tt = reactable(t11,
   style = list(fontSize = "12px"),
@@ -1891,8 +1811,6 @@ minWidth = 120),
 
 tt5
 ```
-
-
 
 ```{r, echo = FALSE, results = 'asis', message = FALSE, fig.align = 'center', warning = FALSE}
 #Corr table 3
@@ -3351,4 +3269,1304 @@ theme(axis.line = element_line(color="white"),
         panel.background = element_blank(),
         legend.position = "bottom") +
   scale_y_continuous(labels = function(x) paste0(x,"%"))
+```
+
+
+### Appendix
+
+```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
+# Build a master table of differences
+
+diff_table <- data %>% 
+      select(
+  age_group,
+  sex,
+  ethnicity,
+  var17,
+  var19,
+  wt,
+  #EV
+  var26, #adoption
+  var87, #EE
+  var28, #PNB,
+  var88, #NE
+  var94, #intent
+  var96, #program interest
+  #Fly
+  var70, #Are you trying to fly less frequently than you used to?
+  var69, #EE
+  var38, #PNB
+  var35, #NE
+  var97, #intent
+  var98, #program interest
+  #Offsets
+  var39, #adoption
+  var40, #EE
+  var41, #PNB
+  var42, #NE
+  var99, #intent
+  var100, #program interest
+  #PBD
+  var71, #Are you trying to eat less meat than you used to?
+  var115, #adoption % of meals
+  var72, #EE
+  var66, #PNB
+  var48, #NE
+  var103, #intent
+  var104, #program interest
+  #RECs
+  var54, #adoption
+  var55, #EE
+  var56, #PNB
+  var57, #NE
+  var105, #intent
+  var106, #program interest
+  #Solar
+  var59, #adoption
+  var60, #EE
+  var61, #PNB
+  var62, #NE
+  var107, #intent
+  var108, #program interest
+  #Food waste
+  var73, #Are you currently trying to reduce the amount of food waste you produce?
+  var74, #EE
+  var75, #PNB
+  var76, #NE
+  var109, #intent
+  var110 #program interest
+  ) %>% 
+  rename(
+  #EV
+  ev_adoption = var26,
+  ev_ee = var87,
+  ev_pnb = var28,
+  ev_ne = var88,
+  ev_intent = var94,
+  ev_program_interest = var96,
+  #Fly
+  fly_adoption = var70, #trying to fly less
+  fly_ee = var69, #EE
+  fly_pnb = var38, #PNB
+  fly_ne = var35, #NE
+  fly_intent = var97,
+  fly_program_interest = var98,
+  #Offset
+  offset_adoption = var39, #adoption
+  offset_ee = var40, #EE
+  offset_pnb = var41, #PNB
+  offset_ne = var42, #NE
+  offset_program_interest = var100, #program interest
+  offset_intent = var99,
+  #PBD
+  pbd_adoption = var71, #trying to
+  pbd_ee = var72, #EE
+  pbd_pnb = var66, #PNB
+  pbd_ne = var48, #NE
+  pbd_program_interest = var104, #program interest
+  pbd_intent = var103, 
+  #RECs
+  recs_adoption = var54, #adoption
+  recs_ee = var55, #EE
+  recs_pnb = var56, #PNB
+  recs_ne = var57, #NE
+  recs_program_interest = var106, #program interest
+  recs_intent = var105,
+  #Solar
+  solar_adoption = var59, #adoption
+  solar_ee = var60, #EE
+  solar_pnb = var61, #PNB
+  solar_ne = var62, #NE
+  solar_program_interest = var108, #program interest
+  solar_intent = var107,
+  #Food waste
+  foodwaste_adoption = var73, #attempt
+  foodwaste_ee = var74, #EE
+  foodwaste_pnb = var75, #PNB
+  foodwaste_ne = var76, #NE
+  foodwaste_program_interest = var110, #program interest
+  foodwaste_intent = var109)
+
+library(forcats)
+
+diff_table$ethnicity <- fct_collapse(diff_table$ethnicity, Other = c("Black", "Asian", "Other"))
+
+diff_table <- diff_table %>% 
+  mutate(
+  #Adoption
+  ev_adoption = case_when(ev_adoption == 0 ~ 0, TRUE ~ 1), 
+  recs_adoption = case_when(recs_adoption == 1 ~ 1, TRUE ~ 0),
+  # demos
+  edu = var17,
+  edu = as_factor(edu),
+  income = var19,
+  income = as_factor(income)) %>% 
+      select(-var17, - var19)
+  
+
+diff_table$income <- fct_collapse(diff_table$income, "Under $30,000" = c("Less than $20,000", "$20,000 to $29,000"),
+                                                      "$30,000 to $59,000" = c("$30,000 to $39,000", "$40,000 to $49,000", "$50,000 to $59,000"),
+                                                      "$60,000 to $99,999" = c("$60,000 to $69,000", "$70,000 to $79,000", "$80,000 to $89,000", "$90,000 to $99,000"),
+                                                      "$100,000 and over" = c("$100,000 to $149,000", "$150,000 or more"))
+
+
+#rating_color <- make_color_pal(c("tomato", "#FFFFFF", "#44ab43")) "#93d3ab"
+
+#rating_color <- make_color_pal(c("coral2", "coral1", "coral","lightgrey", "honeydew", "darkolivegreen1", "darkolivegreen2", "darkolivegreen3"))
+
+rating_color <- make_color_pal(c("coral2", "lightgrey", "darkolivegreen1"))
+```
+
+Guide to interpreting the results in the tables. 
+
+The tables below, broken down by each behavior, help understand: 1) if there are differences in the performance of indicators between the Boston sample and the segment of the population (for example, *Males*); and 2) how large are these differences. 
+
+- For each behavior, the first table presents the mean indicator performance in the overall sample. For example, the value of 0.47 in row *Mean*, column *Trying to eat less meat* in the first *Eat less meat* table tells us that 47% of the population of Boston is trying to eat less meat. The second row of the same table, presents the standard deviation of that indicator in the national sample. Standard deviation is a widely used measure of the variability or dispersion and shows how much variation there is from the mean. A small standard deviation indicates data points that cluster around the mean, whereas a large standard deviation indicates data points that are dispersed across many different values.
+- For each behavior, the values in the second table represent differences, in terms of standard deviation, between indicator performance in the segment compared to the overall population. These values were calculated by taking the difference between mean indicator performance for that row segment and the mean indicator performance in the overall population, divided by the standard deviation of indicator performance in the national sample. For example, the value of -0.12 in row *Male*, column *Trying to eat less meat* in the table *Eat less meat* tells us that the number of Males that are trying to eat less meat is 0.12 standard deviations below the average of the overall population. 
+- Performing the calculations above allows us to draw comparisons between indicator performance within and across the behaviors. In these tables, psychology conventions would say that a small effect would be a difference of ~0.2, a medium effect of ~0.5, and a large effect of ~0.8. The average effect size of well-designed studies in the Social Psychology literature is ~0.3. We therefore generally concentrate our interpretation on effects that are of at least this size. If standard deviation values in the segment rows are close to 0, then the indicator performance for that segment is close to the performance in the overall population.
+- For each segment, in brackets, we have provided the frequency of that segment in the sample. For example, the national sample contains 525 *Males*. 
+
+##### Eat less meat
+
+- **Program interest**: Graduate degree
+
+```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
+pbd_table <- diff_table %>% 
+      select(age_group, sex, ethnicity, income, edu,
+             contains("pbd")) %>% 
+      mutate(pbd_intent = pbd_intent/100,
+             pbd_ne = pbd_ne/10,
+             pbd_ee = pbd_ee/10,
+             pbd_program_interest = pbd_program_interest/10)
+
+mean_pbd <- pbd_table %>% 
+  summarise_if(is.numeric, list(mean), na.rm = TRUE) %>% 
+  mutate(value = "Mean")
+
+sd_pbd <- pbd_table %>% 
+  summarise_if(is.numeric, list(sd), na.rm = TRUE) %>% 
+  mutate(value = "Standard Deviation")
+
+pbd_table <- pbd_table %>% 
+  pivot_longer(cols = c(sex, age_group, ethnicity, income, edu), 
+               names_to = "var", 
+               values_to = "value") 
+
+tally <- pbd_table %>% group_by(value) %>%
+  tally()
+
+pbd_table <- pbd_table %>%
+    group_by(value) %>%
+    summarise(pbd_adoption = (mean(pbd_adoption) - mean(pbd_table$pbd_adoption))/sd(pbd_table$pbd_adoption),
+              pbd_intent = (mean(pbd_intent) - mean(pbd_table$pbd_intent))/sd(pbd_table$pbd_intent),
+              pbd_program_interest = (mean(pbd_program_interest) - mean(pbd_table$pbd_program_interest))/sd(pbd_table$pbd_program_interest),
+              pbd_ee = (mean(pbd_ee) - mean(pbd_table$pbd_ee))/sd(pbd_table$pbd_ee),
+              pbd_pnb = (mean(pbd_pnb) - mean(pbd_table$pbd_pnb))/sd(pbd_table$pbd_pnb),
+              pbd_ne = (mean(pbd_ne) - mean(pbd_table$pbd_ne))/sd(pbd_table$pbd_ne)) %>% 
+      filter(value != "No high school")
+
+pbd_table <- inner_join(pbd_table, tally, by = "value")
+
+pbd_table$value <- paste0(pbd_table$value, " (", pbd_table$n, ")")
+
+pbd_table_mean <- bind_rows(mean_pbd, sd_pbd)
+
+pbd_table_mean <- round_df(pbd_table_mean, 2)
+
+pbd_table_mean <- pbd_table_mean %>% 
+  rename('Segment' = value,
+         'Trying to eat less meat' = pbd_adoption,
+         'Intention' = pbd_intent,
+         'Belief that others are engaging in the behavior' = pbd_ee,
+         'Belief that others should engage in the behavior' = pbd_pnb,
+         'Belief that others think people should engage in the behavior' = pbd_ne,
+         'Program interest' = pbd_program_interest)
+
+pbd_table_mean <- pbd_table_mean %>% 
+  select(Segment, `Trying to eat less meat`, `Intention`, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`,  `Program interest`)
+
+pbd_table_mean = reactable(pbd_table_mean,
+          defaultPageSize = 40,
+  style = list(fontSize = "11px"),
+  showSortIcon = FALSE,
+    pagination = TRUE,
+    compact = TRUE,
+    borderless = FALSE,
+    striped = TRUE,
+    highlight = TRUE,  
+    fullWidth = TRUE,
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+
+pbd_table_mean
+
+pbd_table <- round_df(pbd_table, 2)
+
+pbd_table <- pbd_table %>% 
+   slice(14,12,
+         4:9,
+         19, 15,
+         18, 2, 3, 1,
+         13, 10, 17, 11, 16)
+
+pbd_table <- pbd_table %>% 
+  rename('Segment' = value,
+         'Trying to eat less meat' = pbd_adoption,
+         'Intention' = pbd_intent,
+         'Belief that others are engaging in the behavior' = pbd_ee,
+         'Belief that others should engage in the behavior' = pbd_pnb,
+         'Belief that others think people should engage in the behavior' = pbd_ne,
+         'Program interest' = pbd_program_interest)
+
+pbd_table <- pbd_table %>% 
+  select(Segment, `Trying to eat less meat`, `Intention`, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`,  `Program interest`)
+
+#reactable(pbd_table, defaultPageSize = 40)
+
+#write.csv(pbd_table, "pbd_table.csv")
+
+pbd_table <- pbd_table %>% remove_rownames %>% column_to_rownames(var = "Segment")
+
+#BuYlRd <- function(x) rgb(colorRamp(c("coral", "#FFFFFF", "palegreen"))(x), maxColorValue = 255)
+
+reactable(pbd_table,
+          defaultPageSize = 40,
+  style = list(fontSize = "11px"),
+defaultColDef = colDef(
+    style = function(value) {
+      if (!is.numeric(value)) return()
+     normalized <- (value - min(pbd_table)) / (max(pbd_table) - min(pbd_table))
+      color <- rating_color(normalized)
+      list(background = color)
+    },
+    ),
+  showSortIcon = FALSE,
+    pagination = TRUE,
+    compact = TRUE,
+    borderless = FALSE,
+    striped = TRUE,
+    highlight = TRUE,  
+    fullWidth = TRUE,
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+```
+
+##### Reduce food waste
+
+Most of the differences between the Boston sample and segments of the population are small.
+
+```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
+foodwaste_table <- diff_table %>% 
+      select(age_group, sex, ethnicity, income, edu,
+             contains("foodwaste")) %>% 
+      mutate(foodwaste_intent = foodwaste_intent/100,
+             foodwaste_ne = foodwaste_ne/10,
+             foodwaste_ee = foodwaste_ee/10,
+             foodwaste_program_interest = foodwaste_program_interest/10)
+
+mean_foodwaste <- foodwaste_table %>% 
+  summarise_if(is.numeric, list(mean), na.rm = TRUE) %>% 
+  mutate(value = "Mean")
+
+sd_foodwaste <- foodwaste_table %>% 
+  summarise_if(is.numeric, list(sd), na.rm = TRUE) %>% 
+  mutate(value = "Standard Deviation")
+
+foodwaste_table <- foodwaste_table %>% 
+  pivot_longer(cols = c(sex, age_group, ethnicity, income, edu), 
+               names_to = "var", 
+               values_to = "value") 
+
+tally <- foodwaste_table %>% group_by(value) %>%
+  tally()
+
+foodwaste_table <- foodwaste_table %>%
+    group_by(value) %>%
+    summarise(foodwaste_adoption = (mean(foodwaste_adoption) - mean(foodwaste_table$foodwaste_adoption))/sd(foodwaste_table$foodwaste_adoption),
+              foodwaste_intent = (mean(foodwaste_intent) - mean(foodwaste_table$foodwaste_intent))/sd(foodwaste_table$foodwaste_intent),
+              foodwaste_program_interest = (mean(foodwaste_program_interest) - mean(foodwaste_table$foodwaste_program_interest))/sd(foodwaste_table$foodwaste_program_interest),
+              foodwaste_ee = (mean(foodwaste_ee) - mean(foodwaste_table$foodwaste_ee))/sd(foodwaste_table$foodwaste_ee),
+              foodwaste_pnb = (mean(foodwaste_pnb) - mean(foodwaste_table$foodwaste_pnb))/sd(foodwaste_table$foodwaste_pnb),
+              foodwaste_ne = (mean(foodwaste_ne) - mean(foodwaste_table$foodwaste_ne))/sd(foodwaste_table$foodwaste_ne)) %>% 
+      filter(value != "No high school")
+
+foodwaste_table <- inner_join(foodwaste_table, tally, by = "value")
+
+foodwaste_table$value <- paste0(foodwaste_table$value, " (", foodwaste_table$n, ")")
+
+foodwaste_table_mean <- bind_rows(mean_foodwaste, sd_foodwaste)
+
+foodwaste_table_mean <- round_df(foodwaste_table_mean, 2)
+
+foodwaste_table_mean <- foodwaste_table_mean %>% 
+  rename('Segment' = value,
+         'Trying to reduce food waste' = foodwaste_adoption,
+         'Intention' = foodwaste_intent,
+         'Belief that others are engaging in the behavior' = foodwaste_ee,
+         'Belief that others should engage in the behavior' = foodwaste_pnb,
+         'Belief that others think people should engage in the behavior' = foodwaste_ne,
+         'Program interest' = foodwaste_program_interest)
+
+foodwaste_table_mean <- foodwaste_table_mean %>% 
+  select(Segment, `Trying to reduce food waste`, `Intention`, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`,  `Program interest`)
+
+foodwaste_table_mean = reactable(foodwaste_table_mean,
+          defaultPageSize = 40,
+  style = list(fontSize = "11px"),
+  showSortIcon = FALSE,
+    pagination = TRUE,
+    compact = TRUE,
+    borderless = FALSE,
+    striped = TRUE,
+    highlight = TRUE,  
+    fullWidth = TRUE,
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+
+foodwaste_table_mean
+
+foodwaste_table <- round_df(foodwaste_table, 2)
+
+foodwaste_table <- foodwaste_table %>% 
+   slice(14,12,
+         4:9,
+         19, 15,
+         18, 2, 3, 1,
+         13, 10, 17, 11, 16)
+
+foodwaste_table <- foodwaste_table %>% 
+  rename('Segment' = value,
+         'Trying to reduce food waste' = foodwaste_adoption,
+         'Intention' = foodwaste_intent,
+         'Belief that others are engaging in the behavior' = foodwaste_ee,
+         'Belief that others should engage in the behavior' = foodwaste_pnb,
+         'Belief that others think people should engage in the behavior' = foodwaste_ne,
+         'Program interest' = foodwaste_program_interest)
+
+foodwaste_table <- foodwaste_table %>% 
+  select(Segment, `Trying to reduce food waste`, `Intention`, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`,  `Program interest`)
+
+#reactable(foodwaste_table, defaultPageSize = 40)
+
+#write.csv(foodwaste_table, "foodwaste_table.csv")
+
+foodwaste_table <- foodwaste_table %>% remove_rownames %>% column_to_rownames(var = "Segment")
+
+#BuYlRd <- function(x) rgb(colorRamp(c("coral", "#FFFFFF", "palegreen"))(x), maxColorValue = 255)
+
+reactable(foodwaste_table,
+          defaultPageSize = 40,
+  style = list(fontSize = "11px"),
+defaultColDef = colDef(
+    style = function(value) {
+      if (!is.numeric(value)) return()
+     normalized <- (value - min(foodwaste_table)) / (max(foodwaste_table) - min(foodwaste_table))
+      color <- rating_color(normalized)
+      list(background = color)
+    },
+    ),
+  showSortIcon = FALSE,
+    pagination = TRUE,
+    compact = TRUE,
+    borderless = FALSE,
+    striped = TRUE,
+    highlight = TRUE,  
+    fullWidth = TRUE,
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+```
+
+##### Purchase carbon offsets
+
+- **Intention**: 25-34; 35-44
+- **Belief that others are engaging in the behavior**: 18-24
+- **Program interest**: 35-44
+
+```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
+offset_table <- diff_table %>% 
+      select(age_group, sex, ethnicity, income, edu,
+             contains("offset")) %>% 
+      mutate(offset_intent = offset_intent/100,
+             offset_ne = offset_ne/10,
+             offset_ee = offset_ee/10,
+             offset_program_interest = offset_program_interest/10)
+
+mean_offset <- offset_table %>% 
+  summarise_if(is.numeric, list(mean), na.rm = TRUE) %>% 
+  mutate(value = "Mean")
+
+sd_offset <- offset_table %>% 
+  summarise_if(is.numeric, list(sd), na.rm = TRUE) %>% 
+  mutate(value = "Standard Deviation")
+
+offset_table <- offset_table %>% 
+  pivot_longer(cols = c(sex, age_group, ethnicity, income, edu), 
+               names_to = "var", 
+               values_to = "value") 
+
+tally <- offset_table %>% group_by(value) %>%
+  tally()
+
+offset_table <- offset_table %>%
+    group_by(value) %>%
+    summarise(offset_adoption = (mean(offset_adoption) - mean(offset_table$offset_adoption))/sd(offset_table$offset_adoption),
+              offset_intent = (mean(offset_intent) - mean(offset_table$offset_intent))/sd(offset_table$offset_intent),
+              offset_program_interest = (mean(offset_program_interest) - mean(offset_table$offset_program_interest))/sd(offset_table$offset_program_interest),
+              offset_ee = (mean(offset_ee) - mean(offset_table$offset_ee))/sd(offset_table$offset_ee),
+              offset_pnb = (mean(offset_pnb) - mean(offset_table$offset_pnb))/sd(offset_table$offset_pnb),
+              offset_ne = (mean(offset_ne) - mean(offset_table$offset_ne))/sd(offset_table$offset_ne)) %>% 
+      filter(value != "No high school")
+
+offset_table <- inner_join(offset_table, tally, by = "value")
+
+offset_table$value <- paste0(offset_table$value, " (", offset_table$n, ")")
+
+offset_table_mean <- bind_rows(mean_offset, sd_offset)
+
+offset_table_mean <- round_df(offset_table_mean, 2)
+
+offset_table_mean <- offset_table_mean %>% 
+  rename('Segment' = value,
+         'Bought carbon offsets' = offset_adoption,
+         'Intention' = offset_intent,
+         'Belief that others are engaging in the behavior' = offset_ee,
+         'Belief that others should engage in the behavior' = offset_pnb,
+         'Belief that others think people should engage in the behavior' = offset_ne,
+         'Program interest' = offset_program_interest)
+
+offset_table_mean <- offset_table_mean %>% 
+  select(Segment, `Bought carbon offsets`, `Intention`, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`,  `Program interest`)
+
+offset_table_mean = reactable(offset_table_mean,
+          defaultPageSize = 40,
+  style = list(fontSize = "11px"),
+  showSortIcon = FALSE,
+    pagination = TRUE,
+    compact = TRUE,
+    borderless = FALSE,
+    striped = TRUE,
+    highlight = TRUE,  
+    fullWidth = TRUE,
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+
+offset_table_mean
+
+offset_table <- round_df(offset_table, 2)
+
+offset_table <- offset_table %>% 
+   slice(14,12,
+         4:9,
+         19, 15,
+         18, 2, 3, 1,
+         13, 10, 17, 11, 16)
+
+offset_table <- offset_table %>% 
+  rename('Segment' = value,
+         'Bought carbon offsets' = offset_adoption,
+         'Intention' = offset_intent,
+         'Belief that others are engaging in the behavior' = offset_ee,
+         'Belief that others should engage in the behavior' = offset_pnb,
+         'Belief that others think people should engage in the behavior' = offset_ne,
+         'Program interest' = offset_program_interest)
+
+offset_table <- offset_table %>% 
+  select(Segment, `Bought carbon offsets`, `Intention`, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`,  `Program interest`)
+
+#reactable(offset_table, defaultPageSize = 40)
+
+#write.csv(offset_table, "offset_table.csv")
+
+offset_table <- offset_table %>% remove_rownames %>% column_to_rownames(var = "Segment")
+
+#BuYlRd <- function(x) rgb(colorRamp(c("coral", "#FFFFFF", "palegreen"))(x), maxColorValue = 255)
+
+reactable(offset_table,
+          defaultPageSize = 40,
+  style = list(fontSize = "11px"),
+defaultColDef = colDef(
+    style = function(value) {
+      if (!is.numeric(value)) return()
+     normalized <- (value - min(offset_table)) / (max(offset_table) - min(offset_table))
+      color <- rating_color(normalized)
+      list(background = color)
+    },
+    ),
+  showSortIcon = FALSE,
+    pagination = TRUE,
+    compact = TRUE,
+    borderless = FALSE,
+    striped = TRUE,
+    highlight = TRUE,  
+    fullWidth = TRUE,
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+```
+
+##### Purchase green energy
+
+Most of the differences between the Boston sample and segments of the population are small.
+
+```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
+recs_table <- diff_table %>% 
+      select(age_group, sex, ethnicity, income, edu,
+             contains("recs")) %>% 
+      mutate(recs_intent = recs_intent/100,
+             recs_ne = recs_ne/10,
+             recs_ee = recs_ee/10,
+             recs_program_interest = recs_program_interest/10)
+
+mean_recs <- recs_table %>% 
+  summarise_if(is.numeric, list(mean), na.rm = TRUE) %>% 
+  mutate(value = "Mean")
+
+sd_recs <- recs_table %>% 
+  summarise_if(is.numeric, list(sd), na.rm = TRUE) %>% 
+  mutate(value = "Standard Deviation")
+
+recs_table <- recs_table %>% 
+  pivot_longer(cols = c(sex, age_group, ethnicity, income, edu), 
+               names_to = "var", 
+               values_to = "value") 
+
+tally <- recs_table %>% group_by(value) %>%
+  tally()
+
+recs_table <- recs_table %>%
+    group_by(value) %>%
+    summarise(recs_adoption = (mean(recs_adoption) - mean(recs_table$recs_adoption))/sd(recs_table$recs_adoption),
+              recs_intent = (mean(recs_intent) - mean(recs_table$recs_intent))/sd(recs_table$recs_intent),
+              recs_program_interest = (mean(recs_program_interest) - mean(recs_table$recs_program_interest))/sd(recs_table$recs_program_interest),
+              recs_ee = (mean(recs_ee) - mean(recs_table$recs_ee))/sd(recs_table$recs_ee),
+              recs_pnb = (mean(recs_pnb) - mean(recs_table$recs_pnb))/sd(recs_table$recs_pnb),
+              recs_ne = (mean(recs_ne) - mean(recs_table$recs_ne))/sd(recs_table$recs_ne)) %>% 
+      filter(value != "No high school")
+
+recs_table <- inner_join(recs_table, tally, by = "value")
+
+recs_table$value <- paste0(recs_table$value, " (", recs_table$n, ")")
+
+recs_table_mean <- bind_rows(mean_recs, sd_recs)
+
+recs_table_mean <- round_df(recs_table_mean, 2)
+
+recs_table_mean <- recs_table_mean %>% 
+  rename('Segment' = value,
+         'Contracted for green energy' = recs_adoption,
+         'Intention' = recs_intent,
+         'Belief that others are engaging in the behavior' = recs_ee,
+         'Belief that others should engage in the behavior' = recs_pnb,
+         'Belief that others think people should engage in the behavior' = recs_ne,
+         'Program interest' = recs_program_interest)
+
+recs_table_mean <- recs_table_mean %>% 
+  select(Segment, `Contracted for green energy`, `Intention`, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`,  `Program interest`)
+
+recs_table_mean = reactable(recs_table_mean,
+          defaultPageSize = 40,
+  style = list(fontSize = "11px"),
+  showSortIcon = FALSE,
+    pagination = TRUE,
+    compact = TRUE,
+    borderless = FALSE,
+    striped = TRUE,
+    highlight = TRUE,  
+    fullWidth = TRUE,
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+
+recs_table_mean
+
+recs_table <- round_df(recs_table, 2)
+
+recs_table <- recs_table %>% 
+   slice(14,12,
+         4:9,
+         19, 15,
+         18, 2, 3, 1,
+         13, 10, 17, 11, 16)
+
+recs_table <- recs_table %>% 
+  rename('Segment' = value,
+         'Contracted for green energy' = recs_adoption,
+         'Intention' = recs_intent,
+         'Belief that others are engaging in the behavior' = recs_ee,
+         'Belief that others should engage in the behavior' = recs_pnb,
+         'Belief that others think people should engage in the behavior' = recs_ne,
+         'Program interest' = recs_program_interest)
+
+recs_table <- recs_table %>% 
+  select(Segment, `Contracted for green energy`, `Intention`, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`,  `Program interest`)
+
+#reactable(recs_table, defaultPageSize = 40)
+
+#write.csv(recs_table, "recs_table.csv")
+
+recs_table <- recs_table %>% remove_rownames %>% column_to_rownames(var = "Segment")
+
+#BuYlRd <- function(x) rgb(colorRamp(c("coral", "#FFFFFF", "palegreen"))(x), maxColorValue = 255)
+
+reactable(recs_table,
+          defaultPageSize = 40,
+  style = list(fontSize = "11px"),
+defaultColDef = colDef(
+    style = function(value) {
+      if (!is.numeric(value)) return()
+     normalized <- (value - min(recs_table)) / (max(recs_table) - min(recs_table))
+      color <- rating_color(normalized)
+      list(background = color)
+    },
+    ),
+  showSortIcon = FALSE,
+    pagination = TRUE,
+    compact = TRUE,
+    borderless = FALSE,
+    striped = TRUE,
+    highlight = TRUE,  
+    fullWidth = TRUE,
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+```
+
+##### Install solar panels
+
+- **Intention**: 35-44
+- **Belief that others should engage in the behavior**: 18-24
+- **Belief that others think people should engage in the behavior**: 18-24; 25-34
+
+```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
+solar_table <- diff_table %>% 
+      select(age_group, sex, ethnicity, income, edu,
+             contains("solar")) %>% 
+      mutate(solar_intent = solar_intent/100,
+             solar_ne = solar_ne/10,
+             solar_ee = solar_ee/10,
+             solar_program_interest = solar_program_interest/10)
+
+mean_solar <- solar_table %>% 
+  summarise_if(is.numeric, list(mean), na.rm = TRUE) %>% 
+  mutate(value = "Mean")
+
+sd_solar <- solar_table %>% 
+  summarise_if(is.numeric, list(sd), na.rm = TRUE) %>% 
+  mutate(value = "Standard Deviation")
+
+solar_table <- solar_table %>% 
+  pivot_longer(cols = c(sex, age_group, ethnicity, income, edu), 
+               names_to = "var", 
+               values_to = "value") 
+
+tally <- solar_table %>% group_by(value) %>%
+  tally()
+
+solar_table <- solar_table %>%
+    group_by(value) %>%
+    summarise(solar_adoption = (mean(solar_adoption) - mean(solar_table$solar_adoption))/sd(solar_table$solar_adoption),
+              solar_intent = (mean(solar_intent) - mean(solar_table$solar_intent))/sd(solar_table$solar_intent),
+              solar_program_interest = (mean(solar_program_interest) - mean(solar_table$solar_program_interest))/sd(solar_table$solar_program_interest),
+              solar_ee = (mean(solar_ee) - mean(solar_table$solar_ee))/sd(solar_table$solar_ee),
+              solar_pnb = (mean(solar_pnb) - mean(solar_table$solar_pnb))/sd(solar_table$solar_pnb),
+              solar_ne = (mean(solar_ne) - mean(solar_table$solar_ne))/sd(solar_table$solar_ne)) %>% 
+      filter(value != "No high school")
+
+solar_table <- inner_join(solar_table, tally, by = "value")
+
+solar_table$value <- paste0(solar_table$value, " (", solar_table$n, ")")
+
+solar_table_mean <- bind_rows(mean_solar, sd_solar)
+
+solar_table_mean <- round_df(solar_table_mean, 2)
+
+solar_table_mean <- solar_table_mean %>% 
+  rename('Segment' = value,
+         'Have solar panels' = solar_adoption,
+         'Intention' = solar_intent,
+         'Belief that others are engaging in the behavior' = solar_ee,
+         'Belief that others should engage in the behavior' = solar_pnb,
+         'Belief that others think people should engage in the behavior' = solar_ne,
+         'Program interest' = solar_program_interest)
+
+solar_table_mean <- solar_table_mean %>% 
+  select(Segment, `Have solar panels`, `Intention`, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`,  `Program interest`)
+
+solar_table_mean = reactable(solar_table_mean,
+          defaultPageSize = 40,
+  style = list(fontSize = "11px"),
+  showSortIcon = FALSE,
+    pagination = TRUE,
+    compact = TRUE,
+    borderless = FALSE,
+    striped = TRUE,
+    highlight = TRUE,  
+    fullWidth = TRUE,
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+
+solar_table_mean
+
+solar_table <- round_df(solar_table, 2)
+
+solar_table <- solar_table %>% 
+   slice(14,12,
+         4:9,
+         19, 15,
+         18, 2, 3, 1,
+         13, 10, 17, 11, 16)
+
+solar_table <- solar_table %>% 
+  rename('Segment' = value,
+         'Have solar panels' = solar_adoption,
+         'Intention' = solar_intent,
+         'Belief that others are engaging in the behavior' = solar_ee,
+         'Belief that others should engage in the behavior' = solar_pnb,
+         'Belief that others think people should engage in the behavior' = solar_ne,
+         'Program interest' = solar_program_interest)
+
+solar_table <- solar_table %>% 
+  select(Segment, `Have solar panels`, `Intention`, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`,  `Program interest`)
+
+#reactable(solar_table, defaultPageSize = 40)
+
+#write.csv(solar_table, "solar_table.csv")
+
+solar_table <- solar_table %>% remove_rownames %>% column_to_rownames(var = "Segment")
+
+#BuYlRd <- function(x) rgb(colorRamp(c("coral", "#FFFFFF", "palegreen"))(x), maxColorValue = 255)
+
+reactable(solar_table,
+          defaultPageSize = 40,
+  style = list(fontSize = "11px"),
+defaultColDef = colDef(
+    style = function(value) {
+      if (!is.numeric(value)) return()
+     normalized <- (value - min(solar_table)) / (max(solar_table) - min(solar_table))
+      color <- rating_color(normalized)
+      list(background = color)
+    },
+    ),
+  showSortIcon = FALSE,
+    pagination = TRUE,
+    compact = TRUE,
+    borderless = FALSE,
+    striped = TRUE,
+    highlight = TRUE,  
+    fullWidth = TRUE,
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+```
+
+##### Purchase an EV
+
+- **Adoption**: Under $30,000
+- **Belief that others are engaging in the behavior**: 18-24
+- **Belief that others should engage in the behavior**: 18-24
+- **Program interest**: Graduate degree
+
+```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
+ev_table <- diff_table %>% 
+      select(age_group, sex, ethnicity, income, edu,
+             contains("ev")) %>% 
+      mutate(ev_intent = ev_intent/100,
+             ev_ne = ev_ne/10,
+             ev_ee = ev_ee/10,
+             ev_program_interest = ev_program_interest/10)
+
+mean_ev <- ev_table %>% 
+  summarise_if(is.numeric, list(mean), na.rm = TRUE) %>% 
+  mutate(value = "Mean")
+
+sd_ev <- ev_table %>% 
+  summarise_if(is.numeric, list(sd), na.rm = TRUE) %>% 
+  mutate(value = "Standard Deviation")
+
+ev_table <- ev_table %>% 
+  pivot_longer(cols = c(sex, age_group, ethnicity, income, edu), 
+               names_to = "var", 
+               values_to = "value") 
+
+tally <- ev_table %>% group_by(value) %>%
+  tally()
+
+ev_table <- ev_table %>%
+    group_by(value) %>%
+    summarise(ev_adoption = (mean(ev_adoption) - mean(ev_table$ev_adoption))/sd(ev_table$ev_adoption),
+              ev_intent = (mean(ev_intent) - mean(ev_table$ev_intent))/sd(ev_table$ev_intent),
+              ev_program_interest = (mean(ev_program_interest) - mean(ev_table$ev_program_interest))/sd(ev_table$ev_program_interest),
+              ev_ee = (mean(ev_ee) - mean(ev_table$ev_ee))/sd(ev_table$ev_ee),
+              ev_pnb = (mean(ev_pnb) - mean(ev_table$ev_pnb))/sd(ev_table$ev_pnb),
+              ev_ne = (mean(ev_ne) - mean(ev_table$ev_ne))/sd(ev_table$ev_ne)) %>% 
+      filter(value != "No high school")
+
+ev_table <- inner_join(ev_table, tally, by = "value")
+
+ev_table$value <- paste0(ev_table$value, " (", ev_table$n, ")")
+
+ev_table_mean <- bind_rows(mean_ev, sd_ev)
+
+ev_table_mean <- round_df(ev_table_mean, 2)
+
+ev_table_mean <- ev_table_mean %>% 
+  rename('Segment' = value,
+         'Have an EV' = ev_adoption,
+         'Intention' = ev_intent,
+         'Belief that others are engaging in the behavior' = ev_ee,
+         'Belief that others should engage in the behavior' = ev_pnb,
+         'Belief that others think people should engage in the behavior' = ev_ne,
+         'Program interest' = ev_program_interest)
+
+ev_table_mean <- ev_table_mean %>% 
+  select(Segment, `Have an EV`, `Intention`, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`,  `Program interest`)
+
+ev_table_mean = reactable(ev_table_mean,
+          defaultPageSize = 40,
+  style = list(fontSize = "11px"),
+  showSortIcon = FALSE,
+    pagination = TRUE,
+    compact = TRUE,
+    borderless = FALSE,
+    striped = TRUE,
+    highlight = TRUE,  
+    fullWidth = TRUE,
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+
+ev_table_mean
+
+ev_table <- round_df(ev_table, 2)
+
+ev_table <- ev_table %>% 
+   slice(14,12,
+         4:9,
+         19, 15,
+         18, 2, 3, 1,
+         13, 10, 17, 11, 16)
+
+ev_table <- ev_table %>% 
+  rename('Segment' = value,
+         'Have an EV' = ev_adoption,
+         'Intention' = ev_intent,
+         'Belief that others are engaging in the behavior' = ev_ee,
+         'Belief that others should engage in the behavior' = ev_pnb,
+         'Belief that others think people should engage in the behavior' = ev_ne,
+         'Program interest' = ev_program_interest)
+
+ev_table <- ev_table %>% 
+  select(Segment, `Have an EV`, `Intention`, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`,  `Program interest`)
+
+#reactable(ev_table, defaultPageSize = 40)
+
+#write.csv(ev_table, "ev_table.csv")
+
+ev_table <- ev_table %>% remove_rownames %>% column_to_rownames(var = "Segment")
+
+#BuYlRd <- function(x) rgb(colorRamp(c("coral", "#FFFFFF", "palegreen"))(x), maxColorValue = 255)
+
+reactable(ev_table,
+          defaultPageSize = 40,
+  style = list(fontSize = "11px"),
+defaultColDef = colDef(
+    style = function(value) {
+      if (!is.numeric(value)) return()
+     normalized <- (value - min(ev_table)) / (max(ev_table) - min(ev_table))
+      color <- rating_color(normalized)
+      list(background = color)
+    },
+    ),
+  showSortIcon = FALSE,
+    pagination = TRUE,
+    compact = TRUE,
+    borderless = FALSE,
+    striped = TRUE,
+    highlight = TRUE,  
+    fullWidth = TRUE,
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+```
+
+##### Fly less
+
+- **Program interest**: Graduate degree
+
+```{r, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE}
+fly_table <- diff_table %>% 
+      select(age_group, sex, ethnicity, income, edu,
+             contains("fly")) %>% 
+      mutate(fly_intent = fly_intent/100,
+             fly_ne = fly_ne/10,
+             fly_ee = fly_ee/10,
+             fly_program_interest = fly_program_interest/10)
+
+mean_fly <- fly_table %>% 
+  summarise_if(is.numeric, list(mean), na.rm = TRUE) %>% 
+  mutate(value = "Mean")
+
+sd_fly <- fly_table %>% 
+  summarise_if(is.numeric, list(sd), na.rm = TRUE) %>% 
+  mutate(value = "Standard Dflyiation")
+
+fly_table <- fly_table %>% 
+  pivot_longer(cols = c(sex, age_group, ethnicity, income, edu), 
+               names_to = "var", 
+               values_to = "value") 
+
+tally <- fly_table %>% group_by(value) %>%
+  tally()
+
+fly_table <- fly_table %>%
+    group_by(value) %>%
+    summarise(fly_adoption = (mean(fly_adoption) - mean(fly_table$fly_adoption))/sd(fly_table$fly_adoption),
+              fly_intent = (mean(fly_intent) - mean(fly_table$fly_intent))/sd(fly_table$fly_intent),
+              fly_program_interest = (mean(fly_program_interest) - mean(fly_table$fly_program_interest))/sd(fly_table$fly_program_interest),
+              fly_ee = (mean(fly_ee) - mean(fly_table$fly_ee))/sd(fly_table$fly_ee),
+              fly_pnb = (mean(fly_pnb) - mean(fly_table$fly_pnb))/sd(fly_table$fly_pnb),
+              fly_ne = (mean(fly_ne) - mean(fly_table$fly_ne))/sd(fly_table$fly_ne)) %>% 
+      filter(value != "No high school")
+
+fly_table <- inner_join(fly_table, tally, by = "value")
+
+fly_table$value <- paste0(fly_table$value, " (", fly_table$n, ")")
+
+fly_table_mean <- bind_rows(mean_fly, sd_fly)
+
+fly_table_mean <- round_df(fly_table_mean, 2)
+
+fly_table_mean <- fly_table_mean %>% 
+  rename('Segment' = value,
+         'Trying to fly less' = fly_adoption,
+         'Intention' = fly_intent,
+         'Belief that others are engaging in the behavior' = fly_ee,
+         'Belief that others should engage in the behavior' = fly_pnb,
+         'Belief that others think people should engage in the behavior' = fly_ne,
+         'Program interest' = fly_program_interest)
+
+fly_table_mean <- fly_table_mean %>% 
+  select(Segment, `Trying to fly less`, `Intention`, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`,  `Program interest`)
+
+fly_table_mean = reactable(fly_table_mean,
+          defaultPageSize = 40,
+  style = list(fontSize = "11px"),
+  showSortIcon = FALSE,
+    pagination = TRUE,
+    compact = TRUE,
+    borderless = FALSE,
+    striped = TRUE,
+    highlight = TRUE,  
+    fullWidth = TRUE,
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+
+fly_table_mean
+
+fly_table <- round_df(fly_table, 2)
+
+fly_table <- fly_table %>% 
+   slice(14,12,
+         4:9,
+         19, 15,
+         18, 2, 3, 1,
+         13, 10, 17, 11, 16)
+
+fly_table <- fly_table %>% 
+  rename('Segment' = value,
+         'Trying to fly less' = fly_adoption,
+         'Intention' = fly_intent,
+         'Belief that others are engaging in the behavior' = fly_ee,
+         'Belief that others should engage in the behavior' = fly_pnb,
+         'Belief that others think people should engage in the behavior' = fly_ne,
+         'Program interest' = fly_program_interest)
+
+fly_table <- fly_table %>% 
+  select(Segment, `Trying to fly less`, `Intention`, `Belief that others are engaging in the behavior`, `Belief that others should engage in the behavior`, `Belief that others think people should engage in the behavior`,  `Program interest`)
+
+#reactable(fly_table, defaultPageSize = 40)
+
+#write.csv(fly_table, "fly_table.csv")
+
+fly_table <- fly_table %>% remove_rownames %>% column_to_rownames(var = "Segment")
+
+#BuYlRd <- function(x) rgb(colorRamp(c("coral", "#FFFFFF", "palegreen"))(x), maxColorValue = 255)
+
+reactable(fly_table,
+          defaultPageSize = 40,
+  style = list(fontSize = "11px"),
+defaultColDef = colDef(
+    style = function(value) {
+      if (!is.numeric(value)) return()
+     normalized <- (value - min(fly_table)) / (max(fly_table) - min(fly_table))
+      color <- rating_color(normalized)
+      list(background = color)
+    },
+    ),
+  showSortIcon = FALSE,
+    pagination = TRUE,
+    compact = TRUE,
+    borderless = FALSE,
+    striped = TRUE,
+    highlight = TRUE,  
+    fullWidth = TRUE,
+  theme = reactableTheme(
+      headerStyle = list(
+        "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+        "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+        borderColor = "#555"
+      )))
+```
+
+```{r, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, eval = FALSE}
+library(jtools)
+options("jtools-digits" = 6)
+reg <- data %>% 
+  select(
+  wt,
+  #Vrid,
+  #var13, #RID
+  #EV
+  var26, #adoption
+  #Fly
+  var70, #Are you trying to fly less frequently than you used to?
+  #Offsets
+  var39, #adoption
+  #PBD
+  var71, #Are you trying to eat less meat than you used to?
+  #RECs
+  var54, #adoption
+  #Solar
+  var59, #adoption
+  #Food waste
+  var73, #Are you currently trying to reduce the amount of food waste you produce?
+  #demographics
+  #age_group,
+  #sex,
+  ethnicity,
+  #var20, #politics
+  var19, #income
+  var17, #education
+  ) %>% 
+  rename(
+  #EV
+  ev_adoption = var26,
+  #Fly
+  fly_adoption = var70, #trying to fly less
+  #Offset
+  offset_adoption = var39, #adoption
+  #PBD
+  pbd_adoption = var71, #trying to
+  #RECs
+  recs_adoption = var54, #adoption
+  #Solar
+  solar_adoption = var59, #adoption
+  #Food waste
+  foodwaste_adoption = var73, #attempt
+  #dem
+  income = var19, 
+  education = var17) 
+
+reg <- within(reg, ethnicity <- relevel(ethnicity, ref = "White"))
+#reg <- within(reg, age_group <- relevel(age_group, ref = "65+"))
+
+reg <- reg %>% 
+  mutate(
+    ev_adoption = case_when(ev_adoption == 0 ~ 0, 
+                            ev_adoption == 1 ~ 1,
+                             ev_adoption == 2 ~ 1,
+                             ev_adoption == 3 ~ 1,
+                             ev_adoption == 4 ~ 1,
+                            ev_adoption == 5 ~ 1,
+                            ev_adoption == 6 ~ 1,
+                            ev_adoption == 10097 ~ 1,
+                             ev_adoption == NA ~ 0),
+    recs_adoption = case_when(recs_adoption == 1 ~ 1, TRUE ~ 0),
+    income = as.numeric(income),
+    income = case_when(income == 10063 ~ 11, TRUE ~ income)) %>% 
+  filter(ethnicity != "Other")
+
+reg$education_category = recode(reg$education, '1' = "No college degree", '2' = "No college degree", '3' = "No college degree", '4' = "No college degree", '5' = "College degree", '6' = "Graduate degree")
+
+reg$education_category <- as.factor(reg$education_category)
+
+reg <- within(reg, education_category <- relevel(education_category, ref = "No college degree"))
+
+reg$income_category = recode(reg$income, '1' = "Less than $30,000", '2' = "Less than $30,000", '3' = "$30,000 to $49,000", '4' = "$30,000 to $49,000", '5' = "$50,000 to $69,000", '6' = "$50,000 to $69,000", '7' = "$70,000 to $89,000", '8' = "$70,000 to $89,000", '9' = "$90,000 to $149,000", '10' = "$90,000 to $149,000", '11' = "$150,000 or more")
+
+reg$income_category <- as.factor(reg$income_category)
+
+reg <- within(reg, income_category <- relevel(income_category, ref = "Less than $30,000"))
+```
+
+```{r, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, eval = FALSE}
+
+ev_d_w <- reg %>% 
+  lm(scale(ev_adoption) ~ income_category + education_category + ethnicity, weights = wt, data =.)
+
+ev_d_w <- tidy(ev_d_w) %>% mutate(model = "ev_d_w")
+
+
+#summary(ev_d_w) 
+
+
+solar_d_w <- reg %>%
+    lm(scale(solar_adoption) ~ income_category + education_category + ethnicity, weights = wt, data =.)
+  
+solar_d_w <- tidy(solar_d_w) %>% mutate(model = "solar_d_w")
+
+
+offset_d_w <- reg %>% 
+  lm(scale(offset_adoption) ~ income_category + education_category + ethnicity, weights = wt, data =.)
+
+offset_d_w <- tidy(offset_d_w) %>% mutate(model = "offset_d_w")
+
+
+
+
+recs_d_w <- reg %>% 
+  lm(scale(recs_adoption) ~ income_category + education_category + ethnicity, weights = wt, data =.)
+
+
+
+recs_d_w <- tidy(recs_d_w) %>% mutate(model = "recs_d_w")
+
+
+fly_less_d_w <- reg %>% 
+  lm(scale(fly_adoption) ~ income_category + education_category + ethnicity, weights = wt, data =.)
+
+fly_less_d_w <- tidy(fly_less_d_w) %>% mutate(model = "fly_less_d_w")
+
+
+
+
+#summary(fly_less_w)
+
+pbd_d_w <- reg %>% 
+  lm(scale(pbd_adoption) ~  income_category + education_category + ethnicity, weights = wt, data =.)
+
+pbd_d_w <- tidy(pbd_d_w) %>% mutate(model = "pbd_d_w")
+
+
+
+
+
+#summary(pbd_d_w)
+
+
+
+food_waste_d_w <- reg %>% 
+  lm(scale(foodwaste_adoption) ~ income_category + education_category + ethnicity, weights = wt, data =.)
+
+food_waste_d_w <- tidy(food_waste_d_w) %>% mutate(model = "food_waste_d_w")
+
+
+
+#summary(food_waste_w)
+```
+
+```{r, include = FALSE, echo = FALSE, results = 'asis', message = FALSE, warning = FALSE, eval = FALSE}
+# Use tibble dfs
+models <- rbind(ev_d_w, offset_d_w, recs_d_w, solar_d_w, food_waste_d_w, pbd_d_w, fly_less_d_w)
+
+p <- {dwplot(models, 
+        vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2), 
+        # Customize the of appearance of the dots and whiskers
+        dot_args = list(aes(shape = model)),
+        whisker_args = list(aes(linetype = model))) %>%
+    # Put models on one graph by assigning them to the same names
+    relabel_predictors(c("ethnicityAsian" = "Ethnicity: Asian",
+                         "ethnicityBlack" = "Ethnicity: Black or \nAfrican American",
+                         #"ethnicityOther" = "Ethnicity: Other",
+                         "income_category$30,000 to $49,000" = "Household income: \n$30,000 to $49,000",
+                         "income_category$50,000 to $69,000" = "Household income: \n$50,000 to $69,000",
+                         "income_category$70,000 to $89,000" = "Household income: \n$70,000 to $89,000",
+                         "income_category$90,000 to $149,000" = "Household income: \n$90,000 to $149,000",
+                         "income_category$150,000 or more" = "Household income: \n$150,000 or more",
+                         "education_categoryCollege degree" = "Education level: \nBachelor's degree",
+                         "education_categoryGraduate degree" = "Education level: \nGraduate degree")) +
+    xlab("Standardized coefficient estimate") + ylab("") + 
+    theme_bw() +
+    # Add colorblind-friendly palette & legend values = c("#000000","#D55E00","#CC79A7","#0072B2")
+    scale_colour_manual(values = c("#000000","#000000","#000000","#000000", "red", "red", "red"), 
+                     name = "", 
+                     labels = c("Own an EV", "Bought offsets", "Contracted for green energy", "Installed solar", "Trying to reduce food waste", "Trying to eat less meat", "Trying to fly less"),
+                     guide = guide_legend(reverse = TRUE)) +
+    # Add customized glyphs
+    scale_shape_manual(values = c(16, 4, 15, 3, 8, 6, 0),
+                      name = "",
+                      labels = c("Own an EV", "Bought offsets", "Contracted for green energy", "Installed solar", "Trying to reduce food waste", "Trying to eat less meat", "Trying to fly less"),
+                      guide = guide_legend(reverse = TRUE)) +
+   theme(#axis.title = element_text(size = 16),
+         #plot.margin = unit(c(0,0,0,0),"cm"),
+         #text = element_text(family="TT Times New Roman"),
+         legend.justification = c(0, 0), 
+         # Legend bottom right position 
+         legend.position = c(0.005, 0.000001),
+         # Legend text size
+         legend.text = element_text(size = 8, colour = "black"),
+         #legend.title.align = .5,
+         # Transparent legend text and glyph background
+         legend.background = element_rect(fill= "transparent"),
+         legend.key = element_rect(colour = "transparent", fill = "transparent"),
+         # Axis
+         axis.line = element_line(color = "grey"),
+         axis.ticks = element_line(color = "grey"),
+         axis.text.x  = element_text(hjust = 1, size = 11, color = "black"),
+         axis.text.y = element_text(size = 11, color = "black"),
+         axis.title.x = element_text(color = "black", size = 11),
+         axis.title.y = element_text(color = "black", size = 11),
+         # Panel
+         #panel.grid.major = element_line(size = 0.25, linetype = 'solid', color = "grey"), 
+         #panel.grid.minor = element_line(size = 0.25, linetype = 'solid', color = "grey"),
+         panel.background = element_blank(),
+         panel.border = element_rect(color = "grey", fill = NA, size = 0.5))}
+grid.draw(p)
+ggsave("adoption-demo.png", units = "in", width = 11, height = 13, device='png', dpi = 300)
 ```
